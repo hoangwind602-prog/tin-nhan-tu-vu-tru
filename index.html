@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Niềm vui hôm nay</title>
+  <title>Tin nhắn mới từ vũ trụ</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -11,124 +12,274 @@
 
     body {
       margin: 0;
-      font-family: font-family: "Segoe UI", "Arial", sans-serif;
-      background: linear-gradient(135deg, #f7f1ea, #efe6db, #fdfaf6);
+      font-family: "Segoe UI", "Arial", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.8), transparent 35%),
+        radial-gradient(circle at top right, rgba(255,245,235,0.8), transparent 30%),
+        linear-gradient(135deg, #f8f3ed, #efe6db, #fdfaf7);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      color: #3a2f28;
+      padding: 22px;
+      color: #3f332b;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* STAR BACKGROUND */
+    .stars {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    .star:nth-child(odd) {
+      width: 3px;
+      height: 3px;
+      animation-duration: 4s;
+    }
+
+    .star:nth-child(3n) {
+      width: 6px;
+      height: 6px;
+      animation-duration: 5s;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.4); }
     }
 
     .card {
       width: 100%;
-      max-width: 680px;
+      max-width: 880px;
       background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(8px);
-      border-radius: 28px;
-      padding: 40px 28px;
-      box-shadow: 0 18px 60px rgba(70, 50, 35, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 34px;
+      padding: 46px 26px 38px;
+      box-shadow: 0 20px 70px rgba(70, 50, 35, 0.10);
       text-align: center;
       border: 1px solid rgba(120, 90, 70, 0.08);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .glow {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      background: rgba(255, 245, 235, 0.75);
+      border-radius: 50%;
+      filter: blur(42px);
+      z-index: 0;
+    }
+
+    .glow.one { top: -80px; left: -50px; }
+    .glow.two { bottom: -90px; right: -40px; }
+
+    .content {
+      position: relative;
+      z-index: 2;
     }
 
     .tag {
       display: inline-block;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border-radius: 999px;
-      background: #f3e9de;
+      background: #f4ece3;
       font-size: 14px;
-      letter-spacing: 0.5px;
       margin-bottom: 18px;
+      color: #6d5c4f;
+      letter-spacing: 0.2px;
     }
 
     h1 {
-      font-size: 34px;
-      margin: 0 0 12px;
-      line-height: 1.2;
+      font-size: 38px;
+      margin: 0 0 14px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #2f241e;
     }
 
     .subtitle {
       font-size: 17px;
-      line-height: 1.8;
-      color: #6b5b50;
-      max-width: 520px;
-      margin: 0 auto 28px;
+      line-height: 1.9;
+      color: #6f6055;
+      max-width: 640px;
+      margin: 0 auto 30px;
+    }
+
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 720px;
+      margin: 0 auto 10px;
     }
 
     button {
       border: none;
-      background: #2f241e;
       color: white;
-      padding: 16px 28px;
-      border-radius: 999px;
+      padding: 16px 18px;
+      border-radius: 22px;
       font-size: 16px;
       font-family: inherit;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 10px 25px rgba(47, 36, 30, 0.18);
+      box-shadow: 0 10px 25px rgba(47, 36, 30, 0.14);
+      line-height: 1.4;
     }
 
     button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(47, 36, 30, 0.16);
     }
+
+    .btn-1 { background: #8f7765; }
+    .btn-2 { background: #2f241e; }
+    .btn-3 { background: #a18772; }
+    .btn-4 { background: #6e5b4f; }
+    .btn-5 { background: #4f3e34; }
+    .btn-6 { background: #b79b87; }
+    .btn-7 { background: #7f6858; }
 
     #result {
       margin-top: 34px;
-      min-height: 120px;
+      min-height: 260px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      animation: fadeIn 0.4s ease;
+    }
+
+    .message-card {
+      background: #fffaf5;
+      border: 1px solid rgba(120, 90, 70, 0.08);
+      border-radius: 28px;
+      padding: 28px 24px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(80, 60, 40, 0.06);
+      animation: fadeUp 0.45s ease;
+    }
+
+    .message-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: #9b8779;
+      margin-bottom: 14px;
     }
 
     .quote {
-      font-size: 24px;
-      line-height: 1.8;
+      font-size: 25px;
+      line-height: 1.85;
       color: #2f241e;
-      max-width: 540px;
+      min-height: 80px;
     }
 
     .small-note {
-      margin-top: 14px;
+      margin-top: 16px;
       font-size: 14px;
-      color: #8a786c;
+      color: #8d7b6f;
       font-style: italic;
     }
 
     .meme-img {
       max-width: 100%;
-      border-radius: 22px;
-      margin-top: 8px;
+      border-radius: 24px;
+      margin-top: 10px;
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+      animation: fadeUp 0.45s ease;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .action-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
     }
 
-    footer {
-      margin-top: 32px;
+    .secondary-btn {
+      background: #f1e7dc;
+      color: #5d4e43;
+      box-shadow: none;
+      padding: 12px 16px;
+      font-size: 14px;
+      border-radius: 16px;
+    }
+
+    .secondary-btn:hover {
+      transform: translateY(-2px);
+      background: #eadfd4;
+    }
+
+    .footer-note {
+      margin-top: 34px;
       font-size: 13px;
       color: #9a897d;
     }
 
-    @media (max-width: 600px) {
+    .sparkle {
+      font-size: 18px;
+      margin-bottom: 8px;
+      animation: floaty 2s ease-in-out infinite;
+    }
+
+    .typing::after {
+      content: "|";
+      animation: blink 0.8s infinite;
+      margin-left: 2px;
+      color: #9b8779;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 700px) {
+      .mood-grid {
+        grid-template-columns: 1fr;
+      }
+
       .card {
-        padding: 30px 20px;
+        padding: 32px 18px 28px;
       }
 
       h1 {
-        font-size: 28px;
+        font-size: 30px;
       }
 
       .quote {
@@ -142,56 +293,288 @@
   </style>
 </head>
 <body>
+
+  <div class="stars" id="stars"></div>
+
   <div class="card">
-    <div class="tag">🎁 một góc nhỏ cho bạn</div>
-    <h1>Nhận một chút niềm vui hôm nay</h1>
-    <p class="subtitle">
-      Nếu hôm nay bạn mệt, hãy nhấn nút bên dưới.  
-      Có thể bạn sẽ nhận được một câu nói dễ thương… hoặc một chút hài hước đủ để thở nhẹ hơn.
-    </p>
+    <div class="glow one"></div>
+    <div class="glow two"></div>
 
-    <button onclick="showRandomGift()">Nhấn để nhận ✨</button>
+    <div class="content">
+      <div class="tag">✨ một tín hiệu nhỏ từ vũ trụ</div>
+      <h1>Tin nhắn mới từ vũ trụ</h1>
+      <p class="subtitle">
+        Hãy chọn tâm trạng của bạn hôm nay —
+        vũ trụ có thể đang muốn nhắn cho bạn đúng điều trái tim bạn cần nghe.
+      </p>
 
-    <div id="result"></div>
+      <div class="mood-grid">
+        <button class="btn-1" onclick="showMood('tired')">☁️ hôm nay mình hơi mệt</button>
+        <button class="btn-2" onclick="showMood('fun')">🌷 mình cần một chút vui</button>
+        <button class="btn-3" onclick="showMood('miss')">🌙 mình đang nhớ ai đó</button>
+        <button class="btn-4" onclick="showMood('comfort')">💌 mình cần được an ủi</button>
+        <button class="btn-5" onclick="showMood('truth')">🪞 mình muốn nghe sự thật</button>
+        <button class="btn-6" onclick="showMood('love')">🤍 mình muốn được yêu</button>
+        <button class="btn-7" onclick="showMood('wake')">⚡ mình cần tỉnh ra</button>
+      </div>
 
-    <footer>
-      made with a little softness ♡
-    </footer>
+      <div id="result"></div>
+
+      <div class="footer-note">
+        Gửi đến bạn một chút dịu dàng từ Seri ♡
+      </div>
+    </div>
   </div>
 
+  <audio id="ting" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    const gifts = [
-      { type: "text", content: "Bạn không lười. Bạn chỉ đang ở chế độ tiết kiệm năng lượng cao cấp." },
-      { type: "text", content: "Mọi chuyện rồi sẽ ổn. Nếu chưa ổn thì ngủ một giấc trước đã." },
-      { type: "text", content: "Bạn xinh hơn bạn nghĩ. Camera trước chỉ là kẻ phản diện." },
-      { type: "text", content: "Hôm nay bạn không cần hoàn hảo. Chỉ cần sống sót một cách thanh lịch là đủ." },
-      { type: "text", content: "Nếu không ai khen bạn hôm nay: trông bạn rất có khí chất đấy." },
-      { type: "text", content: "Bạn không bị tụt mood đâu. Bạn chỉ cần đồ ăn ngon và một cái ôm thôi." },
-      { type: "text", content: "Nếu cuộc đời là drama thì hôm nay bạn cứ đóng vai nữ chính đẹp trước." },
-      { type: "text", content: "Bạn đang làm tốt hơn bạn tưởng nhiều đấy." },
-      { type: "text", content: "Một lời nhắc nhỏ: đừng nhắn lại cho người làm bạn mệt." },
-      { type: "text", content: "Bạn xứng đáng với những điều nhẹ nhàng, tử tế và không nhập nhằng." },
-      { type: "image", content: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=900&q=80" },
-      { type: "image", content: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=900&q=80" },
-      { type: "image", content: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=900&q=80" }
+    const tiredMessages = [
+      "Bạn không cần phải mạnh mẽ suốt cả ngày. Hôm nay bạn đã làm rất tốt rồi. Ngoan nào, đi ngủ thôi",
+      "Chậm lại một chút cũng không sao. Bạn vẫn đang đi mà",
+      "Bạn đang làm tốt hơn bạn tưởng nhiều đấy.",
+      "Nếu hôm nay bạn mệt, hãy đắp chăn đi ngủ chứ đừng tự trách mình nha.",
+      "Bạn không cần hoàn hảo trong một ngày bình thường đâu.",
+      "Có những ngày chỉ cần bạn không bỏ cuộc với chính mình là đủ rồi.",
+      "Bạn không yếu đuối. Bạn chỉ đang mang quá nhiều thứ cùng một lúc.",
+      "Hôm nay bạn không cần nở hoa. Chỉ cần thở thôi cũng được.",
+      "Bạn được phép nghỉ mà không cần xin lỗi.",
+      "Đừng ép trái tim mình chạy nhanh hơn tốc độ nó có thể chịu được."
     ];
 
-    function showRandomGift() {
-      const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
-      const result = document.getElementById("result");
+    const funMessages = [
+      "Bạn không lười. Bạn chỉ đang ở chế độ tiết kiệm pin.",
+      "Mọi chuyện rồi sẽ ổn. Nếu chưa ổn thì thôi, mai tính tiếp.",
+      "Bạn xinh hơn camera trước rất nhiều, xin đừng hoang mang.",
+      "Nếu hôm nay cuộc đời là drama thì bạn vẫn phải đẹp.",
+      "Bạn không xuống phong độ đâu. Chỉ là thiếu trà sữa thôi.",
+      "Có thể bạn không cứu được thế giới hôm nay, nhưng ít ra bạn vẫn chưa kích nổ nó.",
+      "Bạn là một người trưởng thành... đang cố gắng giả vờ ổn mỗi ngày.",
+      "Nếu không ai nói với bạn hôm nay: bạn khá đỉnh đó, gút chóp.",
+      "Vũ trụ bảo hôm nay bạn nên chill bớt và cute hơn một chút.",
+      "Thực ra bạn không tệ đâu. Bạn chỉ đang thiếu tiền thôi."
+    ];
 
-      if (randomGift.type === "text") {
-        result.innerHTML = `
-          <div class="quote">“${randomGift.content}”</div>
-          <div class="small-note">gửi đến bạn với một chút dịu dàng ♡</div>
-        `;
-      } else {
-        result.innerHTML = `
-          <img class="meme-img" src="${randomGift.content}" alt="Một chút niềm vui" />
-          <div class="small-note">vũ trụ vừa gửi bạn một chiếc ảnh đáng yêu ✨</div>
-        `;
+    const missMessages = [
+      "Không phải ai bạn nhớ cũng là người bạn nên quay lại.",
+      "Nhớ một người không có nghĩa là người đó thuộc về bạn.",
+      "Có những người chỉ phù hợp để đi ngang đời mình.",
+      "Nỗi nhớ không phải lúc nào cũng là dấu hiệu để quay về.",
+      "Đôi khi bạn không nhớ họ, bạn chỉ nhớ cảm giác từng có.",
+      "Có những cuộc gặp là quả báo chứ không phải định mệnh.",
+      "Bạn có thể nhớ một người và vẫn chọn không quay lại.",
+      "Thứ bạn cần không phải là họ, mà là một sự bình yên.",
+      "Nếu một người làm bạn tổn thương quá nhiều, nỗi nhớ không đủ để biện minh.",
+      "Nhớ ai đó là điều rất người. Nhưng yêu bản thân vẫn phải là điều ưu tiên."
+    ];
+
+    const comfortMessages = [
+      "Bạn vẫn rất đáng yêu ngay cả khi đang mệt.",
+      "Tôi cho phép bạn không làm gì hôm nay.",
+      "Nếu hôm nay lòng bạn nặng, cứ đặt xuống một chút.",
+      "Bạn không cần phải ổn ngay bây giờ đâu.",
+      "Mềm lòng không phải là yếu. Đó là phần dịu dàng nhất của trái tim.",
+      "Bạn không cần gồng lên để được yêu thương.",
+      "Nếu hôm nay bạn muốn khóc, cứ khóc. Cây cũng cần mưa để lớn lên.",
+      "Bạn xứng đáng với những điều nhẹ nhàng và hạnh phúc.",
+      "Có thể hôm nay khó, nhưng bạn vẫn đang đi qua nó.",
+      "Bạn không cô đơn như cảm giác bạn nghĩ đâu, vẫn có một người vô danh đang ầm thầm muốn ôm bạn nè."
+    ];
+
+    const truthMessages = [
+      "Người khiến bạn phải đoán quá nhiều không phải bến đỗ bình yên.",
+      "Bạn đang kéo dài điều đã nên phải kết thúc.",
+      "Đừng tự biến mình thành nơi người khác ghé tạm.",
+      "Nếu ai đó thật lòng, bạn sẽ không phải tự hỏi quá nhiều.",
+      "Bạn đang đau không phải vì quá yếu đuối, mà vì bạn đã chịu đựng quá lâu.",
+      "Không phải mọi thứ mình muốn đều có thể giữ lại.",
+      "Bạn không thể chữa lành bằng cách quay lại nơi từng làm mình tổn thương.",
+      "Nếu điều gì đó luôn làm bạn bất an, đó không phải tình yêu chân thành.",
+      "Đôi khi buông bỏ không phải mất mát, mà là tự cứu lấy mình.",
+      "Bạn không cần ở lại một nơi khiến bạn phải nhỏ lại để vừa."
+    ];
+
+    const loveMessages = [
+      "Bạn không cần trở nên hoàn hảo rồi mới xứng đáng được yêu.",
+      "Tình yêu lành mạnh sẽ không khiến bạn phải xin từng chút rõ ràng.",
+      "Bạn xứng đáng với một người dịu dàng và tử tế.",
+      "Bạn không sinh ra để theo đuổi những người chỉ cho bạn sự nửa vời.",
+      "Có người sẽ yêu cả những phần bạn từng nghĩ là quá nhiều.",
+      "Bạn không cần khiến mình nhỏ lại để vừa với trái tim không đủ rộng ôm lấy bạn.",
+      "Người thật lòng sẽ không để bạn yêu trong cảm giác bất an. 2,3 hôm biến mất thì cho biến luôn",
+      "Bạn xứng đáng được chọn để yêu, để thương, để trân trọng.",
+      "Tình yêu đúng không làm bạn thấy mình phải đánh đổi để được thương.",
+      "Đừng dễ tin vào những lời nói ngọt ngào, hãy tin vào những lần họ không vừa ý mà vẫn dịu dàng với bạn."
+    ];
+
+    const wakeMessages = [
+      "Bạn đang biết câu trả lời rồi, chỉ là chưa muốn chấp nhận.",
+      "Sự im lặng kéo dài cũng là một câu trả lời.",
+      "Không phải vì bạn yêu nhiều nên người ta sẽ đối xử tử tế hơn.",
+      "Điều làm bạn mệt mãi không phải là định mệnh, mà là thói quen không dứt.",
+      "Bạn không cần thêm dấu hiệu nữa. Bạn cần quyết định.",
+      "Không ai bận đến mức không thể nhớ đến người họ yêu.",
+      "Bạn đang tiếc người đó hay tiếc phiên bản hy vọng của chính mình?",
+      "Có những cánh cửa không đóng lại thì bạn sẽ không chịu bước tiếp.",
+      "Đừng gọi đó là sâu đậm nếu nó chỉ toàn bất an, lo lắng.",
+      "Bạn không thiếu tình yêu. Bạn đang thiếu ranh giới."
+    ];
+
+    const cuteImages = [
+      "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=900&q=80"
+    ];
+
+    let lastType = null;
+    let lastMessage = "";
+
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function playTing() {
+      const audio = document.getElementById("ting");
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+
+    function typeWriter(element, text, speed = 28) {
+      element.textContent = "";
+      element.classList.add("typing");
+      let i = 0;
+
+      function typing() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        } else {
+          element.classList.remove("typing");
+        }
+      }
+      typing();
+    }
+
+    function copyMessage() {
+      if (!lastMessage) return;
+      navigator.clipboard.writeText(lastMessage).then(() => {
+        alert("Đã copy tin nhắn của vũ trụ cho bạn ♡");
+      });
+    }
+
+    function renderMessageCard(icon, title, selectedMessage, type) {
+      const result = document.getElementById("result");
+      result.innerHTML = `
+        <div class="message-card">
+          <div class="sparkle">${icon}</div>
+          <div class="message-title">${title}</div>
+          <div class="quote" id="typedQuote"></div>
+          <div class="small-note">nếu câu này chạm vào bạn, có lẽ nó đến đúng lúc ♡</div>
+          <div class="action-row">
+            <button class="secondary-btn" onclick="showMood('${type}')">🔁 nhận thêm một tin nữa</button>
+            <button class="secondary-btn" onclick="copyMessage()">📋 copy câu này</button>
+          </div>
+        </div>
+      `;
+      lastMessage = `“${selectedMessage}”`;
+      setTimeout(() => {
+        const quoteEl = document.getElementById("typedQuote");
+        typeWriter(quoteEl, `“${selectedMessage}”`);
+      }, 80);
+    }
+
+    function showMood(type) {
+      lastType = type;
+      playTing();
+
+      const result = document.getElementById("result");
+      let selectedMessage = "";
+      let title = "";
+      let icon = "💌";
+
+      if (type === "tired") {
+        selectedMessage = randomItem(tiredMessages);
+        title = "tin nhắn dành cho trái tim đang mệt";
+        icon = "☁️";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "fun") {
+        const chance = Math.random();
+        if (chance < 0.35) {
+          const img = randomItem(cuteImages);
+          result.innerHTML = `
+            <div class="message-card">
+              <div class="sparkle">🌷</div>
+              <div class="message-title">một chút vui vũ trụ gửi đến bạn</div>
+              <img class="meme-img" src="${img}" alt="ảnh dễ thương" />
+              <div class="small-note">bạn vừa nhận được một chiếc đáng yêu để cứu mood ✨</div>
+              <div class="action-row">
+                <button class="secondary-btn" onclick="showMood('fun')">🔁 cho mình thêm cái nữa</button>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        selectedMessage = randomItem(funMessages);
+        title = "một chiếc vui nhỏ cho bạn";
+        icon = "🌷";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "miss") {
+        selectedMessage = randomItem(missMessages);
+        title = "tin nhắn cho người đang nhớ";
+        icon = "🌙";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "comfort") {
+        selectedMessage = randomItem(comfortMessages);
+        title = "vũ trụ đang ôm bạn một chút";
+        icon = "💌";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "truth") {
+        selectedMessage = randomItem(truthMessages);
+        title = "một sự thật bạn cần nghe";
+        icon = "🪞";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "love") {
+        selectedMessage = randomItem(loveMessages);
+        title = "một lời dành cho trái tim muốn được yêu";
+        icon = "🤍";
+        renderMessageCard(icon, title, selectedMessage, type);
+      }
+
+      if (type === "wake") {
+        selectedMessage = randomItem(wakeMessages);
+        title = "đây là cú thức tỉnh nhẹ nhàng nhưng thật";
+        icon = "⚡";
+        renderMessageCard(icon, title, selectedMessage, type);
       }
     }
+
+    function createStars() {
+      const stars = document.getElementById("stars");
+      for (let i = 0; i < 45; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDelay = Math.random() * 5 + "s";
+        stars.appendChild(star);
+      }
+    }
+
+    createStars();
   </script>
 </body>
 </html>
