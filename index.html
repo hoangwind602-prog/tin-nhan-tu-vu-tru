@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Niềm vui hôm nay</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      background: linear-gradient(135deg, #f7f1ea, #efe6db, #fdfaf6);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #3a2f28;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 40px 28px;
+      box-shadow: 0 18px 60px rgba(70, 50, 35, 0.12);
+      text-align: center;
+      border: 1px solid rgba(120, 90, 70, 0.08);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #f3e9de;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 34px;
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      line-height: 1.8;
+      color: #6b5b50;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    button {
+      border: none;
+      background: #2f241e;
+      color: white;
+      padding: 16px 28px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 25px rgba(47, 36, 30, 0.18);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    #result {
+      margin-top: 34px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .quote {
+      font-size: 24px;
+      line-height: 1.8;
+      color: #2f241e;
+      max-width: 540px;
+    }
+
+    .small-note {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #8a786c;
+      font-style: italic;
+    }
+
+    .meme-img {
+      max-width: 100%;
+      border-radius: 22px;
+      margin-top: 8px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      margin-top: 32px;
+      font-size: 13px;
+      color: #9a897d;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .quote {
+        font-size: 21px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="tag">🎁 một góc nhỏ cho bạn</div>
+    <h1>Nhận một chút niềm vui hôm nay</h1>
+    <p class="subtitle">
+      Nếu hôm nay bạn mệt, hãy nhấn nút bên dưới.  
+      Có thể bạn sẽ nhận được một câu nói dễ thương… hoặc một chút hài hước đủ để thở nhẹ hơn.
+    </p>
+
+    <button onclick="showRandomGift()">Nhấn để nhận ✨</button>
+
+    <div id="result"></div>
+
+    <footer>
+      made with a little softness ♡
+    </footer>
+  </div>
+
+  <script>
+    const gifts = [
+      { type: "text", content: "Bạn không lười. Bạn chỉ đang ở chế độ tiết kiệm năng lượng cao cấp." },
+      { type: "text", content: "Mọi chuyện rồi sẽ ổn. Nếu chưa ổn thì ngủ một giấc trước đã." },
+      { type: "text", content: "Bạn xinh hơn bạn nghĩ. Camera trước chỉ là kẻ phản diện." },
+      { type: "text", content: "Hôm nay bạn không cần hoàn hảo. Chỉ cần sống sót một cách thanh lịch là đủ." },
+      { type: "text", content: "Nếu không ai khen bạn hôm nay: trông bạn rất có khí chất đấy." },
+      { type: "text", content: "Bạn không bị tụt mood đâu. Bạn chỉ cần đồ ăn ngon và một cái ôm thôi." },
+      { type: "text", content: "Nếu cuộc đời là drama thì hôm nay bạn cứ đóng vai nữ chính đẹp trước." },
+      { type: "text", content: "Bạn đang làm tốt hơn bạn tưởng nhiều đấy." },
+      { type: "text", content: "Một lời nhắc nhỏ: đừng nhắn lại cho người làm bạn mệt." },
+      { type: "text", content: "Bạn xứng đáng với những điều nhẹ nhàng, tử tế và không nhập nhằng." },
+      { type: "image", content: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=900&q=80" },
+      { type: "image", content: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=900&q=80" },
+      { type: "image", content: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=900&q=80" }
+    ];
+
+    function showRandomGift() {
+      const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
+      const result = document.getElementById("result");
+
+      if (randomGift.type === "text") {
+        result.innerHTML = `
+          <div class="quote">“${randomGift.content}”</div>
+          <div class="small-note">gửi đến bạn với một chút dịu dàng ♡</div>
+        `;
+      } else {
+        result.innerHTML = `
+          <img class="meme-img" src="${randomGift.content}" alt="Một chút niềm vui" />
+          <div class="small-note">vũ trụ vừa gửi bạn một chiếc ảnh đáng yêu ✨</div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
