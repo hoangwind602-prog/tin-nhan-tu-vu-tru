@@ -6,59 +6,21 @@
   <title>Pop Pop</title>
 
   <style>
-   #inventory {
-  position: fixed;       /* luôn hiển thị trên màn hình */
-  top: 20px;
-  right: 20px;
-  width: 300px;
-  height: 400px;
-  background-color: #ffffff; /* nền trắng rõ ràng */
-  border: 2px solid #888;
-  border-radius: 12px;
-  padding: 15px;
-  z-index: 9999;         /* nổi trên tất cả mochi */
-  overflow-y: auto;      /* cuộn nếu nhiều đồ */
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-}
-
-#inventory h3 {
-  margin: 0 0 10px 0;
-  font-family: "Segoe UI", sans-serif;
-  font-size: 18px;
-  text-align: center;
-  color: #333;
-}
-
-#inventory-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.inventory-item {
-  width: 50px;
-  height: 50px;
-  background-color: #f2f2f2;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.inventory-item:hover {
-  transform: scale(1.2);
-}
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-    <div id="inventory">
-  <h3>Tủ Đồ</h3>
-  <div id="inventory-items"></div>
-</div>
+      margin: 0;
+      overflow: hidden;
+      font-family: "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #3d3556 0%, #1f1b2e 45%, #12101d 100%);
+      height: 100vh;
+      touch-action: manipulation;
+      user-select: none;
+      position: relative;
+      color: white;
     }
 
     .hidden { display: none !important; }
