@@ -1,4 +1,151 @@
-const randomMove = (Math.random() - 0.5) * 4; 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blob Lười Của Seri</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e8d9f8, #f8e0f5);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Blob chính */
+  .blob {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background-color: #f8f3ff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 15px rgba(255,255,255,0.5) inset;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+
+  /* Hiệu ứng hover / nhún */
+  .blob:hover {
+    transform: scale(1.2) translateY(-5px) rotate(-3deg);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.6) inset;
+  }
+
+  /* Mặt cute */
+  .face {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eye {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    margin: 0 8px;
+  }
+
+  .eye-row {
+    display: flex;
+    margin-bottom: 5px;
+  }
+
+  .blush {
+    width: 12px;
+    height: 6px;
+    background: #ffb6c1;
+    border-radius: 50%;
+    margin: 0 6px;
+  }
+
+  .mouth {
+    width: 20px;
+    height: 6px;
+    border-radius: 3px;
+    background: #d17b7b;
+    margin-top: 4px;
+  }
+
+  /* Tooltip tên */
+  .tooltip {
+    position: absolute;
+    bottom: -25px;
+    background: rgba(255,255,255,0.8);
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  .blob:hover .tooltip {
+    opacity: 1;
+  }
+
+  /* Button nhỏ */
+  .controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .controls button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 10px;
+    background: #f3e8ff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .controls button:hover {
+    background: #e1d2f7;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob" id="blob">
+  <div class="face">
+    <div class="eye-row">
+      <div class="eye"></div>
+      <div class="eye"></div>
+    </div>
+    <div class="blush-row">
+      <div class="blush"></div>
+      <div class="blush"></div>
+    </div>
+    <div class="mouth"></div>
+  </div>
+  <div class="tooltip" id="blobName">Tên của bạn</div>
+</div>
+
+<div class="controls">
+  <button onclick="napChăn()">Đắp chăn</button>
+  <button onclick="changeName()">Đổi tên</button>
+</div>
+
+<script>
+  const blob = document.getElementById('blob');
+  const blobName = document.getElementById('blobName');
+
+  // Spawn animation nhún nhẹ liên tục
+  setInterval(() => {
+      const randomMove = (Math.random() - 0.5) * 4; 
     blob.style.transform = `scale(1.1) translateY(${randomMove}px) rotate(${randomMove}deg)`;
   }, 1500);
 
