@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pop Pop by Seri</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #4a4069 0%, #2a243d 42%, #171321 100%);
+      height: 100vh;
+      touch-action: manipulation;
+      user-select: none;
+      position: relative;
+      color: white;
+    }
+
+    .glow-bg {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 190, 220, 0.08);
+      filter: blur(80px);
+      z-index: 0;
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+
+    .glow-bg.one {
+      top: -80px;
+      left: -50px;
+    }
+
+    .glow-bg.two {
+      bottom: -100px;
+      right: -60px;
+      background: rgba(180, 210, 255, 0.08);
+      animation-delay: 2s;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(30px, -20px) scale(1.1); }
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      animation: twinkle 3s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.8); }
+    }
+
+    .intro-screen, .ready-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
+      backdrop-filter: blur(8px);
+    }
+
+    .intro-card {
+      width: 100%;
+      max-width: 390px;
+      padding: 36px 26px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      text-align: center;
+      animation: fadeUp 0.8s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .intro-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.15);
+    }
+
+    .intro-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      opacity: 0.92;
+      margin-bottom: 20px;
+    }
+
+    .quote-line {
+      font-size: 0.92rem;
+      opacity: 0.7;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .intro-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.14));
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition: 0.25s ease;
+    }
+
+    .intro-btn:hover {
+      transform: scale(1.06);
+      background: linear-gradient(135deg, rgba(255,255,255,0.32), rgba(255,255,255,0.18));
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .top-ui {
+      position: absolute;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-shadow: 0 0 16px rgba(255,255,255,0.18);
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.82;
+    }
+
+    .score-board {
+      position: absolute;
+      top: 22px;
+      right: 16px;
+      z-index: 20;
+      background: rgba(255,255,255,0.12);
+      padding: 10px 16px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .combo-board {
+      position: absolute;
+      top: 22px;
+      left: 16px;
+      z-index: 20;
+      background: rgba(255,255,255,0.10);
+      padding: 10px 16px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      opacity: 0.9;
+    }
+
+    .restart-btn {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 26px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition: 0.25s ease;
+    }
+
+    .restart-btn:hover {
+      transform: translateX(-50%) scale(1.05);
+      background: rgba(255,255,255,0.25);
+    }
+
+    .game-area {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .mochi {
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease;
+      box-shadow:
+        inset -6px -8px 12px rgba(255,255,255,0.28),
+        inset 6px 8px 12px rgba(0,0,0,0.05),
+        0 12px 22px rgba(0,0,0,0.18);
+      animation: floaty 4s ease-in-out infinite;
+    }
+
+    .mochi:hover {
+      filter: brightness(1.04);
+    }
+
+    .mochi:active {
+      transform: scale(0.88);
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .female {
+      background: radial-gradient(circle at 30% 30%, #fff6fb, #f7cfe0 70%, #efb6cf 100%);
+    }
+
+    .male {
+      background: radial-gradient(circle at 30% 30%, #f8fcff, #cfe4f2 70%, #b7d2e6 100%);
+    }
+
+    .face {
+      position: relative;
+      width: 40px;
+      height: 28px;
+    }
+
+    .eye {
+      position: absolute;
+      width: 5px;
+      height: 9px;
+      background: #3b3246;
+      border-radius: 50%;
+      top: 6px;
+    }
+
+    .eye.left { left: 9px; }
+    .eye.right { right: 9px; }
+
+    .blush {
+      position: absolute;
+      width: 8px;
+      height: 5px;
+      background: rgba(255, 145, 170, 0.35);
+      border-radius: 50%;
+      top: 14px;
+    }
+
+    .blush.left { left: 2px; }
+    .blush.right { right: 2px; }
+
+    .mouth {
+      position: absolute;
+      width: 10px;
+      height: 5px;
+      border-bottom: 2px solid #5b4b5d;
+      border-radius: 0 0 10px 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 2px;
+    }
+
+    .mouth.flat {
+      border-bottom: none;
+      border-top: 2px solid #5b4b5d;
+      border-radius: 10px 10px 0 0;
+      bottom: 4px;
+      height: 3px;
+    }
+
+    .mouth.o {
+      width: 8px;
+      height: 8px;
+      border: 2px solid #5b4b5d;
+      border-radius: 50%;
+      border-bottom: 2px solid #5b4b5d;
+      background: transparent;
+      bottom: 1px;
+    }
+
+    .female::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      width: 20px;
+      height: 12px;
+      background: #f3a8c4;
+      border-radius: 12px 12px 6px 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: -12px 4px 0 -4px #f3a8c4, 12px 4px 0 -4px #f3a8c4;
+    }
+
+    .male::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      width: 16px;
+      height: 12px;
+      background: #9fc2d9;
+      border-radius: 50% 50% 40% 40%;
+      left: 50%;
+      transform: translateX(-50%) rotate(-8deg);
+    }
+
+    .pop {
+      animation: popOut 0.22s ease forwards;
+    }
+
+    @keyframes popOut {
+      0% { transform: scale(1); opacity: 1; }
+      40% { transform: scale(0.82); }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    .particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      z-index: 30;
+      animation: burst 0.8s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(0.4);
+        opacity: 0;
+      }
+    }
+
+    .plus-score {
+      position: absolute;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      pointer-events: none;
+      animation: rise 0.8s ease forwards;
+      text-shadow: 0 0 10px rgba(255,255,255,0.4);
+      z-index: 40;
+    }
+
+    @keyframes rise {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-30px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-bg one"></div>
+  <div class="glow-bg two"></div>
+
+  <!-- INTRO 1 -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-card">
+      <div class="intro-title">POP POP</div>
+      <div class="intro-text">
+        Seri mang đến cho bạn một góc nhỏ để vui tay, dịu đầu và thả lỏng một chút.
+      </div>
+      <div class="quote-line" id="quoteLine">"Hôm nay không cần cần nhẹ nhàng hơn một chút."</div>
+      <button class="intro-btn" onclick="goToReady()">OK, ready</button>
+    </div>
+  </div>
+
+  <!-- INTRO 2 -->
+  <div class="ready-screen hidden" id="readyScreen">
+    <div class="intro-card">
+      <div class="intro-title">Ready?</div>
+      <div class="intro-text">
+        Không cần giỏi.<br>
+        Không cần nghĩ quá nhiều.<br>
+        Cứ chill thôi.
+      </div>
+      <button class="intro-btn" onclick="startGame()">PLAY</button>
+    </div>
+  </div>
+
+  <!-- GAME UI -->
+  <div class="top-ui hidden" id="gameUI">
+    <div class="title">Pop Pop</div>
+    <div class="subtitle">Pop cho vui. Pop làm dịu lòng một chút.</div>
+  </div>
+
+  <div class="score-board hidden" id="scoreBoard">⭐ <span id="score">0</span></div>
+  <div class="combo-board hidden" id="comboBoard">💫 Combo: <span id="combo">0</span></div>
+
+  <div class="game-area" id="gameArea"></div>
+
+  <button class="restart-btn hidden" id="restartBtn" onclick="restartGame()">Chơi lại</button>
+
+  <script>
+    const gameArea = document.getElementById("gameArea");
+    const scoreEl = document.getElementById("score");
+    const comboEl = document.getElementById("combo");
+    const introScreen = document.getElementById("introScreen");
+    const readyScreen = document.getElementById("readyScreen");
+    const gameUI = document.getElementById("gameUI");
+    const scoreBoard = document.getElementById("scoreBoard");
+    const comboBoard = document.getElementById("comboBoard");
+    const restartBtn = document.getElementById("restartBtn");
+    const quoteLine = document.getElementById("quoteLine");
+
+    let score = 0;
+    let combo = 0;
+    let mochiCount = 14;
+    let starsCreated = false;
+    let comboTimeout;
+
+    const quotes = [
+      "Hôm nay Chỉ cần nhẹ hơn một chút.",
+      "Một ngày mệt cũng không sao đâu, cố lên.",
+      "Chậm lại một chút cũng là đang sống.",
+      "Thả lỏng vai xuống nhé, vũ trụ không giục ai đâu.",
+      "Pop hết mấy điều linh tinh trong đầu đi."
+    ];
+
+    quoteLine.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+    function createStars() {
+      if (starsCreated) return;
+      starsCreated = true;
+
+      for (let i = 0; i < 60; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        star.style.left = Math.random() * window.innerWidth + "px";
+        star.style.top = Math.random() * window.innerHeight + "px";
+        star.style.animationDelay = Math.random() * 3 + "s";
+        star.style.opacity = Math.random();
+        gameArea.appendChild(star);
+      }
+    }
+
+    function goToReady() {
+      introScreen.classList.add("hidden");
+      readyScreen.classList.remove("hidden");
+    }
+
+    function startGame() {
+      readyScreen.classList.add("hidden");
+      gameUI.classList.remove("hidden");
+      scoreBoard.classList.remove("hidden");
+      comboBoard.classList.remove("hidden");
+      restartBtn.classList.remove("hidden");
+      restartGame();
+    }
+
+    function createMochi() {
+      const mochi = document.createElement("div");
+      const type = Math.random() > 0.5 ? "female" : "male";
+      mochi.classList.add("mochi", type);
+
+      const size = Math.random() * 18 + 60;
+      mochi.style.width = size + "px";
+      mochi.style.height = size + "px";
+
+      mochi.style.left = Math.random() * (window.innerWidth - size) + "px";
+      mochi.style.top = Math.random() * (window.innerHeight - size - 140) + 100 + "px";
+      mochi.style.animationDuration = (Math.random() * 2 + 3) + "s";
+
+      const mouthType = ["smile", "flat", "o"][Math.floor(Math.random() * 3)];
+      let mouthClass = "mouth";
+      if (mouthType === "flat") mouthClass += " flat";
+      if (mouthType === "o") mouthClass += " o";
+
+      mochi.innerHTML = `
+        <div class="face">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="blush left"></div>
+          <div class="blush right"></div>
+          <div class="${mouthClass}"></div>
+        </div>
+      `;
+
+      mochi.addEventListener("click", () => popMochi(mochi));
+      gameArea.appendChild(mochi);
+    }
+
+    function popMochi(mochi) {
+      const rect = mochi.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      mochi.classList.add("pop");
+
+      createParticles(centerX, centerY);
+      playPopSound();
+
+      score++;
+      combo++;
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+
+      let points = "+1";
+      if (combo >= 10) points = "✨ x" + combo;
+      showScore(centerX, centerY, points);
+
+      clearTimeout(comboTimeout);
+      comboTimeout = setTimeout(() => {
+        combo = 0;
+        comboEl.textContent = combo;
+      }, 1800);
+
+      setTimeout(() => {
+        mochi.remove();
+        createMochi();
+      }, 200);
+    }
+
+    function createParticles(x, y) {
+      const emojis = ["⭐", "✨", "💗", "☁️", "💫"];
+      for (let i = 0; i < 10; i++) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        particle.style.left = x + "px";
+        particle.style.top = y + "px";
+        particle.style.setProperty("--x", `${(Math.random() - 0.5) * 100}px`);
+        particle.style.setProperty("--y", `${(Math.random() - 0.5) * 100}px`);
+        particle.style.fontSize = (Math.random() * 10 + 12) + "px";
+        document.body.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 800);
+      }
+    }
+
+    function showScore(x, y, text) {
+      const plus = document.createElement("div");
+      plus.classList.add("plus-score");
+      plus.textContent = text;
+      plus.style.left = x - 10 + "px";
+      plus.style.top = y - 10 + "px";
+      document.body.appendChild(plus);
+
+      setTimeout(() => plus.remove(), 800);
+    }
+
+    function restartGame() {
+      score = 0;
+      combo = 0;
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+      gameArea.innerHTML = "";
+      starsCreated = false;
+      createStars();
+
+      for (let i = 0; i < mochiCount; i++) {
+        createMochi();
+      }
+    }
+
+    function playPopSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(380, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.08);
+
+      gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.08);
+    }
+
+    window.addEventListener("resize", () => {
+      restartGame();
+    });
+  </script>
+
+</body>
+</html>
