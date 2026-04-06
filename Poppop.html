@@ -429,31 +429,77 @@
     }
 
     .collection-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-      text-align: left;
-    }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+  text-align: left;
+}
 
-    .item-card {
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 12px;
-      min-height: 88px;
-    }
+.item-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 22px;
+  padding: 14px 13px;
+  min-height: 110px;
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  transition: 0.25s ease;
+  overflow: hidden;
+}
 
-    .item-emoji {
-      font-size: 1.6rem;
-      margin-bottom: 6px;
-    }
+.item-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 16px 34px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+}
 
-    .small-note {
-      font-size: 0.9rem;
-      opacity: 0.78;
-      margin-top: 10px;
-    }
+.item-card::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.item-emoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 10px rgba(255,255,255,0.18));
+}
+
+.item-card b {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+}
+
+.item-desc {
+  opacity: 0.95;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.95);
+}
+
+.small-note {
+  font-size: 0.96rem;
+  opacity: 0.95;
+  margin-top: 14px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+}
   </style>
 </head>
 <body>
@@ -574,7 +620,7 @@
     let spawnInterval;
     let difficultyTimer;
     let gameRunning = false;
-    let maxObjects = 12;
+    let maxObjects = 20;
 
     let lastPopTime = 0;
     let fastPopChain = 0;
@@ -687,13 +733,13 @@
       obj.style.top = Math.random() * (window.innerHeight - size - 180) + 110 + "px";
       obj.style.animationDuration = (Math.random() * 2 + 3) + "s";
 
-      if (rand < 0.08) {
-        // danger thật
+      if (rand < 0.03) {
+        // danger thật chỉ 3%
         obj.classList.add("danger");
         obj.textContent = dangerIcons[Math.floor(Math.random() * dangerIcons.length)];
         obj.addEventListener("click", () => hitDanger(obj, "Bạn đã ấn trúng cục đáng nghi và nó phản dame."));
-      } else if (rand < 0.16) {
-        // quái giả dạng
+      } else if (rand < 0.06) {
+        // quái giả dạng chỉ 3%
         obj.classList.add("fake-danger");
         obj.innerHTML = `
           <div class="face">
@@ -900,11 +946,11 @@
       comboBoard.classList.remove("show");
       messageBox.classList.remove("show");
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 2; i++) {
         createMochi();
       }
 
-      let spawnRate = 1700;
+      let spawnRate = 2200;
       spawnInterval = setInterval(() => {
         createMochi();
       }, spawnRate);
@@ -950,16 +996,16 @@
         return;
       }
 
-      collection.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "item-card";
-        card.innerHTML = `
-          <div class="item-emoji">${item.emoji}</div>
-          <div><b>${item.name}</b></div>
-          <div style="opacity:0.78; margin-top:6px; font-size:0.92rem;">${item.desc}</div>
-        `;
-        collectionGrid.appendChild(card);
-      });
+     collection.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "item-card";
+  card.innerHTML = `
+    <div class="item-emoji">${item.emoji}</div>
+    <div><b>${item.name}</b></div>
+    <div class="item-desc">${item.desc}</div>
+  `;
+  collectionGrid.appendChild(card);
+});
 
       collectionCount.textContent = `Bạn đã nhặt được ${collection.length} món vô tri nhưng đáng yêu.`;
     }
