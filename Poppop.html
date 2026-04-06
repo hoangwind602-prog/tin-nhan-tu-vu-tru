@@ -6,13 +6,7 @@
   <title>Pop Pop</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      #inventory {
+   #inventory {
   position: fixed;       /* luôn hiển thị trên màn hình */
   top: 20px;
   right: 20px;
@@ -58,6 +52,13 @@
 .inventory-item:hover {
   transform: scale(1.2);
 }
+    }
+
+    body {
+    <div id="inventory">
+  <h3>Tủ Đồ</h3>
+  <div id="inventory-items"></div>
+</div>
     }
 
     .hidden { display: none !important; }
