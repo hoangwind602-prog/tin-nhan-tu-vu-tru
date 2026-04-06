@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cục Bông Mềm</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0e7f5;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  .bong {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 30% 30%, #ffdce3, #f6b9d4);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset -6px -6px 12px rgba(255,255,255,0.5),
+                inset 6px 6px 12px rgba(0,0,0,0.1),
+                0 10px 20px rgba(0,0,0,0.15);
+    animation: breathe 2s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .face {
+    position: relative;
+    width: 60%;
+    height: 60%;
+  }
+
+  .eye {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background-color: #3b3246;
+    border-radius: 50%;
+    top: 20%;
+  }
+
+  .eye.left { left: 20%; }
+  .eye.right { right: 20%; }
+
+  .blush {
+    position: absolute;
+    width: 16px;
+    height: 6px;
+    background-color: rgba(255, 145, 170, 0.35);
+    border-radius: 50%;
+    top: 50%;
+  }
+
+  .blush.left { left: 15%; }
+  .blush.right { right: 15%; }
+
+  .mouth {
+    position: absolute;
+    width: 24px;
+    height: 8px;
+    border-bottom: 2px solid #5b4b5d;
+    border-radius: 0 0 12px 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15%;
+  }
+
+  .name-tag {
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<div class="bong" id="bong">
+  <div class="face">
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="blush left"></div>
+    <div class="blush right"></div>
+    <div class="mouth"></div>
+  </div>
+  <div class="name-tag" id="nameTag">Cục Bông</div>
+</div>
+
+<script>
+  const bong = document.getElementById("bong");
+  const nameTag = document.getElementById("nameTag");
+
+  bong.addEventListener("click", () => {
+    const newName = prompt("Đặt tên cho cục bông dễ thương của bạn:", nameTag.textContent);
+    if (newName) {
+      nameTag.textContent = newName;
+    }
+  });
+</script>
+
+</body>
+</html>
