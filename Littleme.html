@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Little Me</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #fdfcff 0%, #f6f9ff 50%, #fff7fb 100%);
+      color: #5f5a66;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.35;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glow1 {
+      width: 260px;
+      height: 260px;
+      background: #ffd9ef;
+      top: -50px;
+      left: -40px;
+    }
+
+    .glow2 {
+      width: 300px;
+      height: 300px;
+      background: #dcecff;
+      top: 120px;
+      right: -70px;
+    }
+
+    .glow3 {
+      width: 260px;
+      height: 260px;
+      background: #fff1d8;
+      bottom: -80px;
+      left: 30%;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 34px;
+      padding: 34px 24px;
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(181, 171, 191, 0.16);
+    }
+
+    .little-icon {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 18px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #fff, #f7ebf5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 14px 28px rgba(203, 180, 199, 0.18);
+      animation: floaty 3s ease-in-out infinite;
+    }
+
+    @keyframes floaty {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      color: #5c5a72;
+      letter-spacing: 0.5px;
+    }
+
+    .sub {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #7d7788;
+      line-height: 1.8;
+    }
+
+    .main-btn, .soft-btn, .mode-card, .action-btn {
+      border: none;
+      cursor: pointer;
+      transition: 0.22s ease;
+      font-family: inherit;
+    }
+
+    .main-btn {
+      margin-top: 22px;
+      padding: 15px 26px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffd8eb, #dcecff);
+      color: #5d5a67;
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(200, 180, 200, 0.18);
+    }
+
+    .main-btn:hover,
+    .soft-btn:hover,
+    .action-btn:hover,
+    .mode-card:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .editor-section {
+      padding-top: 22px;
+      padding-bottom: 40px;
+    }
+
+    .top-head {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .top-head h2 {
+      margin: 0;
+      font-size: 2rem;
+      color: #5f5a69;
+    }
+
+    .top-head p {
+      margin: 10px auto 0;
+      max-width: 620px;
+      line-height: 1.8;
+      color: #7c7685;
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .preview-card, .side-card {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.78);
+      backdrop-filter: blur(16px);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(181, 171, 191, 0.12);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      background: linear-gradient(180deg, #f8fbff, #fff7fb);
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+    }
+
+    canvas {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 22px;
+      display: block;
+    }
+
+    .placeholder {
+      padding: 30px;
+      text-align: center;
+      color: #8b8494;
+      line-height: 1.8;
+      font-size: 0.98rem;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mode-card {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(238, 231, 242, 1);
+      border-radius: 22px;
+      padding: 16px 14px;
+      text-align: left;
+      box-shadow: 0 10px 24px rgba(201, 188, 210, 0.10);
+    }
+
+    .mode-card.active {
+      outline: 2px solid rgba(214, 201, 255, 0.8);
+      background: linear-gradient(180deg, #fff, #f8f6ff);
+    }
+
+    .mode-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .mode-title {
+      font-weight: 700;
+      color: #5d5868;
+      margin-bottom: 6px;
+    }
+
+    .mode-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #817b88;
+    }
+
+    .soft-btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: #ffffff;
+      color: #5d5a67;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(199, 186, 208, 0.12);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.95);
+      color: #5f5a66;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(199, 186, 208, 0.12);
+    }
+
+    .tiny-note {
+      margin-top: 16px;
+      text-align: center;
+      color: #8b8390;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 34px;
+      color: #9b93a0;
+      font-size: 0.95rem;
+    }
+
+    .loading-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff7fb, #f2f8ff);
+      color: #7c7484;
+      font-size: 0.94rem;
+      text-align: center;
+      display: none;
+    }
+
+    .loading-box.show {
+      display: block;
+      animation: pulseSoft 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSoft {
+      0%,100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.015); }
+    }
+
+    @media (max-width: 900px) {
+      .editor-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .top-head h2 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow glow1"></div>
+  <div class="bg-glow glow2"></div>
+  <div class="bg-glow glow3"></div>
+
+  <div class="wrap">
+
+    <!-- HOME -->
+    <section class="hero" id="homeSection">
+      <div class="card">
+        <div class="little-icon">📷</div>
+        <h1>Little Me</h1>
+        <div class="sub">
+          phiên bản dịu dàng hơn của bạn đây
+        </div>
+
+        <button class="main-btn" onclick="document.getElementById('uploadInput').click()">
+          Tải ảnh lên
+        </button>
+        <input type="file" id="uploadInput" accept="image/*" class="hidden" />
+
+        <div class="tiny-note">
+          bạn sẽ nhìn thấy mình<br>
+          đáng yêu hơn một chút ☁️
+        </div>
+      </div>
+    </section>
+
+    <!-- EDITOR -->
+    <section class="editor-section hidden" id="editorSection">
+      <div class="top-head">
+        <h2>Chọn mood cho ảnh của bạn</h2>
+        <p>
+          xinh một chút, đáng yêu một chút
+        </p>
+      </div>
+
+      <div class="editor-grid">
+        <!-- PREVIEW -->
+        <div class="preview-card">
+          <div class="canvas-wrap">
+            <canvas id="canvas"></canvas>
+            <div class="placeholder" id="placeholderText">
+              tải một tấm ảnh lên để bắt đầu nhe ✨
+            </div>
+          </div>
+
+          <div class="loading-box" id="loadingBox">
+            đang làm bạn đáng yêu hơn một chút...
+          </div>
+
+          <div class="action-row">
+            <button class="action-btn" onclick="downloadImage()">Lưu ảnh</button>
+            <button class="action-btn" onclick="applyCurrentMode()">Thử kiểu khác</button>
+            <button class="action-btn" onclick="document.getElementById('uploadInput').click()">Tải ảnh khác</button>
+          </div>
+
+          <div class="tiny-note">
+            “phiên bản dịu dàng hơn của bạn đây”
+          </div>
+        </div>
+
+        <!-- SIDE -->
+        <div class="side-card">
+          <div class="mode-title" style="font-size:1.1rem; margin-bottom:10px;">Chọn mode</div>
+
+          <div class="modes">
+            <button class="mode-card active" data-mode="sticker" onclick="selectMode('sticker', this)">
+              <div class="mode-icon">🎀</div>
+              <div class="mode-title">Sticker</div>
+              <div class="mode-desc">thêm chút đáng yêu vào ảnh của bạn</div>
+            </button>
+
+            <button class="mode-card" data-mode="booth" onclick="selectMode('booth', this)">
+              <div class="mode-icon">📷</div>
+              <div class="mode-title">Photo Booth</div>
+              <div class="mode-desc">khung ảnh photobooth</div>
+            </button>
+
+            <button class="mode-card" data-mode="dream" onclick="selectMode('dream', this)">
+              <div class="mode-icon">☁️</div>
+              <div class="mode-title">Dream Frame</div>
+              <div class="mode-desc">đặt bạn vào một khung cảnh mới nè</div>
+           button>
+
+            <button class="mode-card" data-mode="soft" onclick="selectMode('soft', this)">
+              <div class="mode-icon">🫧</div>
+              <div class="mode-title">Soft Filter</div>
+              <div class="mode-desc">mềm hơn, trong hơn, dreamy hơn</div>
+            </button>
+          </div>
+
+          <button class="soft-btn" onclick="applyCurrentMode()">Tạo lại ảnh</button>
+
+          <div class="tiny-note">
+            sticker sẽ được giữ ở mức vừa đủ để ảnh vẫn xinh.
+        </div>
+      </div>
+
+      <div class="footer-note">
+        made by Seri 💋
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const uploadInput = document.getElementById("uploadInput");
+    const homeSection = document.getElementById("homeSection");
+    const editorSection = document.getElementById("editorSection");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const placeholderText = document.getElementById("placeholderText");
+    const loadingBox = document.getElementById("loadingBox");
+
+    let uploadedImage = null;
+    let currentMode = "sticker";
+
+    uploadInput.addEventListener("change", handleUpload);
+
+    function handleUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          uploadedImage = img;
+          homeSection.classList.add("hidden");
+          editorSection.classList.remove("hidden");
+          placeholderText.style.display = "none";
+          setupCanvas(img);
+          applyCurrentMode();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setupCanvas(img) {
+      const maxW = 900;
+      const maxH = 1100;
+      let w = img.width;
+      let h = img.height;
+
+      const scale = Math.min(maxW / w, maxH / h, 1);
+      w *= scale;
+      h *= scale;
+
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    function selectMode(mode, btn) {
+      currentMode = mode;
+      document.querySelectorAll(".mode-card").forEach(card => card.classList.remove("active"));
+      btn.classList.add("active");
+
+      if (uploadedImage) {
+        applyCurrentMode();
+      }
+    }
+
+    function applyCurrentMode() {
+      if (!uploadedImage) return;
+
+      loadingBox.classList.add("show");
+
+      setTimeout(() => {
+        drawBaseImage();
+
+        if (currentMode === "sticker") applyStickerMode();
+        if (currentMode === "booth") applyPhotoBoothMode();
+        if (currentMode === "dream") applyDreamFrameMode();
+        if (currentMode === "soft") applySoftFilterMode();
+
+        loadingBox.classList.remove("show");
+      }, 450);
+    }
+
+    function drawBaseImage() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+
+      const radius = 34;
+      roundRect(ctx, 0, 0, canvas.width, canvas.height, radius);
+      ctx.clip();
+      ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+    }
+
+    function applyStickerMode() {
+      // soft overlay
+      ctx.fillStyle = "rgba(255, 240, 248, 0.10)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // blush
+      ctx.fillStyle = "rgba(255, 168, 196, 0.20)";
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.32, canvas.height * 0.60, 38, 20, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.68, canvas.height * 0.60, 38, 20, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // bunny ears
+      drawText("🐰", canvas.width * 0.18, canvas.height * 0.12, 56);
+      drawText("🐰", canvas.width * 0.72, canvas.height * 0.12, 56);
+
+      // bow
+      drawText("🎀", canvas.width * 0.43, canvas.height * 0.06, 48);
+
+      // stars / hearts / clouds
+      const stickers = ["✨", "💗", "☁️", "🌙", "🫧", "⭐"];
+      for (let i = 0; i < 12; i++) {
+        const emoji = stickers[Math.floor(Math.random() * stickers.length)];
+        const x = Math.random() * (canvas.width - 50) + 10;
+        const y = Math.random() * (canvas.height - 50) + 10;
+        const size = Math.random() * 18 + 20;
+        drawText(emoji, x, y, size);
+      }
+
+      // cat whiskers
+      ctx.strokeStyle = "rgba(255,255,255,0.78)";
+      ctx.lineWidth = 2;
+      whiskers(canvas.width * 0.37, canvas.height * 0.58, -1);
+      whiskers(canvas.width * 0.63, canvas.height * 0.58, 1);
+    }
+
+    function whiskers(x, y, dir) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 30 * dir, y - 8);
+      ctx.moveTo(x, y + 10);
+      ctx.lineTo(x + 30 * dir, y + 10);
+      ctx.moveTo(x, y + 20);
+      ctx.lineTo(x + 30 * dir, y + 28);
+      ctx.stroke();
+    }
+
+    function applyPhotoBoothMode() {
+      // white border
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,0.90)";
+      roundRect(ctx, 18, 18, canvas.width - 36, canvas.height - 36, 24);
+      ctx.strokeStyle = "rgba(255,255,255,0.75)";
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      ctx.restore();
+
+      // booth strips
+      ctx.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width * 0.5, 30);
+      ctx.lineTo(canvas.width * 0.5, canvas.height - 30);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(30, canvas.height * 0.5);
+      ctx.lineTo(canvas.width - 30, canvas.height * 0.5);
+      ctx.stroke();
+
+      // tiny stickers
+      drawText("🎀", canvas.width * 0.07, canvas.height * 0.06, 34);
+      drawText("✨", canvas.width * 0.85, canvas.height * 0.07, 28);
+      drawText("💌", canvas.width * 0.08, canvas.height * 0.88, 28);
+      drawText("☁️", canvas.width * 0.83, canvas.height * 0.88, 32);
+
+      // caption
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.fillRect(canvas.width * 0.25, canvas.height - 56, canvas.width * 0.5, 34);
+      ctx.fillStyle = "#8b8190";
+      ctx.font = "bold 16px Segoe UI";
+      ctx.textAlign = "center";
+      ctx.fillText("Little Me", canvas.width / 2, canvas.height - 33);
+    }
+
+    function applyDreamFrameMode() {
+      // dreamy overlay
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, "rgba(220, 235, 255, 0.24)");
+      grad.addColorStop(0.5, "rgba(255, 242, 249, 0.18)");
+      grad.addColorStop(1, "rgba(255, 236, 216, 0.16)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // sun glow
+      const sun = ctx.createRadialGradient(canvas.width * 0.82, canvas.height * 0.18, 10, canvas.width * 0.82, canvas.height * 0.18, 120);
+      sun.addColorStop(0, "rgba(255, 247, 220, 0.95)");
+      sun.addColorStop(1, "rgba(255, 247, 220, 0)");
+      ctx.fillStyle = sun;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // clouds
+      for (let i = 0; i < 6; i++) {
+        drawCloud(Math.random() * canvas.width, Math.random() * canvas.height * 0.35 + 20, Math.random() * 0.6 + 0.8);
+      }
+
+      // window frame
+      ctx.strokeStyle = "rgba(255,255,255,0.78)";
+      ctx.lineWidth = 8;
+      roundRect(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 26);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(canvas.width * 0.5, 40);
+      ctx.lineTo(canvas.width * 0.5, canvas.height - 40);
+      ctx.moveTo(40, canvas.height * 0.5);
+      ctx.lineTo(canvas.width - 40, canvas.height * 0.5);
+      ctx.stroke();
+
+      drawText("☁️", canvas.width * 0.08, canvas.height * 0.08, 30);
+      drawText("🌷", canvas.width * 0.84, canvas.height * 0.88, 28);
+    }
+
+    function drawCloud(x, y, scale = 1) {
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(x, y, 22 * scale, Math.PI * 0.5, Math.PI * 1.5);
+      ctx.arc(x + 22 * scale, y - 14 * scale, 22 * scale, Math.PI, Math.PI * 2);
+      ctx.arc(x + 48 * scale, y, 22 * scale, Math.PI * 1.5, Math.PI * 0.5);
+      ctx.arc(x + 22 * scale, y + 12 * scale, 28 * scale, 0, Math.PI);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function applySoftFilterMode() {
+      // bright wash
+      ctx.fillStyle = "rgba(255,255,255,0.10)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // pink/blue gradient
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, "rgba(255, 223, 239, 0.14)");
+      grad.addColorStop(1, "rgba(218, 235, 255, 0.14)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // dreamy blur circles
+      for (let i = 0; i < 9; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const r = Math.random() * 45 + 18;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, "rgba(255,255,255,0.20)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      drawText("🫧", canvas.width * 0.10, canvas.height * 0.10, 28);
+      drawText("✨", canvas.width * 0.84, canvas.height * 0.12, 24);
+      drawText("☁️", canvas.width * 0.78, canvas.height * 0.84, 26);
+    }
+
+    function drawText(text, x, y, size) {
+      ctx.font = `${size}px Segoe UI Emoji, Apple Color Emoji, sans-serif`;
+      ctx.fillText(text, x, y);
+  }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    function downloadImage() {
+      if (!uploadedImage) return;
+      const link = document.createElement("a");
+      link.download = "little-me-by-seri.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
+      
