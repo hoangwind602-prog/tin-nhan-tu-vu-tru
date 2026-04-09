@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dưới Ánh Sao Đêm | Under The Night Stars</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg1: #171b34;
+      --bg2: #26234a;
+      --bg3: #3a3766;
+      --card: rgba(255,255,255,0.12);
+      --card-border: rgba(255,255,255,0.18);
+      --text: #fffdfc;
+      --soft: rgba(255,255,255,0.82);
+      --accent: #ffdca8;
+      --accent2: #ffc8df;
+      --shadow: 0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #44508f 0%, #29284e 35%, #171b34 100%);
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hidden { display: none !important; }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+      animation: twinkle 3s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0%,100% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-shadow: 0 0 16px rgba(255,255,255,0.12);
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--soft);
+      margin-bottom: 18px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 20px;
+      margin: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: rgba(255,255,255,0.24);
+    }
+
+    .comic-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+      padding: 16px 14px 22px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      z-index: 5;
+    }
+
+    .mini-pill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.14);
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .lang-btn.active {
+      background: rgba(255,255,255,0.24);
+    }
+
+    .comic-card {
+      flex: 1;
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      }
+
+    .scene {
+      flex: 1;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #2f3465 0%, #4a4f8d 45%, #7a78a7 100%);
+      min-height: 420px;
+    }
+
+    .caption-box {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 18px;
+      text-align: center;
+      line-height: 1.7;
+      color: var(--soft);
+      font-size: 0.98rem;
+      min-height: 72px;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      gap: 10px;
+    }
+
+    .footer-mark {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.72);
+    }
+
+    /* ===== comic visual ===== */
+
+    .moon {
+      position: absolute;
+      top: 28px;
+      right: 36px;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fffef4, #ffeeb5 65%, #f2d27d 100%);
+      box-shadow: 0 0 28px rgba(255, 238, 181, 0.35);
+      z-index: 1;
+    }
+
+    .window-stars {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      filter: blur(1px);
+    }
+
+    .room {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 55%;
+      background: linear-gradient(to top, #d8b48b 0%, #e7c6a4 35%, #f5dfc9 100%);
+      z-index: 1;
+    }
+
+    .wall {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 42%;
+      height: 22%;
+      background: linear-gradient(to top, #c7b0d6, #ddd0ea);
+      z-index: 1;
+    }
+
+    .frame {
+      position: absolute;
+      width: 72px;
+      height: 52px;
+      background: #fff7f2;
+      border: 4px solid #b48e73;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+    .table {
+      position: absolute;
+      width: 72px;
+      height: 42px;
+      background: #b98562;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+    .fan {
+      position: absolute;
+      width: 72px;
+      height: 110px;
+      z-index: 3;
+    }
+
+    .fan-head {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.72);
+      border: 4px solid #9aa5b6;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .fan-blade {
+      position: absolute;
+      width: 16px;
+      height: 24px;
+      background: rgba(180,190,210,0.75);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform-origin: center bottom;
+    }
+
+    .fan-stand {
+      width: 8px;
+      height: 40px;
+      background: #98a0b3;
+      margin: 0 auto;
+      border-radius: 10px;
+    }
+
+    .fan-base {
+      width: 42px;
+      height: 12px;
+      background: #7e8798;
+      margin: 0 auto;
+      border-radius: 999px;
+    }
+
+    .bed {
+      position: absolute;
+      width: 250px;
+      height: 120px;
+      background: #fff2f3;
+      border-radius: 26px;
+      z-index: 2;
+      box-shadow: inset 0 -12px 0 rgba(255, 198, 206, 0.55);
+    }
+
+    .mattress {
+      position: absolute;
+      inset: 12px;
+      border-radius: 20px;
+      background: #fff9fb;
+    }
+
+    .mat {
+      position: absolute;
+      width: 270px;
+      height: 110px;
+      background: #e6d3b7;
+      border-radius: 24px;
+      z-index: 2;
+      box-shadow: inset 0 -10px 0 rgba(201, 170, 136, 0.28);
+    }
+
+    .window {
+      position: absolute;
+      width: 120px;
+      height: 100px;
+      background: linear-gradient(to bottom, #26305f, #4a5c99);
+      border: 8px solid #fff4ef;
+      border-radius: 18px;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .window::before, .window::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,0.6);
+    }
+
+    .window::before {
+      width: 6px;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .window::after {
+      height: 6px;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .curtain {
+      position: absolute;
+      width: 30px;
+      height: 90px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 0 0 18px 18px;
+      z-index: 3;
+      animation: sway 4s ease-in-out infinite;
+      transform-origin: top center;
+      }
+
+    @keyframes sway {
+      0%,100% { transform: rotate(0deg); }
+      50% { transform: rotate(4deg); }
+    }
+
+    .plant {
+      position: absolute;
+      width: 38px;
+      height: 52px;
+      z-index: 3;
+    }
+
+    .pot {
+      position: absolute;
+      bottom: 0;
+      left: 8px;
+      width: 22px;
+      height: 18px;
+      background: #b57d62;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 12px;
+      height: 20px;
+      background: #7ab686;
+      border-radius: 50%;
+    }
+
+    /* ===== characters ===== */
+
+    .char {
+      position: absolute;
+      z-index: 5;
+      transform-origin: center bottom;
+      animation: breathe 3.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%,100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-2px) scale(1.01); }
+    }
+
+    .head {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #ffe0c8;
+      z-index: 2;
+      box-shadow: inset -5px -6px 0 rgba(255, 192, 160, 0.25);
+    }
+
+    .body {
+      position: absolute;
+      width: 64px;
+      height: 56px;
+      border-radius: 24px;
+      z-index: 1;
+    }
+
+    .hair {
+      position: absolute;
+      z-index: 3;
+    }
+
+    .eye {
+      position: absolute;
+      width: 5px;
+      height: 8px;
+      background: #4a3c45;
+      border-radius: 50%;
+      top: 22px;
+    }
+
+    .blush {
+      position: absolute;
+      width: 10px;
+      height: 5px;
+      background: rgba(255, 145, 170, 0.28);
+      border-radius: 50%;
+      top: 29px;
+    }
+
+    .mouth {
+      position: absolute;
+      width: 10px;
+      height: 5px;
+      border-bottom: 2px solid #6a5360;
+      border-radius: 0 0 10px 10px;
+      top: 33px;
+      left: 22px;
+    }
+
+    .closed-eye {
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: #5a4b55;
+      border-radius: 999px;
+      top: 24px;
+    }
+
+    .pillow {
+      position: absolute;
+      width: 42px;
+      height: 28px;
+      background: #fffaf8;
+      border-radius: 16px;
+      box-shadow: inset -4px -4px 0 rgba(255, 225, 225, 0.45);
+      z-index: 4;
+    }
+
+    .paper-fan {
+      position: absolute;
+      width: 34px;
+      height: 20px;
+      background: linear-gradient(to top, #f8d7d7, #fff6f2);
+      border-radius: 0 0 18px 18px;
+      border: 2px solid rgba(180,140,140,0.5);
+      z-index: 6;
+    }
+
+    .teddy {
+      position: absolute;
+      width: 26px;
+      height: 30px;
+      background: #cda57c;
+      border-radius: 14px;
+      z-index: 6;
+    }
+
+    .bubble {
+      position: absolute;
+      max-width: 150px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.88);
+      color: #4a4050;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.5;
+      z-index: 20;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+    }
+
+    .bubble::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: rgba(255,255,255,0.88);
+      transform: rotate(45deg);
+      bottom: -5px;
+      left: 24px;
+    }
+
+    .ending-text {
+      font-size: 1.1rem;
+      line-height: 2;
+      color: #fffaf3;
+      text-align: center;
+      padding: 12px 10px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 420px) {
+      .scene { min-height: 390px; }
+      .title { font-size: 1.8rem; }
+      .caption-box { font-size: 0.95rem; }
+    
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stars"></div>
+
+  <!-- OPENING -->
+  <div class="screen" id="openingScreen">
+    <div class="card">
+      <div class="title" id="openTitle">Dưới Ánh Sao Đêm</div>
+      <div class="subtitle" id="openSubtitle">
+        Một câu chuyện nhỏ về mùa hè, mất điện, và sự mát lành của ký ức.
+      </div>
+      <button class="btn" onclick="openStory()" id="openBtn">Mở câu chuyện</button>
+    </div>
+  </div>
+
+  <!-- COMIC -->
+  <div class="comic-wrap hidden" id="comicWrap">
+    <div class="top-bar">
+      <div class="mini-pill" id="pageCounter">1 / 5</div>
+      <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('vi')" id="btnVI">VI</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btnEN">EN</button>
+      </div>
+    </div>
+
+    <div class="comic-card">
+      <div class="scene" id="scene"></div>
+      <div class="caption-box" id="captionBox"></div>
+
+      <div class="nav-bar">
+        <button class="btn" onclick="prevPage()" id="prevBtn">← Trước</button>
+        <button class="btn" onclick="nextPage()" id="nextBtn">Sau →</button>
+      </div>
+
+      <div class="footer-mark">made by Seri ☁️</div>
+    </div>
+  </div>
+
+  <script>
+    const stars = document.getElementById("stars");
+    const openingScreen = document.getElementById("openingScreen");
+    const comicWrap = document.getElementById("comicWrap");
+    const scene = document.getElementById("scene");
+    const captionBox = document.getElementById("captionBox");
+    const pageCounter = document.getElementById("pageCounter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const btnVI = document.getElementById("btnVI");
+    const btnEN = document.getElementById("btnEN");
+
+    let currentPage = 0;
+    let lang = "vi";
+
+    const pages = [
+      {
+        vi: {
+          caption: "“Một đêm mùa hè nóng hầm hập.”"
+        },
+        en: {
+          caption: "“A summer night, warm and breathless.”"
+        }
+      },
+      {
+        vi: {
+          caption: "“Cả căn phòng bỗng lặng im.”"
+        },
+        en: {
+          caption: "“Then suddenly, the whole room fell silent.”"
+        }
+      },
+      {
+        vi: {
+          caption: "“Mỗi người ôm lấy chiếc gối của mình.”"
+        },
+        en: {
+          caption: "“Each of them carried their own little pillow.”"
+        }
+      },
+      {
+        vi: {
+          caption: "“Gió trời thoảng qua mát dịu.”"
+        },
+        en: {
+          caption: "“A soft night breeze drifted in.”"
+        }
+      },
+      {
+        vi: {
+          caption: "“Có những mùa hè không có điều hoà,<br>nhưng lại mát nhất trong ký ức tuổi thơ.”"
+        },
+        en: {
+          caption: "“Some summers had no air conditioner,<br>yet stayed the coolest in childhood memory.”"
+        }
+      }
+    ];
+
+    const uiText = {
+      vi: {
+        openTitle: "Dưới Ánh Sao Đêm",
+        openSubtitle: "Một câu chuyện nhỏ về mùa hè, mất điện, và sự mát lành của ký ức.",
+        openBtn: "Mở câu chuyện",
+        prev: "← Trước",
+        next: "Sau →"
+      },
+      en: {
+        openTitle: "Under The Night Stars",
+        openSubtitle: "A tiny story about summer, a blackout, and the coolness of memory.",
+        openBtn: "Open the story",
+        prev: "← Back",
+        next: "Next →"
+          }
+    };
+
+    function createStars() {
+      for (let i = 0; i < 65; i++) {
+        const s = document.createElement("div");
+        s.className = "star";
+        const size = Math.random() * 3 + 1;
+        s.style.width = size + "px";
+        s.style.height = size + "px";
+        s.style.left = Math.random() * window.innerWidth + "px";
+        s.style.top = Math.random() * window.innerHeight + "px";
+        s.style.animationDelay = Math.random() * 3 + "s";
+        s.style.opacity = Math.random();
+        stars.appendChild(s);
+      }
+    }
+
+    function openStory() {
+      openingScreen.classList.add("hidden");
+      comicWrap.classList.remove("hidden");
+      renderPage();
+    }
+
+    function setLang(newLang) {
+      lang = newLang;
+      btnVI.classList.toggle("active", lang === "vi");
+      btnEN.classList.toggle("active", lang === "en");
+
+      document.getElementById("openTitle").innerHTML = uiText[lang].openTitle;
+      document.getElementById("openSubtitle").innerHTML = uiText[lang].openSubtitle;
+      document.getElementById("openBtn").innerHTML = uiText[lang].openBtn;
+      prevBtn.innerHTML = uiText[lang].prev;
+      nextBtn.innerHTML = uiText[lang].next;
+
+      renderPage();
+    }
+
+    function nextPage() {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        renderPage();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderPage();
+      }
+    }
+
+    function renderPage() {
+      pageCounter.textContent = `${currentPage + 1} / ${pages.length}`;
+      captionBox.innerHTML = pages[currentPage][lang].caption;
+      prevBtn.style.opacity = currentPage === 0 ? "0.5" : "1";
+      nextBtn.style.opacity = currentPage === pages.length - 1 ? "0.5" : "1";
+      drawScene(currentPage);
+    }
+
+    function drawScene(page) {
+      scene.innerHTML = "";
+
+      // moon + clouds + tiny stars
+      const moon = document.createElement("div");
+      moon.className = "moon";
+      scene.appendChild(moon);
+
+      for (let i = 0; i < 10; i++) {
+        const tiny = document.createElement("div");
+        tiny.className = "star";
+        const size = Math.random() * 2 + 1;
+        tiny.style.width = size + "px";
+        tiny.style.height = size + "px";
+        tiny.style.left = Math.random() * 100 + "%";
+        tiny.style.top = Math.random() * 45 + "%";
+        tiny.style.animationDelay = Math.random() * 3 + "s";
+        scene.appendChild(tiny);
+      }
+
+      addCloud(28, 60, 18, 0.16);
+      addCloud(120, 88, 22, 0.12);
+      addCloud(240, 52, 16, 0.14);
+
+      if (page === 0) drawPage1();
+      if (page === 1) drawPage2();
+      if (page === 2) drawPage3();
+      if (page === 3) drawPage4();
+      if (page === 4) drawPage5();
+      }
+
+    function addCloud(x, y, w, op = 0.16) {
+      const c = document.createElement("div");
+      c.className = "cloud";
+      c.style.left = x + "px";
+      c.style.top = y + "px";
+      c.style.width = w * 4 + "px";
+      c.style.height = w + "px";
+      c.style.opacity = op;
+      scene.appendChild(c);
+    }
+
+    function addRoomBasics() {
+      const wall = document.createElement("div");
+      wall.className = "wall";
+      scene.appendChild(wall);
+
+      const room = document.createElement("div");
+      room.className = "room";
+      scene.appendChild(room);
+
+      const frame = document.createElement("div");
+      frame.className = "frame";
+      frame.style.left = "34px";
+      frame.style.top = "124px";
+      scene.appendChild(frame);
+
+      const table = document.createElement("div");
+      table.className = "table";
+      table.style.right = "28px";
+      table.style.bottom = "108px";
+      scene.appendChild(table);
+
+      const lamp = document.createElement("div");
+      lamp.style.position = "absolute";
+      lamp.style.width = "18px";
+      lamp.style.height = "24px";
+      lamp.style.borderRadius = "8px 8px 4px 4px";
+      lamp.style.background = "linear-gradient(to bottom, #ffe7b7, #f7bf7f)";
+      lamp.style.right = "54px";
+      lamp.style.bottom = "138px";
+      lamp.style.boxShadow = "0 0 16px rgba(255,220,160,0.35)";
+      lamp.style.zIndex = "3";
+      scene.appendChild(lamp);
+    }
+
+    function addFan(x, y, stopped = false) {
+      const fan = document.createElement("div");
+      fan.className = "fan";
+      fan.style.left = x + "px";
+      fan.style.top = y + "px";
+
+      const head = document.createElement("div");
+      head.className = "fan-head";
+
+      for (let i = 0; i < 3; i++) {
+        const blade = document.createElement("div");
+        blade.className = "fan-blade";
+        blade.style.transform = `translate(-50%, -50%) rotate(${i * 120}deg) translateY(-12px)`;
+        head.appendChild(blade);
+      }
+
+      if (!stopped) {
+        head.style.animation = "spin 0.8s linear infinite";
+      }
+
+      const stand = document.createElement("div");
+      stand.className = "fan-stand";
+      const base = document.createElement("div");
+      base.className = "fan-base";
+
+      fan.appendChild(head);
+      fan.appendChild(stand);
+      fan.appendChild(base);
+      scene.appendChild(fan);
+    }
+
+    function addBed(x, y) {
+      const bed = document.createElement("div");
+      bed.className = "bed";
+      bed.style.left = x + "px";
+      bed.style.top = y + "px";
+
+      const mattress = document.createElement("div");
+      mattress.className = "mattress";
+      bed.appendChild(mattress);
+
+      scene.appendChild(bed);
+    }
+
+    function addMat(x, y) {
+      const mat = document.createElement("div");
+      mat.className = "mat";
+      mat.style.left = x + "px";
+      mat.style.top = y + "px";
+      scene.appendChild(mat);
+    }
+
+    function addWindow(x, y) {
+      const w = document.createElement("div");
+      w.className = "window";
+      w.style.left = x + "px";
+      w.style.top = y + "px";
+      scene.appendChild(w);
+
+      const c1 = document.createElement("div");
+      c1.className = "curtain";
+      c1.style.left = x - 8 + "px";
+      c1.style.top = y + 8 + "px";
+
+      const c2 = document.createElement("div");
+      c2.className = "curtain";
+      c2.style.left = x + 98 + "px";
+      c2.style.top = y + 8 + "px";
+      c2.style.animationDelay = "1s";
+
+      scene.appendChild(c1);
+      scene.appendChild(c2);
+    }
+
+    function addPlant(x, y) {
+      const plant = document.createElement("div");
+      plant.className = "plant";
+      plant.style.left = x + "px";
+      plant.style.top = y + "px";
+
+      const pot = document.createElement("div");
+      pot.className = "pot";
+
+      for (let i = 0; i < 4; i++) {
+        const leaf = document.createElement("div");
+        leaf.className = "leaf";
+        leaf.style.left = (Math.random() * 18 + 4) + "px";
+        leaf.style.top = (Math.random() * 20 + 2) + "px";
+        leaf.style.transform = `rotate(${Math.random() * 90 - 45}deg)`;
+        plant.appendChild(leaf);
+      }
+
+      plant.appendChild(pot);
+      scene.appendChild(plant);
+    }
+
+    function createCharacter(type, x, y, pose = "stand", sleepy = false) {
+      const char = document.createElement("div");
+      char.className = "char";
+      char.style.left = x + "px";
+      char.style.top = y + "px";
+      char.style.width = "74px";
+      char.style.height = "100px";
+
+      const head = document.createElement("div");
+      head.className = "head";
+
+      const body = document.createElement("div");
+      body.className = "body";
+      body.style.left = "5px";
+      body.style.top = "42px";
+
+      const hair = document.createElement("div");
+      hair.className = "hair";
+
+      if (type === "dad") {
+        body.style.background = "#e8f0ff";
+        head.style.left = "10px";
+        head.style.top = "0px";
+        hair.style.width = "56px";
+        hair.style.height = "24px";
+        hair.style.left = "9px";
+        hair.style.top = "-1px";
+        hair.style.background = "#4b3f48";
+        hair.style.borderRadius = "26px 26px 12px 12px";
+      }
+
+      if (type === "mom") {
+        body.style.background = "#ffe7ef";
+        head.style.left = "10px";
+        head.style.top = "0px";
+        hair.style.width = "62px";
+        hair.style.height = "46px";
+        hair.style.left = "6px";
+        hair.style.top = "-1px";
+        hair.style.background = "#3d2f37";
+        hair.style.borderRadius = "30px 30px 22px 22px";
+      }
+
+      if (type === "girl") {
+        body.style.background = "#fff0b8";
+        body.style.height = "54px";
+        body.style.width = "58px";
+        body.style.left = "8px";
+        head.style.width = "48px";
+        head.style.height = "48px";
+        head.style.left = "13px";
+        head.style.top = "4px";
+        hair.style.width = "52px";
+        hair.style.height = "34px";
+        hair.style.left = "11px";
+        hair.style.top = "3px";
+        hair.style.background = "#4a3841";
+        hair.style.borderRadius = "24px 24px 18px 18px";
+      }
+
+      if (type === "boy") {
+        body.style.background = "#d9ecff";
+        body.style.height = "50px";
+        body.style.width = "56px";
+        body.style.left = "9px";
+        head.style.width = "46px";
+        head.style.height = "46px";
+        head.style.left = "14px";
+        head.style.top = "6px";
+        hair.style.width = "48px";
+        hair.style.height = "20px";
+        hair.style.left = "13px";
+        hair.style.top = "6px";
+        hair.style.background = "#4a3c45";
+        hair.style.borderRadius = "24px 24px 10px 10px";
+      }
+
+      if (sleepy) {
+        const eye1 = document.createElement("div");
+        eye1.className = "closed-eye";
+        eye1.style.left = "16px";
+
+        const eye2 = document.createElement("div");
+        eye2.className = "closed-eye";
+        eye2.style.left = "31px";
+
+        head.appendChild(eye1);
+        head.appendChild(eye2);
+      } else {
+        const eye1 = document.createElement("div");
+        eye1.className = "eye";
+        eye1.style.left = "17px";
+
+        const eye2 = document.createElement("div");
+        eye2.className = "eye";
+        eye2.style.left = "31px";
+
+        head.appendChild(eye1);
+        head.appendChild(eye2);
+      }
+
+      const blush1 = document.createElement("div");
+      blush1.className = "blush";
+      blush1.style.left = "8px";
+
+      const blush2 = document.createElement("div");
+      blush2.className = "blush";
+      blush2.style.left = "35px";
+
+      const mouth = document.createElement("div");
+      mouth.className = "mouth";
+
+      head.appendChild(blush1);
+      head.appendChild(blush2);
+      head.appendChild(mouth);
+
+      char.appendChild(body);
+      char.appendChild(head);
+      char.appendChild(hair);
+
+      if (pose === "carry-pillow") {
+        const pillow = document.createElement("div");
+        pillow.className = "pillow";
+        pillow.style.left = "18px";
+        pillow.style.top = "50px";
+        char.appendChild(pillow);
+      }
+
+      if (type === "mom" && pose === "carry-fan") {
+        const fan = document.createElement("div");
+        fan.className = "paper-fan";
+        fan.style.left = "38px";
+        fan.style.top = "58px";
+        char.appendChild(fan);
+      }
+
+      if (type === "girl" && pose === "carry-teddy") {
+        const teddy = document.createElement("div");
+        teddy.className = "teddy";
+        teddy.style.left = "38px";
+        teddy.style.top = "58px";
+        char.appendChild(teddy);
+      }
+
+      scene.appendChild(char);
+      return char;
+    }
+
+    function addBubble(text, x, y) {
+      const b = document.createElement("div");
+      b.className = "bubble";
+      b.innerHTML = text;
+      b.style.left = x + "px";
+      b.style.top = y + "px";
+      scene.appendChild(b);
+    }
+
+    // ===== PAGE 1 =====
+    function drawPage1() {
+      addRoomBasics();
+      addBed(85, 220);
+      addFan(300, 170, false);
+
+      createCharacter("dad", 100, 250, "stand", true).style.transform = "rotate(90deg)";
+      createCharacter("mom", 155, 248, "stand", true).style.transform = "rotate(90deg)";
+      createCharacter("girl", 215, 262, "stand", true).style.transform = "rotate(90deg)";
+      createCharacter("boy", 255, 266, "stand", true).style.transform = "rotate(90deg)";
+
+      const sweat = document.createElement("div");
+      sweat.style.position = "absolute";
+      sweat.style.left = "250px";
+      sweat.style.top = "248px";
+      sweat.style.fontSize = "24px";
+      sweat.style.zIndex = "8";
+      sweat.textContent = "💦";
+      scene.appendChild(sweat);
+    }
+
+    // ===== PAGE 2 =====
+    function drawPage2() {
+      addRoomBasics();
+      addBed(85, 220);
+      addFan(300, 170, true);
+
+     const dad = createCharacter("dad", 95, 235, "stand", false);
+      const mom = createCharacter("mom", 155, 228, "stand", false);
+      const girl = createCharacter("girl", 218, 252, "carry-pillow", false);
+      const boy = createCharacter("boy", 270, 258, "carry-pillow", false);
+
+      dad.style.transform = "rotate(-10deg)";
+      mom.style.transform = "rotate(4deg)";
+
+      addBubble(lang === "vi" ? "Bố mẹ ơi mất điện rồi" : "Mom, Dad... power is out!", 222, 168);
+      addBubble(lang === "vi" ? "Ôi, mất điện thật rồi..." : "Oh... the power really went out.", 110, 160);
+    }
+
+    // ===== PAGE 3 =====
+    function drawPage3() {
+      addRoomBasics();
+
+      const hallLight = document.createElement("div");
+      hallLight.style.position = "absolute";
+      hallLight.style.left = "0";
+      hallLight.style.right = "0";
+      hallLight.style.bottom = "0";
+      hallLight.style.height = "65%";
+      hallLight.style.background = "linear-gradient(to top, #efc89f, #f8ddc3)";
+      hallLight.style.zIndex = "1";
+      scene.appendChild(hallLight);
+
+      const dad = createCharacter("dad", 52, 255, "carry-pillow", false);
+      const mom = createCharacter("mom", 145, 248, "carry-fan", false);
+      const girl = createCharacter("girl", 240, 272, "carry-teddy", false);
+      const boy = createCharacter("boy", 310, 276, "carry-pillow", false);
+
+      dad.style.transform = "rotate(-4deg)";
+      mom.style.transform = "rotate(3deg)";
+      girl.style.transform = "rotate(-2deg)";
+      boy.style.transform = "rotate(2deg)";
+
+      addBubble(lang === "vi" ? "Đi cả nhà ra phòng khách ngủ cho mát." : "Let's sleep in the living room. It's cooler there.", 48, 176);
+      addBubble(lang === "vi" ? "Cầm theo gối đi con nhé." : "Bring your pillows, okay?", 196, 178);
+    }
+
+    // ===== PAGE 4 =====
+    function drawPage4() {
+      const room = document.createElement("div");
+      room.className = "room";
+      room.style.height = "60%";
+      scene.appendChild(room);
+
+      addWindow(250, 112);
+      addPlant(230, 190);
+      addPlant(360, 194);
+      addMat(80, 260);
+
+      const dad = createCharacter("dad", 92, 268, "stand", false);
+      const mom = createCharacter("mom", 178, 255, "carry-fan", false);
+      const girl = createCharacter("girl", 286, 286, "carry-teddy", true);
+      const boy = createCharacter("boy", 336, 278, "carry-pillow", false);
+
+      dad.style.transform = "rotate(8deg)";
+      girl.style.transform = "rotate(8deg)";
+
+      addBubble(lang === "vi" ? "Chị ơi, trời nhiều sao sáng chưa kìa!" : "Sis, look! So many stars!", 232, 208);
+      addBubble(lang === "vi" ? "Chị buồn ngủ lắm..." : "I'm sooo sleepy...", 286, 240);
+      addBubble(lang === "vi" ? "Nào ra đây nằm, mẹ quạt cho mát." : "Come here, I'll fan you two.", 112, 188);
+    }
+
+    // ===== PAGE 5 =====
+    function drawPage5() {
+      const room = document.createElement("div");
+      room.className = "room";
+      room.style.height = "60%";
+      scene.appendChild(room);
+
+      addWindow(248, 96);
+      addPlant(228, 174);
+      addPlant(360, 180);
+      addMat(74, 258);
+
+      const dad = createCharacter("dad", 78, 282, "stand", true);
+      dad.style.transform = "rotate(90deg)";
+
+      const boy = createCharacter("boy", 145, 294, "stand", true);
+      boy.style.transform = "rotate(90deg)";
+
+      const mom = createCharacter("mom", 205, 280, "carry-fan", true);
+      mom.style.transform = "rotate(90deg)";
+
+      const girl = createCharacter("girl", 280, 288, "carry-teddy", true);
+      girl.style.transform = "rotate(90deg)";
+
+      const paperFan = document.createElement("div");
+      paperFan.className = "paper-fan";
+      paperFan.style.left = "255px";
+      paperFan.style.top = "275px";
+      paperFan.style.transform = "rotate(16deg)";
+      scene.appendChild(paperFan);
+
+      const ending = document.createElement("div");
+      ending.className = "ending-text";
+      ending.innerHTML = lang === "vi"
+        ? "Có những mùa hè không có điều hoà,<br>nhưng lại mát nhất trong ký ức tuổi thơ."
+        : "Some summers had no air conditioner,<br>yet stayed the coolest in childhood memory.";
+      ending.style.position = "absolute";
+      ending.style.left = "24px";
+      ending.style.right = "24px";
+      ending.style.bottom = "18px";
+      ending.style.zIndex = "30";
+      ending.style.background = "rgba(26, 25, 48, 0.35)";
+      ending.style.borderRadius = "20px";
+      ending.style.backdropFilter = "blur(6px)";
+      scene.appendChild(ending);
+    }
+
+    // add missing spin animation
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    createStars();
+    setLang("vi");
+  </script>
+
+</body>
+</html>
