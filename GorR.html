@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>G or R — made by Seri</title>
+  <style>
+    :root {
+      --bg: #fff7f5;
+      --card: #ffffff;
+      --text: #3f3a3a;
+      --muted: #8b7f7f;
+      --green: #9ed7b4;
+      --green-dark: #5b9a79;
+      --red: #f3a1ad;
+      --red-dark: #c96b79;
+      --soft: #fdf1ef;
+      --shadow: 0 12px 28px rgba(0,0,0,0.08);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #fffaf8 0%, #fff3f1 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255, 214, 221, 0.35), transparent 32%),
+        radial-gradient(circle at top right, rgba(194, 235, 216, 0.35), transparent 30%),
+        linear-gradient(180deg, #fffaf8 0%, #fff3f1 100%);
+    }
+
+    .floating-blur {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: 0.35;
+      z-index: 0;
+      animation: floaty 10s ease-in-out infinite;
+    }
+
+    .blur1 {
+      width: 140px;
+      height: 140px;
+      background: #ffd8e1;
+      top: 40px;
+      left: -30px;
+    }
+
+    .blur2 {
+      width: 120px;
+      height: 120px;
+      background: #d8f1e3;
+      bottom: 90px;
+      right: -20px;
+      animation-delay: 2s;
+      }
+
+    @keyframes floaty {
+      0%,100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-10px) translateX(8px); }
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      padding: 24px 20px 18px;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top-badge {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      z-index: 4;
+    }
+
+    .title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.05;
+      text-align: center;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .subtitle {
+      margin-top: 14px;
+      font-size: 1rem;
+      line-height: 1.75;
+      text-align: center;
+      color: var(--muted);
+      max-width: 320px;
+    }
+
+    .mini-heart {
+      font-size: 3rem;
+      margin-bottom: 18px;
+      animation: bob 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
+    }
+
+    @keyframes bob {
+      0%,100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.03); }
+    }
+
+    .main-card {
+      width: 100%;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+    }
+
+    .intro-card {
+      text-align: center;
+      padding: 28px 22px;
+    }
+
+    .soft-line {
+      width: 54px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #f8c9d2, #cfead9);
+      margin: 18px auto 0;
+      opacity: 0.85;
+      }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 20px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #f7d3da 0%, #f2bcc7 100%);
+      color: #5c454a;
+      margin-top: 26px;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.02);
+    }
+
+    .game-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+      height: 100%;
+      padding-top: 36px;
+      padding-bottom: 16px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .pill {
+      flex: 1;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .pill .label {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .pill .value {
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .card {
+      width: 100%;
+      min-height: 280px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255, 215, 224, 0.35), transparent 70%);
+      top: -40px;
+      right: -30px;
+      border-radius: 999px;
+    }
+
+    .type-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff5f3;
+      color: #8a6f6f;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      z-index: 1;
+    }
+
+    .scenario {
+      font-size: 1.38rem;
+      line-height: 1.65;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      z-index: 1;
+      max-width: 92%;
+    }
+
+    .buttons {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .choice-btn {
+      border: none;
+      border-radius: 24px;
+      padding: 18px 12px;
+      font-size: 1.02rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: 0.2s ease;
+    }
+
+    .choice-btn:active {
+      transform: scale(0.98);
+    }
+
+    .green-btn {
+      background: linear-gradient(180deg, #cfead9 0%, #9ed7b4 100%);
+      color: #315e49;
+      }
+
+    .red-btn {
+      background: linear-gradient(180deg, #f8c8d0 0%, #f3a1ad 100%);
+      color: #6f3b45;
+    }
+
+    .feedback-box {
+      width: 100%;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .feedback-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+
+    .feedback-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .feedback-reaction {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feedback-text {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.98rem;
+      margin-bottom: 18px;
+    }
+
+    .result-score {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1;
+      margin: 10px 0 6px;
+    }
+
+    .result-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .result-note {
+      margin-top: 14px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+      font-size: 0.98rem;
+      max-width: 320px;
+    }
+
+    .made-by {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.82rem;
+      color: #9a8f8f;
+      letter-spacing: 0.3px;
+      z-index: 4;
+      opacity: 0.92;
+    }
+
+    .fade-up {
+      animation: fadeUp 0.35s ease;
+      }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tiny-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 18px;
+      justify-content: center;
+    }
+
+    .tiny-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ecd9d9;
+    }
+
+    .tiny-dots span.active {
+      background: #d8b2ba;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="floating-blur blur1"></div>
+    <div class="floating-blur blur2"></div>
+
+    <!-- INTRO -->
+    <section class="screen active" id="introScreen">
+      <div class="top-badge">mini relationship game</div>
+
+      <div class="main-card intro-card fade-up">
+        <div class="mini-heart">💌</div>
+        <h1 class="title">G or R</h1>
+        <div class="subtitle">
+          Một web mini để phân loại <b>green flag</b> và <b>red flag</b> trong tình yêu.<br><br>
+          Đọc → chọn <b>💚 Green</b> hoặc <b>🚩 Red</b>.
+        </div>
+        <div class="soft-line"></div>
+        <button class="btn btn-primary" onclick="startGame()">Bắt đầu chơi</button>
+      </div>
+
+      <div class="made-by">made by Seri ☁️</div>
+    </section>
+
+    <!-- GAME -->
+    <section class="screen" id="gameScreen">
+      <div class="top-badge">Green Flag or Red Flag?</div>
+
+      <div class="game-wrap">
+        <div class="status-row">
+          <div class="pill">
+            <div class="label">Điểm</div>
+            <div class="value" id="scoreEl">0</div>
+          </div>
+          <div class="pill">
+            <div class="label">Thẻ</div>
+            <div class="value" id="progressEl">1 / 20</div>
+          </div>
+        </div>
+
+        <div class="card fade-up" id="cardBox">
+          <div class="type-tag" id="typeTag">💬 Lời nói</div>
+          <div class="scenario" id="scenarioText">...</div>
+        </div>
+
+        <div class="buttons fade-up">
+          <button class="choice-btn green-btn" onclick="answer('green')">💚 Green Flag</button>
+          <button class="choice-btn red-btn" onclick="answer('red')">🚩 Red Flag</button>
+        </div>
+
+        <div class="tiny-dots" id="dotsWrap"></div>
+      </div>
+
+      <div class="made-by">made by Seri ☁️</div>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section class="screen" id="feedbackScreen">
+      <div class="top-badge">Kết quả lượt này</div>
+
+      <div class="feedback-box fade-up">
+        <div class="feedback-emoji" id="feedbackEmoji">💚</div>
+        <div class="feedback-title" id="feedbackTitle">Chuẩn rồi đó</div>
+        <div class="feedback-reaction" id="feedbackReaction">Bạn nhìn cũng ra vấn đề phết.</div>
+        <div class="feedback-text" id="feedbackText">Giải thích ở đây.</div>
+        <button class="btn btn-primary" onclick="nextCard()">Tiếp tục</button>
+      </div>
+      <div class="made-by">made by Seri ☁️</div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="screen" id="resultScreen">
+      <div class="top-badge">Kết quả cuối</div>
+
+      <div class="main-card intro-card fade-up">
+        <div class="mini-heart">🫶</div>
+        <h1 class="title">Bạn được</h1>
+        <div class="result-score" id="finalScore">0/20</div>
+        <div class="result-title" id="rankTitle">Đang phân tích...</div>
+        <div class="result-note" id="rankNote">
+          Không phải ai dịu dàng, tử tế cũng thật lòng.<br>
+          Nhưng người thật lòng sẽ không khiến bạn phải mệt vì suy đoán.
+        </div>
+        <div class="soft-line"></div>
+        <button class="btn btn-primary" onclick="startGame()">Chơi lại</button>
+      </div>
+
+      <div class="made-by">made by Seri ☁️</div>
+    </section>
+  </div>
+
+  <script>
+    const allCards = [
+      // GREEN - LỜI NÓI
+      { text: "Về đến nhà nhắn anh/em nhé.", type: "speech", flag: "green", explain: "Quan tâm nhưng không kiểm soát." },
+      { text: "Nếu hôm nay em/anh mệt thì nghỉ ngơi đi.", type: "speech", flag: "green", explain: "Tôn trọng sức khỏe và cảm xúc." },
+      { text: "Anh/em tôn trọng quyết định của em/anh.", type: "speech", flag: "green", explain: "Tình cảm là đồng hành, không áp đặt." },
+      { text: "Em/anh không cần phải trả lời ngay đâu.", type: "speech", flag: "green", explain: "Không ép phản hồi tức thì." },
+      { text: "Anh/em muốn lắng nghe cảm xúc của em/anh.", type: "speech", flag: "green", explain: "Biết lắng nghe là một green flag lớn." },
+      { text: "Em/anh không cần thay đổi để vừa ý anh/em.", type: "speech", flag: "green", explain: "Yêu không phải bóp méo bản thân." },
+      { text: "Anh/em tin em/anh.", type: "speech", flag: "green", explain: "Tin tưởng là nền móng của sự an toàn." },
+      { text: "Không sao đâu, mình cùng nói chuyện rõ ràng nhé.", type: "speech", flag: "green", explain: "Muốn giải quyết thay vì né tránh." },
+      { text: "Anh/em rất tự hào về em/anh.", type: "speech", flag: "green", explain: "Biết ghi nhận và nâng đỡ nhau." },
+      { text: "Nếu em/anh không thích thì cứ nói thẳng nhé.", type: "speech", flag: "green", explain: "Cho đối phương quyền bày tỏ ranh giới." },
+      { text: "Em/anh cứ đi với bạn bè đi, vui vẻ nha.", type: "speech", flag: "green", explain: "Không chiếm hữu vô lý." },
+      { text: "Anh/em muốn hiểu em/anh chứ không muốn ép em/anh.", type: "speech", flag: "green", explain: "Thấu hiểu quan trọng hơn kiểm soát." },
+      { text: "Em/anh xứng đáng được yêu thương tử tế.", type: "speech", flag: "green", explain: "Một người tốt sẽ không làm bạn thấy mình quá ít giá trị." },
+      { text: "Em/anh không cần phải hoàn hảo đâu.", type: "speech", flag: "green", explain: "Tình yêu là nơi được là chính mình." },
+      { text: "Anh/em sẽ không để em/anh phải đoán ý mình.", type: "speech", flag: "green", explain: "Rõ ràng là một green flag rất lớn." },
+      { text: "Nếu em/anh chưa sẵn sàng thì mình chậm lại cũng được.", type: "speech", flag: "green", explain: "Biết chờ và tôn trọng nhịp của nhau." },
+      { text: "Anh/em không muốn làm em/anh thấy bất an.", type: "speech", flag: "green", explain: "Có ý thức giữ sự an toàn cảm xúc." },
+      { text: "Cảm ơn em/anh vì đã nói thật với anh/em.", type: "speech", flag: "green", explain: "Khuyến khích sự trung thực." },
+      { text: "Em/anh có thể nói 'không' với anh/em.", type: "speech", flag: "green", explain: "Tôn trọng ranh giới cá nhân." },
+      { text: "Mình cùng học cách yêu tốt hơn nhé.", type: "speech", flag: "green", explain: "Biết cùng nhau trưởng thành." },
+      { text: "Anh/em muốn em/anh được là chính mình khi ở cạnh anh/em.", type: "speech", flag: "green", explain: "Tình yêu là nơi được thở." },
+      { text: "Mình có gì không ổn thì cứ nói để cùng sửa nhé.", type: "speech", flag: "green", explain: "Biết đối thoại là rất đáng quý." },
+      { text: "Anh/em hiểu là em/anh cũng cần không gian riêng.", type: "speech", flag: "green", explain: "Yêu không có nghĩa là dính chặt 24/7." },
+      { text: "Nếu anh/em làm em/anh buồn thì cứ nói cho anh/em biết.", type: "speech", flag: "green", explain: "Có trách nhiệm với cảm xúc của nhau." },
+      { text: "Em/anh không cần cố vui trước mặt anh/em đâu.", type: "speech", flag: "green", explain: "Cho phép đối phương được yếu lòng." },
+
+      // GREEN - HÀNH ĐỘNG
+      { text: "Nhớ món em/anh thích mà không cần nhắc.", type: "action", flag: "green", explain: "Để tâm đến những điều nhỏ." },
+      { text: "Tôn trọng thời gian riêng của em/anh.", type: "action", flag: "green", explain: "Không biến yêu thành kiểm soát." },
+      { text: "Xin lỗi khi làm sai.", type: "action", flag: "green", explain: "Biết nhận lỗi là trưởng thành." },
+      { text: "Không biến mất mỗi khi có vấn đề.", type: "action", flag: "green", explain: "Ở lại để cùng giải quyết." },
+      { text: "Chủ động hỏi han khi thấy em/anh bất ổn.", type: "action", flag: "green", explain: "Có sự tinh ý và quan tâm thật." },
+      { text: "Không kiểm tra điện thoại của em/anh.", type: "action", flag: "green", explain: "Tin tưởng và tôn trọng riêng tư." },
+      { text: "Giữ lời hứa dù là chuyện nhỏ.", type: "action", flag: "green", explain: "Sự ổn định rất quan trọng." },
+      { text: "Giới thiệu em/anh một cách rõ ràng.", type: "action", flag: "green", explain: "Không giấu giếm mối quan hệ." },
+      { text: "Quan tâm đến cảm xúc hơn là cái tôi.", type: "action", flag: "green", explain: "Biết đặt mối quan hệ lên trên thắng thua." },
+      { text: "Lắng nghe khi em/anh nói, không cắt ngang.", type: "action", flag: "green", explain: "Biết lắng nghe cũng là một cách yêu." },
+      { text: "Không ép em/anh phải online mọi lúc.", type: "action", flag: "green", explain: "Không biến sự quan tâm thành giám sát." },
+      { text: "Nhắn trước khi bận lâu để em/anh khỏi lo.", type: "action", flag: "green", explain: "Sự rõ ràng giúp an tâm." },
+      { text: "Tôn trọng bạn bè và gia đình của em/anh.", type: "action", flag: "green", explain: "Biết giữ hình ảnh đẹp cho đối phương trong mắt gia đình, bạn bè." },
+      { text: "Không đùa quá trớn về nỗi đau của em/anh.", type: "action", flag: "green", explain: "Biết đâu là điều cần nhẹ tay." },
+      { text: "Có mặt khi em/anh cần nhưng không ép em/anh phải mở lòng ngay.", type: "action", flag: "green", explain: "Quan tâm đúng cách." },
+      { text: "Giữ thái độ tử tế cả khi đang giận.", type: "action", flag: "green", explain: "Yêu không đồng nghĩa với làm đau." },
+      { text: "Không đem lỗi cũ ra để thắng cãi nhau.", type: "action", flag: "green", explain: "Muốn giải quyết chứ không hạ bệ." },
+      { text: "Nhớ những điều em/anh từng sợ và tránh làm lại.", type: "action", flag: "green", explain: "Quan tâm có chiều sâu." },
+      { text: "Không đùa mập mờ với người khác để em/anh ghen.", type: "action", flag: "green", explain: "Không tạo bất an vô ích." },
+      { text: "Tự điều chỉnh hành vi khi biết em/anh không thoải mái.", type: "action", flag: "green", explain: "Biết lắng nghe bằng hành động." },
+      { text: "Không ép em/anh phải chia sẻ mật khẩu.", type: "action", flag: "green", explain: "Tình yêu không cần kiểm soát cực đoan." },
+      { text: "Đến đúng giờ vì biết em/anh đang chờ.", type: "action", flag: "green", explain: "Tôn trọng thời gian cũng là tôn trọng người." },
+      { text: "Nhẹ nhàng hỏi lại khi hiểu lầm thay vì nổi nóng.", type: "action", flag: "green", explain: "Biết giữ bình tĩnh trong tình cảm." },
+      { text: "Không khiến em/anh phải chạy theo sự chú ý của mình.", type: "action", flag: "green", explain: "Một người rõ ràng sẽ không chơi trò tâm lý." },
+      { text: "Cố gắng sửa điều nhỏ mà em/anh từng buồn.", type: "action", flag: "green", explain: "Yêu là biết điều chỉnh để tốt hơn." },
+
+      // RED - LỜI NÓI
+      { text: "Anh/em bận.", type: "speech", flag: "red", explain: "Nếu lúc nào cũng chỉ có câu này thì rất đáng nghi." },
+      { text: "Nếu yêu anh/em thì đừng qua lại với người đó nữa.", type: "speech", flag: "red", explain: "Đây là kiểm soát, không phải yêu." },
+      { text: "Em/anh nhạy cảm quá rồi đó.", type: "speech", flag: "red", explain: "Dễ là đang phủ nhận cảm xúc của bạn." },
+      { text: "Anh/em như vậy là vì thương em/anh.", type: "speech", flag: "red", explain: "Không phải kiểm soát nào cũng được gọi là yêu." },
+      { text: "Anh/em không thích định nghĩa mối quan hệ.", type: "speech", flag: "red", explain: "Nghe mơ hồ và dễ giữ bạn trong lưng chừng." },
+      { text: "Em/anh phải hiểu cho anh/em chứ.", type: "speech", flag: "red", explain: "Luôn bắt bạn thông cảm một chiều." },
+      { text: "Anh/em chỉ biến mất vài ngày thôi mà.", type: "speech", flag: "red", explain: "Biến mất rồi xem nhẹ cảm xúc của bạn." },
+      { text: "Đừng đăng ảnh như vậy nữa.", type: "speech", flag: "red", explain: "Dễ là kiểm soát hình ảnh và tự do cá nhân." },
+      { text: "Anh/em ghen vì anh/em yêu.", type: "speech", flag: "red", explain: "Ghen không tự động đồng nghĩa với yêu lành mạnh." },
+      { text: "Em/anh không cần ai ngoài anh/em.", type: "speech", flag: "red", explain: "Cô lập bạn khỏi thế giới xung quanh." },
+      { text: "Anh/em không sai, em/anh đang làm quá.", type: "speech", flag: "red", explain: "Phủi trách nhiệm rất nhanh." },
+      { text: "Nếu yêu anh/em thật thì em/anh sẽ nghe lời.", type: "speech", flag: "red", explain: "Tình yêu không phải bài test phục tùng." },
+      { text: "Em/anh nghĩ nhiều quá rồi.", type: "speech", flag: "red", explain: "Dễ là gaslighting nhẹ." },
+      { text: "Anh/em đâu bắt em/anh buồn.", type: "speech", flag: "red", explain: "Trốn tránh trách nhiệm cảm xúc." },
+      { text: "Anh/em đối xử với ai cũng vậy.", type: "speech", flag: "red", explain: "Đôi khi là cách bình thường hóa sự vô tâm." },
+      { text: "Anh/em không thích em/anh thân với người khác giới.", type: "speech", flag: "red", explain: "Dễ trượt sang kiểm soát." },
+      { text: "Đừng làm anh/em phải nổi nóng.", type: "speech", flag: "red", explain: "Đổ lỗi cho bạn về cảm xúc của họ." },
+      { text: "Ai yêu anh/em cũng phải chịu được tính này.", type: "speech", flag: "red", explain: "Không có ý định thay đổi điều gây tổn thương." },
+      { text: "Em/anh nên thấy may vì có anh/em.", type: "speech", flag: "red", explain: "Nghe mùi thao túng giá trị bản thân." },
+      { text: "Anh/em không có thời gian cho mấy chuyện cảm xúc đó.", type: "speech", flag: "red", explain: "Xem nhẹ nhu cầu cảm xúc của đối phương." },
+      { text: "Yêu nhau thì cần gì ranh giới.", type: "speech", flag: "red", explain: "Cực kỳ sai. Yêu càng phải cần ranh giới rõ ràng." },
+      { text: "Em/anh phải chứng minh cho anh/em thấy.", type: "speech", flag: "red", explain: "Tình yêu không nên là chuỗi bài kiểm tra." },
+      { text: "Anh/em ghét khi em/anh không làm theo ý anh/em.", type: "speech", flag: "red", explain: "Nghe như muốn điều khiển hơn là yêu." },
+      { text: "Anh/em sẽ thay đổi sau.", type: "speech", flag: "red", explain: "Nếu chỉ hứa mãi mà không làm, đó là red flag." },
+      { text: "Đừng làm mọi chuyện phức tạp lên.", type: "speech", flag: "red", explain: "Thường dùng để né đối thoại thật." },
+
+      // RED - HÀNH ĐỘNG
+      { text: "Chỉ nhắn tin khi buồn hoặc cô đơn.", type: "action", flag: "red", explain: "Bạn không nên chỉ là chỗ trống để lấp." },
+      { text: "Biến mất rồi quay lại như chưa có gì.", type: "action", flag: "red", explain: "Thiếu ổn định và thiếu tôn trọng." },
+      { text: "Ghen nhưng không cho em/anh sự rõ ràng.", type: "action", flag: "red", explain: "Muốn giữ nhưng không muốn chịu trách nhiệm." },
+      { text: "Luôn khiến em/anh cảm thấy mình sai.", type: "action", flag: "red", explain: "Một kiểu thao túng tinh vi." },
+      { text: "Kiểm soát bạn bè hoặc quần áo của em/anh.", type: "action", flag: "red", explain: "Đây là red flag rất rõ." },
+      { text: "Né tránh mọi cuộc nói chuyện nghiêm túc.", type: "action", flag: "red", explain: "Không thể xây mối quan hệ lành mạnh nếu luôn né." },
+      { text: "Không bao giờ xin lỗi.", type: "action", flag: "red", explain: "Cái tôi quá lớn." },
+      { text: "Chỉ tử tế khi cần điều gì đó.", type: "action", flag: "red", explain: "Tình cảm có điều kiện." },
+      { text: "Giữ em/anh trong trạng thái mập mờ.", type: "action", flag: "red", explain: "Mập mờ kéo dài là một red flag lớn." },
+      { text: "Làm em/anh thấy bất an nhưng gọi đó là 'yêu'.", type: "action", flag: "red", explain: "Bất an không phải bằng chứng của tình yêu." },
+      { text: "Thả tim, tương tác mập mờ với người khác để em/anh khó chịu.", type: "action", flag: "red", explain: "Cố tình tạo ghen là không ổn." },
+      { text: "Bắt em/anh phải báo cáo lịch trình liên tục.", type: "action", flag: "red", explain: "Không phải quan tâm, đó là giám sát." },
+      { text: "Đọc trộm tin nhắn của em/anh.", type: "action", flag: "red", explain: "Xâm phạm quyền riêng tư." },
+      { text: "Giận dỗi rồi im lặng để em/anh phải đoán.", type: "action", flag: "red", explain: "Silent treatment rất mệt và không lành mạnh." },
+      { text: "Chỉ xuất hiện khi tiện cho mình.", type: "action", flag: "red", explain: "Bạn không nên chỉ là lựa chọn lúc rảnh." },
+      { text: "So sánh em/anh với người cũ hoặc người khác.", type: "action", flag: "red", explain: "Rất dễ làm tổn thương giá trị bản thân." },
+      { text: "Đùa quá trớn rồi bảo em/anh là 'không biết đùa'.", type: "action", flag: "red", explain: "Không tôn trọng cảm xúc của bạn." },
+      { text: "Giữ thái độ lạnh nhạt để em/anh phải chạy theo.", type: "action", flag: "red", explain: "Đây là trò tâm lý, không phải yêu." },
+      { text: "Đòi xem điện thoại để 'chứng minh tình yêu'.", type: "action", flag: "red", explain: "Tình yêu không cần bài test kiểm tra." },
+      { text: "Kể chuyện riêng của em/anh cho người khác mà không hỏi.", type: "action", flag: "red", explain: "Thiếu tôn trọng ranh giới." },
+      { text: "Đến muộn liên tục nhưng xem đó là chuyện nhỏ.", type: "action", flag: "red", explain: "Lặp lại nhiều lần là thiếu tôn trọng." },
+      { text: "Không bao giờ chủ động giải quyết hiểu lầm.", type: "action", flag: "red", explain: "Mối quan hệ không thể tự lành nếu chỉ một người cố." },
+      { text: "Làm em/anh lo rồi biến mất để 'thử lòng'.", type: "action", flag: "red", explain: "Thử lòng là trò gây tổn thương đối phương nhất, cái gì cũng có giới hạn." },
+      { text: "Chê ngoại hình hoặc làm em/anh tự ti rồi bảo là góp ý.", type: "action", flag: "red", explain: "Đó không phải yêu tử tế." },
+      { text: "Nói chuyện với em/anh như đang ban ơn.", type: "action", flag: "red", explain: "Một mối quan hệ tốt không khiến bạn thấy mình thấp hơn." }
+    ];
+
+    const correctReactions = [
+      "Chuẩn rồi đó 💚",
+      "Bạn nhìn cũng ra vấn đề đấy.",
+      "Ổn áp đó.",
+      "Tỉnh táo nha.",
+      "Nhìn người cũng bén đấy.",
+      "Không dễ bị dắt mũi đâu nha."
+    ];
+
+    const wrongReactions = [
+      "Hơi đáng nghi đó 😭",
+      "Câu này nghe ngọt nhưng không ổn.",
+      "Đừng để bị lời nói ngọt đánh lừa.",
+      "Tình yêu không nên khiến bạn bất an.",
+      "Bẫy cảm xúc đó nha.",
+      "Nghe dịu đó nhưng không hẳn là lành."
+    ];
+
+    let gameCards = [];
+    let currentIndex = 0;
+    let score = 0;
+    let currentCard = null;
+    const introScreen = document.getElementById("introScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const feedbackScreen = document.getElementById("feedbackScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const scoreEl = document.getElementById("scoreEl");
+    const progressEl = document.getElementById("progressEl");
+    const scenarioText = document.getElementById("scenarioText");
+    const typeTag = document.getElementById("typeTag");
+
+    const feedbackEmoji = document.getElementById("feedbackEmoji");
+    const feedbackTitle = document.getElementById("feedbackTitle");
+    const feedbackReaction = document.getElementById("feedbackReaction");
+    const feedbackText = document.getElementById("feedbackText");
+
+    const finalScore = document.getElementById("finalScore");
+    const rankTitle = document.getElementById("rankTitle");
+    const rankNote = document.getElementById("rankNote");
+    const dotsWrap = document.getElementById("dotsWrap");
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function showScreen(screen) {
+      [introScreen, gameScreen, feedbackScreen, resultScreen].forEach(s => s.classList.remove("active"));
+      screen.classList.add("active");
+    }
+
+    function startGame() {
+      const shuffled = shuffle(allCards);
+      gameCards = shuffled.slice(0, 20);
+      currentIndex = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      renderDots();
+      showScreen(gameScreen);
+      renderCard();
+    }
+
+    function renderDots() {
+      dotsWrap.innerHTML = "";
+      for (let i = 0; i < 20; i++) {
+        const dot = document.createElement("span");
+        if (i === currentIndex) dot.classList.add("active");
+        dotsWrap.appendChild(dot);
+      }
+    }
+
+    function renderCard() {
+      currentCard = gameCards[currentIndex];
+      progressEl.textContent = `${currentIndex + 1} / 20`;
+      scenarioText.textContent = currentCard.text;
+      typeTag.textContent = currentCard.type === "speech" ? "💬 Lời nói" : "✨ Hành động";
+      renderDots();
+    }
+
+    function answer(choice) {
+      const isCorrect = choice === currentCard.flag;
+
+      if (isCorrect) {
+        score++;
+        scoreEl.textContent = score;
+      }
+
+      feedbackEmoji.textContent = isCorrect ? "💚" : "🚩";
+      feedbackTitle.textContent = isCorrect ? "Đúng rồi!" : "Chưa đúng lắm";
+      feedbackReaction.textContent = isCorrect
+        ? correctReactions[Math.floor(Math.random() * correctReactions.length)]
+        : wrongReactions[Math.floor(Math.random() * wrongReactions.length)];
+
+      feedbackText.textContent = currentCard.explain;
+
+      showScreen(feedbackScreen);
+    }
+
+    function nextCard() {
+      currentIndex++;
+
+      if (currentIndex >= gameCards.length) {
+        showResult();
+      } else {
+        showScreen(gameScreen);
+        renderCard();
+      }
+    }
+
+    function showResult() {
+      finalScore.textContent = `${score}/20`;
+
+      let title = "";
+      let note = "";
+
+      if (score <= 6) {
+        title = "Bạn có trái tim mềm dễ tin người";
+        note = "Bạn khá dễ bị những câu nói ngọt ngào làm mềm lòng. Không sao cả — chỉ là từ nay nên tỉnh hơn một chút trong tình cảm.";
+      } else if (score <= 12) {
+        title = "Đang học cách nhìn người";
+        note = "Bạn bắt đầu phân biệt được điều lành mạnh và điều không ổn, nhưng đôi lúc vẫn dễ bỏ qua vài dấu hiệu đáng nghi.";
+      } else if (score <= 17) {
+        title = "Khá tỉnh táo trong tình cảm";
+        note = "Bạn nhìn người cũng ổn áp đó. Bạn hiểu rằng tình yêu tử tế sẽ không làm mình mệt vì phải đoán mãi.";
+      } else {
+        title = "Máy quét";
+        note = "Bạn rất tỉnh trong chuyện tình cảm.";
+        }
+
+      rankTitle.textContent = title;
+      rankNote.textContent = note;
+
+      showScreen(resultScreen);
+    }
+  </script>
+</body>
+</html>
+
+        
+      
