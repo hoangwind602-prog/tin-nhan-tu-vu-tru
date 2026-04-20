@@ -13,8 +13,9 @@ margin:0;
 font-family:'Inter',sans-serif;
 color:#F5F5F5;
 background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
-overflow:hidden;
 }
+
+/* ⭐ nền sao nhưng KHÔNG chặn click */
 body::before{
 content:"";
 position:fixed;
@@ -24,14 +25,15 @@ background-image: radial-gradient(white 1px, transparent 1px);
 background-size:40px 40px;
 opacity:0.15;
 animation:move 80s linear infinite;
-
-/* 🔥 THÊM DÒNG NÀY */
-pointer-events: none;
+pointer-events:none;
 }
+
 @keyframes move{
 from{transform:translateY(0);}
 to{transform:translateY(-300px);}
 }
+
+/* SCREEN */
 .screen{
 display:none;
 height:100vh;
@@ -40,68 +42,123 @@ align-items:center;
 flex-direction:column;
 text-align:center;
 padding:20px;
+position:relative;
+z-index:2;
 }
 .active{display:flex;}
-h1{font-family:'Playfair Display';font-size:24px;}
+
+h1{
+font-family:'Playfair Display';
+font-size:24px;
+}
+
+/* INPUT */
 textarea{
-width:90%;max-width:400px;height:120px;
-border-radius:12px;border:none;padding:15px;
+width:90%;
+max-width:400px;
+height:120px;
+border-radius:12px;
+border:none;
+padding:15px;
 }
+
+/* BUTTON */
 button{
-margin-top:20px;padding:12px 24px;
-border-radius:10px;border:none;
-background:#6C63FF;color:white;
+margin-top:20px;
+padding:12px 24px;
+border-radius:10px;
+border:none;
+background:#6C63FF;
+color:white;
+cursor:pointer;
 }
+
+/* CARD */
 .cards{display:flex;gap:12px;}
-.card{width:90px;height:150px;perspective:1000px;cursor:pointer;}
-.inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s;}
-.card.flipped .inner{transform:rotateY(180deg);}
-.front,.back{
-position:absolute;width:100%;height:100%;
-border-radius:12px;backface-visibility:hidden;
+
+.card{
+width:90px;
+height:150px;
+perspective:1000px;
+cursor:pointer;
 }
+
+.inner{
+width:100%;
+height:100%;
+position:relative;
+transform-style:preserve-3d;
+transition:transform .8s;
+}
+
+.card.flipped .inner{
+transform:rotateY(180deg);
+}
+
+.front,.back{
+position:absolute;
+width:100%;
+height:100%;
+border-radius:12px;
+backface-visibility:hidden;
+}
+
 .front{
 background:linear-gradient(135deg,#2c2c4a,#1c1c2e);
-display:flex;align-items:center;justify-content:center;
+display:flex;
+align-items:center;
+justify-content:center;
 }
+
 .back{
 transform:rotateY(180deg);
-background-size:cover;background-position:center;
+background-size:cover;
+background-position:center;
 }
+
+/* RESULT */
 .result{
 max-width:420px;
 font-family:'Playfair Display';
 line-height:1.9;
 text-align:left;
 }
-.small{font-size:12px;color:#aaa;}
+
+.small{
+font-size:12px;
+color:#aaa;
+}
 </style>
 </head>
 
 <body>
 
+<!-- SCENE 1 -->
 <div id="s1" class="screen active">
 <h1>Có những điều… bạn chưa từng nói ra.</h1>
-<button onclick="go(2)">Mình muốn được lắng nghe</button>
+<button id="btn1">Mình muốn được lắng nghe</button>
 </div>
 
+<!-- SCENE 2 -->
 <div id="s2" class="screen">
-<textarea id="q" placeholder="Viết điều trong lòng bạn..."></textarea>
-<div class="small">Đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
-<button onclick="draw()">Rút bài</button>
+<textarea placeholder="Viết điều trong lòng bạn..."></textarea>
+<div class="small">đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
+<button id="btn2">Rút bài</button>
 </div>
 
+<!-- SCENE 3 -->
 <div id="s3" class="screen">
 <div class="cards">
-<div class="card" onclick="flip(0)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
-<div class="card" onclick="flip(1)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
-<div class="card" onclick="flip(2)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
+<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
+<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
+<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
 </div>
 </div>
 
+<!-- SCENE 4 -->
 <div id="s4" class="screen">
 <div id="reading" class="result"></div>
-<button onclick="location.reload()">Hẹn gặp lại</button>
+  <button onclick="location.reload()">Hẹn gặp lại</button>
 <p class="small">made by seri</p>
 </div>
 
