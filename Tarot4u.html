@@ -12,90 +12,63 @@ body{
 margin:0;
 font-family:'Inter',sans-serif;
 color:#F5F5F5;
-overflow:auto;
+background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
+overflow:hidden;
 }
-
-/* 🌌 BACKGROUND */
-.bg{
+body::before{
+content:"";
 position:fixed;
 width:100%;
 height:100%;
-background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
-}
-.stars{
-position:absolute;
-width:100%;
-height:100%;
 background-image: radial-gradient(white 1px, transparent 1px);
-background-size: 40px 40px;
+background-size:40px 40px;
 opacity:0.15;
-animation: move 80s linear infinite;
+animation:move 80s linear infinite;
 }
 @keyframes move{
 from{transform:translateY(0);}
 to{transform:translateY(-300px);}
 }
-
-/* SCREEN */
 .screen{
 display:none;
-min-height:100vh;
-padding:20px;
+height:100vh;
 justify-content:center;
 align-items:center;
 flex-direction:column;
 text-align:center;
+padding:20px;
 }
 .active{display:flex;}
-
-h1{
-font-family:'Playfair Display',serif;
-font-size:24px;
-line-height:1.6;
-}
-
-/* INPUT */
+h1{font-family:'Playfair Display';font-size:24px;}
 textarea{
-width:90%;
-max-width:400px;
-height:120px;
-border-radius:12px;
-border:none;
-padding:15px;
-font-size:15px;
+width:90%;max-width:400px;height:120px;
+border-radius:12px;border:none;padding:15px;
 }
-
-/* BUTTON */
 button{
-margin-top:20px;
-padding:12px 24px;
-border-radius:10px;
-border:none;
-background:#6C63FF;
-color:white;
+margin-top:20px;padding:12px 24px;
+border-radius:10px;border:none;
+background:#6C63FF;color:white;
 }
-
-/* 🎴 CARDS */
-.cards{display:flex; gap:14px;}
-
-.card{
-width:90px;
-height:150px;
-border-radius:12px;
-background:#222;
-background-size:cover;
-background-position:center;
-cursor:pointer;
-transition:.4s;
+.cards{display:flex;gap:12px;}
+.card{width:90px;height:150px;perspective:1000px;cursor:pointer;}
+.inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s;}
+.card.flipped .inner{transform:rotateY(180deg);}
+.front,.back{
+position:absolute;width:100%;height:100%;
+border-radius:12px;backface-visibility:hidden;
 }
-.card:hover{transform:scale(1.05);}
-
-/* RESULT */
+.front{
+background:linear-gradient(135deg,#2c2c4a,#1c1c2e);
+display:flex;align-items:center;justify-content:center;
+}
+.back{
+transform:rotateY(180deg);
+background-size:cover;background-position:center;
+}
 .result{
 max-width:420px;
-font-family:'Playfair Display',serif;
+font-family:'Playfair Display';
 line-height:1.9;
-font-size:16px;
 text-align:left;
 }
 .small{font-size:12px;color:#aaa;}
@@ -104,119 +77,181 @@ text-align:left;
 
 <body>
 
-<div class="bg"><div class="stars"></div></div>
-
-<!-- SCENE 1 -->
-<div id="scene1" class="screen active">
+<div id="s1" class="screen active">
 <h1>Có những điều… bạn chưa từng nói ra.</h1>
-<button onclick="next(2)">Mình muốn được lắng nghe</button>
+<button onclick="go(2)">Mình muốn được lắng nghe</button>
 </div>
 
-<!-- SCENE 2 -->
-<div id="scene2" class="screen">
-<textarea id="question" placeholder="Viết điều đang ở trong lòng bạn…"></textarea>
+<div id="s2" class="screen">
+<textarea id="q" placeholder="Viết điều trong lòng bạn..."></textarea>
 <div class="small">Đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
-<button onclick="startDraw()">Rút bài</button>
+<button onclick="draw()">Rút bài</button>
 </div>
 
-<!-- SCENE 3 -->
-<div id="scene3" class="screen">
+<div id="s3" class="screen">
 <div class="cards">
-<div class="card" onclick="flipCard(0)"></div>
-<div class="card" onclick="flipCard(1)"></div>
-<div class="card" onclick="flipCard(2)"></div>
+<div class="card" onclick="flip(0)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
+<div class="card" onclick="flip(1)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
+<div class="card" onclick="flip(2)"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
 </div>
 </div>
 
-<!-- SCENE 4 -->
-<div id="scene4" class="screen">
-<div id="cardNames"></div>
+<div id="s4" class="screen">
 <div id="reading" class="result"></div>
-<button onclick="restart()">Hẹn gặp lại</button>
+<button onclick="location.reload()">Hẹn gặp lại</button>
 <p class="small">made by seri</p>
 </div>
 
 <script>
 
-/* 🔮 22 LÁ TAROT */
 const tarot = [
-{name:"The Fool",img:"https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",past:"Bạn đã từng bắt đầu với một niềm tin rất thuần khiết.",present:"Bạn đang đứng trước một khởi đầu mới nhưng còn ngập ngừng.",future:"Có lẽ điều bạn cần không phải là chắc chắn, mà là can đảm thử một lần nữa.",reflection:["Bạn có đang sợ bắt đầu không?"]},
-{name:"The Magician",img:"https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",past:"Bạn đã từng có khả năng tạo ra điều mình muốn.",present:"Bạn đang có nhiều hơn bạn nghĩ.",future:"Hãy tin rằng bạn đủ khả năng thay đổi tình hình.",reflection:["Bạn có đang đánh giá thấp bản thân không?"]},
-{name:"The High Priestess",img:"https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg",past:"Bạn đã từng cảm nhận rất sâu sắc.",present:"Bạn cần lắng nghe trực giác.",future:"Câu trả lời nằm bên trong bạn.",reflection:["Bạn có đang bỏ qua cảm nhận của mình?"]},
-{name:"The Empress",img:"https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg",past:"Bạn đã từng được yêu thương dịu dàng.",present:"Bạn cần chăm sóc bản thân.",future:"Sự mềm mại sẽ chữa lành bạn.",reflection:["Bạn đã chăm sóc tốt cho bản thân chưa?"]},
-{name:"The Emperor",img:"https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg",past:"Bạn đã từng cố kiểm soát mọi thứ.",present:"Bạn đang tìm sự ổn định.",future:"Sự vững vàng sẽ giúp bạn.",reflection:["Bạn có đang kiểm soát quá mức không?"]},
-{name:"The Lovers",img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",past:"Đã từng có một kết nối sâu sắc.",present:"Bạn đang đứng trước lựa chọn cảm xúc.",future:"Hãy thành thật với trái tim.",reflection:["Bạn đang chọn vì yêu hay vì sợ?"]},
-{name:"The Chariot",img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/The_Chariot.jpg",past:"Bạn đã từng rất quyết tâm.",present:"Bạn đang cố tiến về phía trước.",future:"Bạn sẽ vượt qua nếu không bỏ cuộc.",reflection:["Bạn có đang đi đúng hướng không?"]},
-{name:"Strength",img:"https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",past:"Bạn đã từng mạnh mẽ hơn bạn nghĩ.",present:"Bạn cần kiên nhẫn.",future:"Sức mạnh thật là sự dịu dàng.",reflection:["Bạn có đang quá khắt khe với mình?"]},
-{name:"The Hermit",img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg",past:"Bạn đã từng thu mình lại.",present:"Bạn đang tìm câu trả lời bên trong.",future:"Sự tĩnh lặng sẽ dẫn lối.",reflection:["Bạn có đang lắng nghe chính mình?"]},
-{name:"Wheel of Fortune",img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg",past:"Mọi thứ đã từng thay đổi.",present:"Bạn đang trong một chu kỳ.",future:"Mọi thứ sẽ tiếp tục xoay chuyển.",reflection:["Bạn có chấp nhận sự thay đổi?"]},
-{name:"Justice",img:"https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg",past:"Bạn đã từng đối diện sự thật.",present:"Bạn cần nhìn rõ.",future:"Mọi thứ sẽ cân bằng.",reflection:["Bạn có đang công bằng với mình không?"]},
-{name:"The Hanged Man",img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg",past:"Bạn đã từng phải dừng lại.",present:"Bạn cần nhìn khác đi.",future:"Buông bỏ sẽ giúp bạn.",reflection:["Bạn có đang cố chấp không?"]},
-{name:"Death",img:"https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg",past:"Một điều đã kết thúc.",present:"Bạn đang chuyển mình.",future:"Khởi đầu mới đang tới.",reflection:["Bạn có đang níu giữ quá khứ?"]},
-{name:"Temperance",img:"https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg",past:"Bạn đã từng cố cân bằng.",present:"Bạn cần chậm lại.",future:"Sự hài hòa sẽ đến.",reflection:["Bạn có đang quá vội vàng?"]},
-{name:"The Devil",img:"https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg",past:"Bạn đã từng bị ràng buộc.",present:"Bạn đang mắc kẹt.",future:"Bạn có thể thoát ra.",reflection:["Điều gì đang giữ bạn lại?"]},
-{name:"The Tower",img:"https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",past:"Một điều đã sụp đổ.",present:"Bạn đang đối diện sự thật.",future:"Sự thật sẽ giải phóng bạn.",reflection:["Bạn có đang trốn tránh?"]},
-{name:"The Star",img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg",past:"Bạn đã từng có niềm tin đẹp.",present:"Bạn đang chữa lành.",future:"Hy vọng sẽ quay lại.",reflection:["Bạn có tin mình sẽ ổn không?"]},
-{name:"The Moon",img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg",past:"Bạn đã từng mơ hồ.",present:"Bạn đang không rõ ràng.",future:"Hãy tin trực giác.",reflection:["Bạn có đang né tránh?"]},
-{name:"The Sun",img:"https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg",past:"Bạn đã từng rất rực rỡ.",present:"Bạn có cơ hội hạnh phúc.",future:"Ánh sáng sẽ trở lại.",reflection:["Bạn có cho phép mình được vui không?"]},
-{name:"Judgement",img:"https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg",past:"Bạn đã từng thức tỉnh.",present:"Bạn đang nhìn lại bản thân.",future:"Cơ hội mới mở ra.",reflection:["Bạn đã sẵn sàng để thay đổi chưa?"]},
-{name:"The World",img:"https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",past:"Bạn đã hoàn thành một chặng.",present:"Bạn đang chuyển giao.",future:"Một vòng mới bắt đầu.",reflection:["Bạn đã sẵn sàng bước tiếp chưa?, cố lên!"]}
+{name:"The Fool",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/00_fool.jpg",
+past:"Những kinh nghiệm bạn có được trong quá khứ không đến từ sự sắp đặt kỹ lưỡng, mà đến từ sự dũng cảm thử nghiệm, sự ngây thơ hoặc quyết định "liều" vào thời điểm đó. Đó là nền tảng giúp bạn hiểu được giá trị của việc dám tin vào bản thân.",
+present:"Đừng quá lo lắng về việc chưa có lộ trình chi tiết. Đây là lúc cần sự dũng cảm để bước tiếp mà không cần biết đích đến chính xác là gì. Bạn đang được vũ trụ mời gọi hãy giữ tinh thần cởi mở, sáng tạo và sẵn sàng đón nhận những cơ hội bất ngờ sẽ đến với mình.",
+future:"Bạn sẽ sớm thoát khỏi những ràng buộc cũ (về tư duy, môi trường làm việc hoặc tình cảm). Tuy nhiên, hãy nhớ rằng The Fool cũng cảnh báo về việc cần phải có sự chuẩn bị, dù bạn có phiêu lưu đến đâu. Tương lai của bạn hứa hẹn sự tự do, nhưng nó đòi hỏi bạn phải duy trì sự sáng suốt giữa niềm tin và sự chủ quan."},
+
+{name:"The Magician",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/01_magician.jpg",
+past:"Bạn đã dành thời gian để thu thập kiến thức, kỹ năng và trải nghiệm. Có thể bạn cảm thấy mình đang loay hoay, nhưng thực chất đó là giai đoạn bạn chuẩn bị "hành trang". Mọi thất bại hay thành công nhỏ trước đây đều là những mảnh ghép mà bạn cần để xây dựng bản ngã hiện tại. Bạn đã học cách kết nối giữa ý muốn trong đầu và hành động thực tế..",
+present:"Hiện tại là thời điểm "đỉnh cao" của sự tập trung. The Magician ở đây nói rằng bạn có quyền năng tối thượng để biến ý tưởng thành hiện thực. Đừng tìm kiếm sự giúp đỡ từ bên ngoài hay chờ đợi một "định mệnh" nào đó mang đến thành công. Mọi thứ bạn cần (trí tuệ, cảm xúc, tài chính, sự kiên định) đều đang nằm ngay trước mặt. Đây là lúc sự tập trung là chìa khóa. Nếu bạn có một dự định, hãy bắt đầu ngay. Bạn chính là người dẫn dắt, là đạo diễn cho vở kịch của đời mình.",
+future:"Bạn sẽ không còn là người quan sát, mà sẽ trở thành người "phù phép" cho cuộc đời mình. Tuy nhiên, họ sẽ cảnh báo một điều: Sự mất tập trung là kẻ thù duy nhất. Nếu bạn duy trì được sự kỷ luật, tương lai của bạn sẽ là một kiệt tác do chính bạn tạo ra."},
+
+{name:"The High Priestess",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/02_high_priestess.jpg",
+past:"Bạn đã có một giai đoạn tích lũy tri thức nội tại. Bạn có thể đã dành nhiều thời gian ở một mình, suy ngẫm, hoặc trực giác của bạn đã lên tiếng rất mạnh mẽ trong những tình huống cũ mà bạn đã chọn cách giữ im lặng.",
+present:"Bạn có thể đang cảm thấy có điều gì đó chưa được sáng tỏ, một sự thật nào đó chưa được tiết lộ. Lời khuyên là: Hãy dừng lại một nhịp. Hãy lắng nghe tiếng nói nhỏ nhẹ bên trong thay vì những tiếng ồn ào xung quanh.",
+future:"Bạn sẽ trở thành người nắm giữ chìa khóa cho sự bình yên của chính mình. Sự thành công trong tương lai không đến từ việc bạn "cố gắng" làm điều gì đó, mà đến từ việc bạn "trở thành" người hiểu rõ bản thân mình nhất."},
+
+{name:"The Empress",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/03_empress.jpg",
+past:"Đây là khoảng thời gian bạn đã đặt nền móng cho những gì bạn đang có hiện nay. Có thể đó là lúc bạn bắt đầu nuôi dưỡng một sở thích, vun đắp một mối quan hệ, hoặc đơn giản là chăm chút cho không gian sống và tâm hồn mình. Mọi sự phát triển bạn thấy hôm nay đều bắt nguồn từ sự "chăm bón" đầy kiên nhẫn trong quá khứ. Bạn đã học được rằng cái gì cũng cần thời gian để nở hoa.",
+present:"Hiện tại, bạn có một nguồn năng lượng sáng tạo cực kỳ mạnh mẽ. Nếu bạn đang muốn thực hiện một dự án, viết lách, hoặc làm đẹp không gian sống, đây là thời điểm "vàng". Mọi thứ bạn chạm vào lúc này đều có xu hướng sinh sôi nảy nở.",
+future:"Bạn đang tiến tới một giai đoạn mà mọi thứ trở nên cân bằng. Cuộc sống của bạn sẽ đầy đủ cả về vật chất lẫn tinh thần."},
+
+{name:"The Emperor",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/04_emperor.jpg",
+past:"Bạn đã trải qua giai đoạn thiết lập các quy tắc, tạo dựng sự ổn định và có lẽ là đã phải học cách kiểm soát cảm xúc hoặc hoàn cảnh để đạt được vị thế hiện tại. Có thể bạn đã phải đóng vai trò là "người lãnh đạo" – dù là trong công việc hay trong chính cuộc sống cá nhân.",
+present:"Bạn cần một kế hoạch cụ thể, một cấu trúc chặt chẽ và sự kiên định. Đây không phải lúc để xuề xòa hay để hoàn cảnh dẫn dắt. Bạn cần phải là "vua" trong thế giới của chính mình, thiết lập ranh giới và bảo vệ những gì mình đã gây dựng.",
+future:"Nếu bạn giữ vững được sự kỷ luật và tính toán chiến lược như hiện tại, tương lai của bạn sẽ là sự thành công bền vững. Bạn sẽ không chỉ là người làm, mà là người quản lý, người định hướng. Bạn sẽ tạo ra được những giá trị có tính kế thừa và lâu dài."},
+
+{name:"The Lovers",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/06_lovers.jpg",
+past:"Đó có thể là một mối quan hệ, một hướng đi nghề nghiệp, hoặc một giá trị sống mà bạn phải lựa chọn giữa "cái tôi cá nhân" và "sự kỳ vọng của người khác". Bạn đã học được rằng mỗi lựa chọn đều có cái giá của nó, và chính những quyết định đó đã định hình nên sự tự nhận thức của bạn ngày hôm nay.",
+present:"Bạn đang được yêu cầu phải chọn lựa một điều gì đó (hoặc ai đó) mà khi gắn kết với nó, bạn cảm thấy mình trở nên trọn vẹn hơn. Tuy nhiên, lá bài này cũng là một bài kiểm tra: Bạn có đang chọn vì áp lực bên ngoài, hay vì sự rung động thực sự từ sâu bên trong? Hãy thành thật với bản thân.",
+future:"Bạn sẽ sớm tìm thấy một sự gắn kết (với người, với công việc, hoặc với chính sứ mệnh của mình) mà ở đó bạn không còn cảm thấy mâu thuẫn."},
+
+{name:"The Chariot",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/07_chariot.jpg",
+past:"Trong quá khứ, bạn đã phải học cách chế ngự cảm xúc, vượt qua những nghi ngờ hoặc những xung đột nội tâm để giữ vững tay lái. Dù có lúc mệt mỏi, chính sự kỷ luật đó đã giúp bạn định hình bản lĩnh.",
+present:"The Chariot khẳng định bạn đang có sức mạnh ý chí cực kỳ lớn. Bạn không chỉ có ý tưởng (Magician) hay sự tĩnh lặng (High Priestess), mà bạn đang có động lực hành động. Đây không phải lúc để chần chừ hay mơ mộng. Nếu bạn có một mục tiêu (kể cả mục tiêu học tập, thay đổi bản thân hay những dự định xa xôi, đây là lúc "cỗ xe" của bạn đang chạy với tốc độ cao nhất.",
+future:"Bạn sẽ không chỉ đạt được mục tiêu, mà còn nhận được sự công nhận cho nỗ lực của mình. Tương lai của bạn sẽ là hành trình của sự tự chủ, nơi bạn làm chủ hoàn cảnh thay vì bị hoàn cảnh dẫn dắt. Bạn sẽ thấy mình mạnh mẽ hơn, cứng cáp hơn và hoàn toàn làm chủ cuộc đời."},
+
+{name:"Strength",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/08_strength.jpg",
+past:"Bạn đã trải qua giai đoạn học cách "thuần hóa" chính những nỗi sợ, sự giận dữ, hay những khao khát hoang dại nhất của bản thân. Bạn không dùng vũ lực để dập tắt chúng, mà dùng sự thấu hiểu.",
+present:"Đây là thời điểm bạn đạt đến sự cân bằng tuyệt đối giữa tâm hồn và lý trí.Sức mạnh của bạn lúc này đến từ sự tĩnh tại. Nếu bạn đang đối mặt với khó khăn, cách tốt nhất để giải quyết không phải là đối đầu trực diện, mà là dùng sự kiên nhẫn, lòng trắc ẩn và sự bao dung để cảm hóa tình hình.",
+future:"Bạn sẽ bước vào tương lai với tư thế của một người làm chủ hoàn toàn bản ngã. Khi bạn không còn bị điều khiển bởi nỗi sợ hay sự nóng nảy, bạn sẽ có khả năng xoay chuyển mọi tình huống theo ý mình mà không cần tốn nhiều công sức."},
+
+{name:"The Hermit",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/09_hermit.jpg",
+past:"Bạn đã từng chọn cách rút lui hoặc giữ khoảng cách với những mối quan hệ ồn ào. Đó không phải là sự yếu đuối, mà là sự lựa chọn để "thanh lọc" tâm hồn. Bạn đã học được cách sống sót và tự hài lòng trong sự cô độc.",
+present:"Đừng sợ cảm giác muốn thu mình lại. The Hermit cho biết bạn đang cần câu trả lời cho một vấn đề nào đó, và câu trả lời ấy sẽ không đến từ lời khuyên của người khác, mà từ sự chiêm nghiệm sâu sắc của riêng bạn.",
+future:"Tương lai của bạn hứa hẹn một sự hiểu biết sâu sắc về các quy luật vận hành của cuộc đời. Bạn sẽ không còn phải đi theo những con đường mòn của người khác. Bạn sẽ trở thành người tự chỉ lối cho mình."},
+
+{name:"Wheel of Fortune",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/10_wheel_of_fortune.jpg",
+past:"Bạn đã học được cách chấp nhận rằng có những điều nằm ngoài tầm kiểm soát của con người, và đó chính là bài học về sự buông bỏ.",
+present:"Khi cơ hội đến, hãy nắm lấy. Hiện tại của bạn đang có sự cộng hưởng với các luồng năng lượng lớn. Nếu bạn cảm thấy mọi thứ bắt đầu thay đổi, đừng chống lại, hãy thuận theo dòng chảy.",
+future:"Tương lai không chỉ là sự nỗ lực, mà là sự "gặp thời". Bạn sẽ thấy những mảnh ghép cuộc đời tự động khớp vào nhau theo cách bạn không thể ngờ tới."},
+
+{name:"Justice",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/11_justice.jpg",
+past:"Justice phản chiếu lại những hành động cũ. Nếu trong quá khứ bạn đã sống chân thật, đã kiên trì nghiên cứu, đã nỗ lực hết mình dù trong lặng lẽ, thì giờ đây bạn sẽ bắt đầu nhìn thấy "trái ngọt" mang tính công bằng.",
+present:"Bạn đang ở trong giai đoạn cần sự khách quan. Đừng để cảm xúc che mờ lý trí.",
+future:"MBạn sẽ có được sự thanh thản trong tâm trí vì bạn biết mình xứng đáng với những gì mình có."},
+
+{name:"The Hanged Man",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/12_hanged_man.jpg",
+past:"Bạn đã học được rằng đôi khi việc không làm gì cả lại là hành động mạnh mẽ nhất mà bạn có thể thực hiện.",
+present:"Hãy dành thời gian này để "treo ngược" những quan điểm cũ, những định kiến cũ. Khi bạn nhìn thế giới từ một góc độ khác (đảo ngược vị trí), bạn sẽ thấy những giải pháp mà trước đây bạn không thể thấy.",
+future:"Khi bạn sẵn sàng buông bỏ những cái tôi hoặc những mong cầu kiểm soát, bạn sẽ đạt được một cảnh giới mới của sự hiểu biết. Bạn sẽ không còn là người bị động, mà trở thành người "thấy rõ bản chất"."},
+
+{name:"Death",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/13_death.jpg",
+past:"Bạn đã từng phải trải qua một sự thay đổi đột ngột hoặc một sự chia ly (có thể là một môi trường sống, một mối quan hệ, hay một niềm tin cũ). Lúc đó nó có thể rất đau đớn, nhưng nhìn lại, bạn sẽ thấy rằng nếu không có sự "kết thúc" đó, bạn đã không bao giờ có thể trở thành con người như bây giờ.",
+present:"Có thể bạn đang cảm thấy muốn vứt bỏ một thói quen, một suy nghĩ, hay một điều gì đó đã cũ kỹ đang níu chân mình lại. Lá bài này khuyên bạn đừng cố níu kéo những gì đã "chết". Hãy chấp nhận buông tay.",
+future:"Đây không phải là kết thúc của cuộc đời, mà là sự bắt đầu của một phiên bản tốt hơn chính bạn."},
+
+{name:"Temperance",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/14_temperance.jpg",
+past:"Có những lúc bạn muốn bùng nổ, có những lúc lại muốn thu mình lại.",
+present:"Hãy giữ thái độ điềm tĩnh, linh hoạt và biết cách điều chỉnh nhịp độ.",
+future:"Tương lai không chỉ là thành công hay thất bại, mà là sự bình yên. Bạn sẽ tìm thấy sự cân bằng giữa việc theo đuổi mục tiêu và việc tận hưởng cuộc sống."},
+
+{name:"The Devil",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/15_devil.jpg",
+past:"Bạn đã từng chịu ảnh hưởng từ những nỗi sợ hãi về việc bị đánh giá, hoặc sự lệ thuộc vào một kỳ vọng nào đó (của người khác hoặc của chính bạn). Đó có thể là một mối quan hệ độc hại, một sự ám ảnh về sự thành công, hoặc những suy nghĩ tự ti khiến bạn không dám bước tiếp.",
+present:"Bạn đang tự giới hạn bản thân bởi một niềm tin sai lầm hoặc một thói quen tiêu cực. Có thể bạn đang cảm thấy mình không đủ giỏi, hoặc đang quá lệ thuộc vào một điều gì đó bên ngoài để cảm thấy an toàn.",
+future:"Nếu bạn dám đối diện với "con quỷ" (những ám ảnh, những nỗi sợ) ngay bây giờ, tương lai của bạn sẽ là sự bứt phá đầy mạnh mẽ."},
+
+{name:"The Tower",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/16_tower.jpg",
+past:"Vũ trụ đã phá hủy một cấu trúc cũ để bạn không bị mắc kẹt mãi trong đó. Bạn đã trải qua giai đoạn "đổ nát" để hiểu rằng: Cái gì không thuộc về nền móng vững chắc của sự thật thì sẽ không tồn tại mãi.",
+present:"Hiện tại, bạn có thể đang đứng trước áp lực của việc phải thay đổi. Thay vì hoảng loạn, hãy hiểu rằng sự đổ vỡ này là cần thiết. Tòa tháp đổ xuống là để dọn sạch mặt bằng, chuẩn bị cho một công trình mới vững chãi hơn.",
+future:"Sự thật sẽ giải phóng bạn."},
+
+{name:"The Star",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/17_star.jpg",
+past:"Bạn đã từng đi qua những lúc cảm thấy mất phương hướng, nhưng chính trong sự tuyệt vọng đó, bạn đã không từ bỏ.",
+present:"The Star báo hiệu bạn đang ở trong một giai đoạn cực kỳ thuận lợi để chữa lành và phục hồi.",
+future:"Bạn sẽ thấy những mục tiêu của mình trở nên rõ ràng như những vì sao trên bầu trời đêm."},
+
+{name:"The Moon",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/18_moon.jpg",
+past:"Bạn đã từng đi qua những giai đoạn "đêm tối của tâm hồn". Có những điều bạn đã hiểu sai, hoặc có những bí mật (của người khác hoặc của chính bạn) đã làm bạn lung lay niềm tin.",
+present:"The Moon khuyên bạn: Đừng cố ép mọi thứ phải sáng tỏ ngay lập tức. Hãy học cách bơi trong sự không rõ ràng này. Đây là lúc trực giác của bạn mạnh mẽ nhất, hãy để nó dẫn dắt bạn qua những bóng tối.",
+future:"Khi bạn kiên nhẫn vượt qua được sự mơ hồ, tương lai sẽ tặng bạn một sự hiểu biết sâu sắc về bản chất của mọi sự việc. Bạn sẽ không còn sợ hãi bóng đêm nữa, vì bạn đã làm quen với nó."},
+
+{name:"The Sun",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/19_sun.jpg",
+past:"Bạn đã từng đạt được những cột mốc khiến bạn tự hào. Đó không phải là sự may mắn, mà là kết quả của việc bạn đã đi qua màn đêm.",
+present:"Mọi năng lượng tiêu cực đã bị đốt cháy. Bạn có đủ sự thông thái và nhiệt huyết để hiện thực hóa các dự định. Đây là lúc sự sáng tạo của bạn lên ngôi, và quan trọng nhất là bạn cảm thấy hoàn toàn an tâm với chính mình. Bạn không cần phải che giấu bản thân, không cần phải dè dặt. Bạn đang thu hút những điều tích cực chỉ bằng việc là chính mình.",
+future:"Sự chờ đợi của bạn không phải là một quãng nghỉ vô nghĩa, mà là sự chuẩn bị để đón nhận "ánh bình minh" lớn nhất của đời mình."},
+
+{name:"Judgement",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/20_judgement.jpg",
+past:"Bạn không thể thay đổi những gì đã xảy ra, nhưng với lá bài này, bạn có khả năng hóa giải nó.",
+present:"Bạn đang ở giai đoạn quan trọng của sự tự vấn. Lá bài này xuất hiện khi bạn cần đưa ra một quyết định mang tính "thay đổi cuộc đời".",
+future:"Tương lai hứa hẹn một sự phục hồi hoàn toàn. Bạn sẽ không còn là phiên bản cũ của chính mình nữa."},
+
+{name:"The World",img:"https://raw.githubusercontent.com/ekelen/tarot-api/master/static/cards/rws/21_world.jpg",
+past:"Những gì bạn từng nghĩ là "đứt gãy" trong quá khứ thực ra là những đoạn kết cần thiết để bước sang trang mới.",
+present:"Nếu bạn cảm thấy mình đang tiến tới một cột mốc quan trọng, hãy biết rằng bạn đang đi đúng hướng. Hiện tại, năng lượng của bạn đang hòa quyện với dòng chảy của vũ trụ.",
+future:"Bạn sẽ đạt được sự hài hòa giữa đam mê, sự nghiệp và tâm hồn. Bạn sẽ thấy mình không chỉ đạt được mục tiêu cá nhân mà còn cảm thấy mình thuộc về một điều gì đó lớn lao hơn."}
 ];
 
-/* LOGIC */
-let selected=[];
-let flipped=0;
+let pick=[]; let step=0;
 
-function next(n){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById('scene'+n).classList.add('active');
+function go(n){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("s"+n).classList.add("active");
 }
 
-function startDraw(){
-selected=[]; flipped=0;
-while(selected.length<3){
+function draw(){
+pick=[]; step=0;
+while(pick.length<3){
 let c=tarot[Math.floor(Math.random()*tarot.length)];
-if(!selected.includes(c)) selected.push(c);
+if(!pick.includes(c)) pick.push(c);
 }
-document.querySelectorAll('.card').forEach(c=>c.style.background="#222");
-next(3);
-}
-
-function flipCard(i){
-if(i!==flipped) return;
-const cards=document.querySelectorAll('.card');
-cards[i].style.backgroundImage=`url(${selected[i].img})`;
-flipped++;
-if(flipped===3){setTimeout(showResult,1200);}
+document.querySelectorAll(".card").forEach(c=>c.classList.remove("flipped"));
+go(3);
 }
 
-function generateReading(){
-return `
-Có thể bạn đã mang theo câu hỏi này trong lòng một khoảng thời gian khá lâu.
+function flip(i){
+if(i!==step) return;
+const cards=document.querySelectorAll(".card");
+cards[i].classList.add("flipped");
+cards[i].querySelector(".back").style.backgroundImage=`url('${pick[i].img}')`;
+step++;
+if(step===3){setTimeout(show,1200);}
+}
 
-${selected[0].past}
+function show(){
+go(4);
 
-Có những điều từ quá khứ vẫn âm thầm ảnh hưởng đến hiện tại của bạn.
+document.getElementById("reading").innerHTML = `
+<b>${pick[0].name} – Quá khứ</b><br>${pick[0].past}<br><br>
+<b>${pick[1].name} – Hiện tại</b><br>${pick[1].present}<br><br>
+<b>${pick[2].name} – Hướng đi</b><br>${pick[2].future}<br><br>
 
-${selected[1].present}
+Có thể bạn đang ở một khoảng giữa — nơi mà những điều cũ vẫn còn ảnh hưởng, nhưng những điều mới đang dần hình thành.
 
-Hiện tại có thể chưa rõ ràng, nhưng đó là lúc bạn bắt đầu cảm nhận thay vì cố hiểu.
+Bạn không cần phải vội hiểu hết mọi thứ ngay lúc này.
 
-${selected[2].future}
-
-Có lẽ bạn đang ở một giai đoạn chuyển tiếp, nơi mọi thứ chưa hoàn toàn rõ ràng, nhưng cũng không còn như trước nữa.
-
-${selected[2].reflection[0]}
+Chỉ cần bạn vẫn ở đây… và vẫn lắng nghe chính mình, vậy là đủ rồi.
 `;
 }
-
-function showResult(){
-next(4);
-document.getElementById('cardNames').innerText=selected.map(c=>c.name).join(" • ");
-document.getElementById('reading').innerText=generateReading();
-}
-
-function restart(){location.reload();}
 
 </script>
 
