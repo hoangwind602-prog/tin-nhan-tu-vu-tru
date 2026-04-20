@@ -8,125 +8,77 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
 
 <style>
-body{
-margin:0;
-font-family:'Inter',sans-serif;
-color:#F5F5F5;
-background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
-}
-
-/* ⭐ nền sao nhưng KHÔNG chặn click */
-body::before{
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background-image: radial-gradient(white 1px, transparent 1px);
-background-size:40px 40px;
-opacity:0.15;
-animation:move 80s linear infinite;
-pointer-events:none;
-}
-
-@keyframes move{
-from{transform:translateY(0);}
-to{transform:translateY(-300px);}
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #0F0F1A;
+  color: #F5F5F5;
 }
 
 /* SCREEN */
-.screen{
-display:none;
-height:100vh;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-text-align:center;
-padding:20px;
-position:relative;
-z-index:2;
+.screen {
+  display: none;
+  height: 100vh;
+  padding: 20px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-.active{display:flex;}
+.active { display: flex; }
 
-h1{
-font-family:'Playfair Display';
-font-size:24px;
+/* TEXT */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  line-height: 1.6;
 }
 
-/* INPUT */
-textarea{
-width:90%;
-max-width:400px;
-height:120px;
-border-radius:12px;
-border:none;
-padding:15px;
+textarea {
+  width: 90%;
+  max-width: 400px;
+  height: 120px;
+  border-radius: 12px;
+  border: none;
+  padding: 15px;
+  font-size: 15px;
 }
 
 /* BUTTON */
-button{
-margin-top:20px;
-padding:12px 24px;
-border-radius:10px;
-border:none;
-background:#6C63FF;
-color:white;
-cursor:pointer;
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  background: #6C63FF;
+  color: white;
 }
 
-/* CARD */
-.cards{display:flex;gap:12px;}
-
-.card{
-width:90px;
-height:150px;
-perspective:1000px;
-cursor:pointer;
+/* CARDS */
+.cards {
+  display: flex;
+  gap: 12px;
 }
-
-.inner{
-width:100%;
-height:100%;
-position:relative;
-transform-style:preserve-3d;
-transition:transform .8s;
-}
-
-.card.flipped .inner{
-transform:rotateY(180deg);
-}
-
-.front,.back{
-position:absolute;
-width:100%;
-height:100%;
-border-radius:12px;
-backface-visibility:hidden;
-}
-
-.front{
-background:linear-gradient(135deg,#2c2c4a,#1c1c2e);
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.back{
-transform:rotateY(180deg);
-background-size:cover;
-background-position:center;
+.card {
+  width: 80px;
+  height: 130px;
+  background: linear-gradient(135deg,#1c1c2e,#2c2c4a);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* RESULT */
-.result{
-max-width:420px;
-font-family:'Playfair Display';
-line-height:1.9;
-text-align:left;
+.result {
+  max-width: 420px;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.8;
+  font-size: 16px;
 }
-
-.small{
-font-size:12px;
-color:#aaa;
+.small {
+  font-size: 13px;
+  color: #A8A8B3;
 }
 </style>
 </head>
@@ -134,32 +86,33 @@ color:#aaa;
 <body>
 
 <!-- SCENE 1 -->
-<div id="s1" class="screen active">
-<h1>Có những điều… bạn chưa từng nói ra.</h1>
-<button id="btn1">Mình muốn được lắng nghe</button>
+<div id="scene1" class="screen active">
+  <h1>Có những điều… bạn chưa từng nói ra.</h1>
+  <button onclick="next(2)">Mình muốn được lắng nghe</button>
 </div>
 
 <!-- SCENE 2 -->
-<div id="s2" class="screen">
-<textarea placeholder="Viết điều trong lòng bạn..."></textarea>
-<div class="small">đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
-<button id="btn2">Rút bài</button>
+<div id="scene2" class="screen">
+  <textarea id="question" placeholder="Viết điều đang ở trong lòng bạn…"></textarea>
+  <div class="small">đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
+  <button onclick="startDraw()">Rút bài</button>
 </div>
 
 <!-- SCENE 3 -->
-<div id="s3" class="screen">
-<div class="cards">
-<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
-<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
-<div class="card"><div class="inner"><div class="front">?</div><div class="back"></div></div></div>
-</div>
+<div id="scene3" class="screen">
+  <div class="cards">
+    <div class="card" onclick="flipCard(0)">?</div>
+    <div class="card" onclick="flipCard(1)">?</div>
+    <div class="card" onclick="flipCard(2)">?</div>
+  </div>
 </div>
 
 <!-- SCENE 4 -->
-<div id="s4" class="screen">
-<div id="reading" class="result"></div>
-  <button onclick="location.reload()">Hẹn gặp lại</button>
-<p class="small">made by seri</p>
+<div id="scene4" class="screen">
+  <div id="cardNames"></div>
+  <div class="result" id="reading"></div>
+  <button onclick="restart()">Hẹn gặp lại</button>
+  <p class="small">made by seri</p>
 </div>
 
 <script>
