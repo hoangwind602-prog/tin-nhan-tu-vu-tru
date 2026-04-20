@@ -8,205 +8,215 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #0F0F1A;
-  color: #F5F5F5;
+body{
+margin:0;
+font-family:'Inter',sans-serif;
+color:#F5F5F5;
+overflow:hidden;
+}
+
+/* 🌌 BACKGROUND */
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
+}
+.stars{
+position:absolute;
+width:100%;
+height:100%;
+background-image: radial-gradient(white 1px, transparent 1px);
+background-size: 40px 40px;
+opacity:0.15;
+animation: move 80s linear infinite;
+}
+@keyframes move{
+from{transform:translateY(0);}
+to{transform:translateY(-300px);}
 }
 
 /* SCREEN */
-.screen {
-  display: none;
-  height: 100vh;
-  padding: 20px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.screen{
+display:none;
+height:100vh;
+padding:20px;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
 }
-.active { display: flex; }
+.active{display:flex;}
 
-/* TEXT */
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  line-height: 1.6;
+h1{
+font-family:'Playfair Display',serif;
+font-size:24px;
+line-height:1.6;
 }
 
-textarea {
-  width: 90%;
-  max-width: 400px;
-  height: 120px;
-  border-radius: 12px;
-  border: none;
-  padding: 15px;
-  font-size: 15px;
+/* INPUT */
+textarea{
+width:90%;
+max-width:400px;
+height:120px;
+border-radius:12px;
+border:none;
+padding:15px;
+font-size:15px;
 }
 
 /* BUTTON */
-button {
-  margin-top: 20px;
-  padding: 12px 24px;
-  border-radius: 10px;
-  border: none;
-  background: #6C63FF;
-  color: white;
+button{
+margin-top:20px;
+padding:12px 24px;
+border-radius:10px;
+border:none;
+background:#6C63FF;
+color:white;
 }
 
-/* CARDS */
-.cards {
-  display: flex;
-  gap: 12px;
+/* 🎴 CARDS */
+.cards{display:flex; gap:14px;}
+
+.card{
+width:90px;
+height:150px;
+border-radius:12px;
+background:#222;
+background-size:cover;
+background-position:center;
+cursor:pointer;
+transition:.4s;
 }
-.card {
-  width: 80px;
-  height: 130px;
-  background: linear-gradient(135deg,#1c1c2e,#2c2c4a);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.card:hover{transform:scale(1.05);}
 
 /* RESULT */
-.result {
-  max-width: 420px;
-  font-family: 'Playfair Display', serif;
-  line-height: 1.8;
-  font-size: 16px;
+.result{
+max-width:420px;
+font-family:'Playfair Display',serif;
+line-height:1.9;
+font-size:16px;
+text-align:left;
 }
-.small {
-  font-size: 13px;
-  color: #A8A8B3;
-}
+.small{font-size:12px;color:#aaa;}
 </style>
 </head>
 
 <body>
 
+<div class="bg"><div class="stars"></div></div>
+
 <!-- SCENE 1 -->
 <div id="scene1" class="screen active">
-  <h1>Có những điều… bạn chưa từng nói ra.</h1>
-  <button onclick="next(2)">Mình muốn được lắng nghe</button>
+<h1>Có những điều… bạn chưa từng nói ra.</h1>
+<button onclick="next(2)">Mình muốn được lắng nghe</button>
 </div>
 
 <!-- SCENE 2 -->
 <div id="scene2" class="screen">
-  <textarea id="question" placeholder="Viết điều đang ở trong lòng bạn…"></textarea>
-  <div class="small">đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
-  <button onclick="startDraw()">Rút bài</button>
+<textarea id="question" placeholder="Viết điều đang ở trong lòng bạn…"></textarea>
+<div class="small">Đừng lo lắng tôi chỉ là người muốn lắng nghe bạn.</div>
+<button onclick="startDraw()">Rút bài</button>
 </div>
 
 <!-- SCENE 3 -->
 <div id="scene3" class="screen">
-  <div class="cards">
-    <div class="card" onclick="flipCard(0)">?</div>
-    <div class="card" onclick="flipCard(1)">?</div>
-    <div class="card" onclick="flipCard(2)">?</div>
-  </div>
+<div class="cards">
+<div class="card" onclick="flipCard(0)"></div>
+<div class="card" onclick="flipCard(1)"></div>
+<div class="card" onclick="flipCard(2)"></div>
+</div>
 </div>
 
 <!-- SCENE 4 -->
 <div id="scene4" class="screen">
-  <div id="cardNames"></div>
-  <div class="result" id="reading"></div>
-  <button onclick="restart()">Hẹn gặp lại</button>
-  <p class="small">made by seri</p>
+<div id="cardNames"></div>
+<div id="reading" class="result"></div>
+<button onclick="restart()">Hẹn gặp lại</button>
+<p class="small">made by seri</p>
 </div>
 
 <script>
 
-/* ===== 22 LÁ TAROT ===== */
+/* 🔮 22 LÁ TAROT */
 const tarot = [
-{name:"The Fool",past:"Bạn đã từng bắt đầu với niềm tin rất trong trẻo.",present:"Bạn đang đứng trước một khởi đầu mới nhưng còn ngập ngừng.",future:"Hãy cho bản thân cơ hội thử, dù chỉ là nhỏ nhất.",reflection:["Bạn có đang sợ bắt đầu không?","Điều gì khiến bạn chùn bước?"]},
-{name:"The Magician",past:"Bạn đã từng có trong tay khả năng tạo ra điều mình muốn.",present:"Bạn đang có nhiều hơn những gì bạn nghĩ.",future:"Hãy tin vào chính mình.",reflection:["Bạn có đang đánh giá thấp bản thân?","Bạn đã dùng hết khả năng của mình chưa?"]},
-{name:"The High Priestess",past:"Bạn đã từng cảm nhận được điều gì đó bằng trực giác.",present:"Bạn cần lắng nghe bên trong hơn là bên ngoài.",future:"Câu trả lời nằm trong bạn.",reflection:["Bạn có đang bỏ qua trực giác?"]},
-{name:"The Empress",past:"Bạn đã từng được nuôi dưỡng bằng tình cảm.",present:"Bạn cần sự dịu dàng với chính mình.",future:"Hãy cho phép bản thân được yêu thương.",reflection:["Bạn đã chăm sóc tốt bản thân chưa?"]},
-{name:"The Emperor",past:"Bạn đã từng kiểm soát mọi thứ rất chặt chẽ.",present:"Bạn đang cố giữ mọi thứ ổn định.",future:"Sự vững vàng sẽ giúp bạn.",reflection:["Bạn có đang quá kiểm soát không?"]},
-{name:"The Lovers",past:"Đã từng có một kết nối rất sâu sắc.",present:"Bạn đang đứng trước một lựa chọn cảm xúc.",future:"Hãy thành thật với trái tim.",reflection:["Bạn đang chọn vì yêu hay vì sợ?"]},
-{name:"The Chariot",past:"Bạn đã từng rất quyết tâm.",present:"Bạn đang cố tiến về phía trước.",future:"Bạn sẽ vượt qua nếu giữ vững hướng đi.",reflection:["Bạn có đang đi đúng hướng không?"]},
-{name:"Strength",past:"Bạn đã từng mạnh mẽ hơn bạn nghĩ.",present:"Bạn cần sự kiên nhẫn và mềm mại.",future:"Sức mạnh thật là sự dịu dàng.",reflection:["Bạn có đang quá khắt khe với mình?"]},
-{name:"The Hermit",past:"Bạn đã từng thu mình lại.",present:"Bạn đang tìm kiếm câu trả lời bên trong.",future:"Sự tĩnh lặng sẽ dẫn lối.",reflection:["Bạn có đang lắng nghe chính mình?"]},
-{name:"Wheel of Fortune",past:"Mọi thứ đã từng thay đổi bất ngờ.",present:"Bạn đang trong một vòng xoay.",future:"Mọi thứ sẽ tiếp tục chuyển động.",reflection:["Bạn có chấp nhận thay đổi không?"]},
-{name:"Justice",past:"Bạn đã từng phải đối diện với sự thật.",present:"Bạn cần nhìn nhận rõ ràng.",future:"Mọi thứ sẽ cân bằng lại.",reflection:["Bạn có đang công bằng với chính mình không?"]},
-{name:"The Hanged Man",past:"Bạn đã từng phải dừng lại.",present:"Bạn cần nhìn mọi thứ theo góc khác.",future:"Buông bỏ sẽ giúp bạn thấy rõ.",reflection:["Bạn có đang cố chấp không?"]},
-{name:"Death",past:"Một điều gì đó đã kết thúc.",present:"Bạn đang ở giữa chuyển mình.",future:"Một khởi đầu mới đang tới.",reflection:["Bạn có đang níu giữ những điều cũ?"]},
-{name:"Temperance",past:"Bạn đã từng cố cân bằng.",present:"Bạn cần chậm lại.",future:"Sự hài hòa sẽ đến.",reflection:["Bạn có đang quá vội vàng không?"]},
-{name:"The Devil",past:"Bạn đã từng bị ràng buộc.",present:"Bạn đang bị mắc kẹt trong điều gì đó.",future:"Bạn có thể thoát ra nếu muốn.",reflection:["Điều gì đang giữ bạn ở lại?"]},
-{name:"The Tower",past:"Một điều đã từng sụp đổ.",present:"Bạn đang đối diện sự thật khó khăn.",future:"Sự thật sẽ giải phóng bạn.",reflection:["Bạn có đang trốn tránh sự thật?"]},
-{name:"The Star",past:"Bạn đã từng có niềm tin đẹp.",present:"Bạn đang chữa lành.",future:"Hy vọng sẽ quay lại.",reflection:["Bạn có tin mình sẽ ổn không?"]},
-{name:"The Moon",past:"Bạn đã từng mơ hồ.",present:"Bạn đang không rõ ràng.",future:"Hãy tin trực giác.",reflection:["Bạn có đang né tránh sự thật?"]},
-{name:"The Sun",past:"Bạn đã từng rất rực rỡ.",present:"Bạn có cơ hội hạnh phúc.",future:"Ánh sáng sẽ đến.",reflection:["Bạn có cho phép mình được vui không?"]},
-{name:"Judgement",past:"Bạn đã từng thức tỉnh.",present:"Bạn đang nhìn lại bản thân.",future:"Một cơ hội mới mở ra.",reflection:["Bạn đã sẵn sàng thay đổi chưa?"]},
-{name:"The World",past:"Bạn đã hoàn thành một chặng.",present:"Bạn đang ở điểm chuyển giao.",future:"Một vòng tròn mới mở ra.",reflection:["Bạn đã sẵn sàng bước tiếp chưa?"]}
+{name:"The Fool",img:"https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",past:"Bạn đã từng bắt đầu với một niềm tin rất thuần khiết.",present:"Bạn đang đứng trước một khởi đầu mới nhưng còn ngập ngừng.",future:"Có lẽ điều bạn cần không phải là chắc chắn, mà là can đảm thử một lần nữa.",reflection:["Bạn có đang sợ bắt đầu không?"]},
+{name:"The Magician",img:"https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",past:"Bạn đã từng có khả năng tạo ra điều mình muốn.",present:"Bạn đang có nhiều hơn bạn nghĩ.",future:"Hãy tin rằng bạn đủ khả năng thay đổi tình hình.",reflection:["Bạn có đang đánh giá thấp bản thân không?"]},
+{name:"The High Priestess",img:"https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg",past:"Bạn đã từng cảm nhận rất sâu sắc.",present:"Bạn cần lắng nghe trực giác.",future:"Câu trả lời nằm bên trong bạn.",reflection:["Bạn có đang bỏ qua cảm nhận của mình?"]},
+{name:"The Empress",img:"https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg",past:"Bạn đã từng được yêu thương dịu dàng.",present:"Bạn cần chăm sóc bản thân.",future:"Sự mềm mại sẽ chữa lành bạn.",reflection:["Bạn đã chăm sóc tốt cho bản thân chưa?"]},
+{name:"The Emperor",img:"https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg",past:"Bạn đã từng cố kiểm soát mọi thứ.",present:"Bạn đang tìm sự ổn định.",future:"Sự vững vàng sẽ giúp bạn.",reflection:["Bạn có đang kiểm soát quá mức không?"]},
+{name:"The Lovers",img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",past:"Đã từng có một kết nối sâu sắc.",present:"Bạn đang đứng trước lựa chọn cảm xúc.",future:"Hãy thành thật với trái tim.",reflection:["Bạn đang chọn vì yêu hay vì sợ?"]},
+{name:"The Chariot",img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/The_Chariot.jpg",past:"Bạn đã từng rất quyết tâm.",present:"Bạn đang cố tiến về phía trước.",future:"Bạn sẽ vượt qua nếu không bỏ cuộc.",reflection:["Bạn có đang đi đúng hướng không?"]},
+{name:"Strength",img:"https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",past:"Bạn đã từng mạnh mẽ hơn bạn nghĩ.",present:"Bạn cần kiên nhẫn.",future:"Sức mạnh thật là sự dịu dàng.",reflection:["Bạn có đang quá khắt khe với mình?"]},
+{name:"The Hermit",img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg",past:"Bạn đã từng thu mình lại.",present:"Bạn đang tìm câu trả lời bên trong.",future:"Sự tĩnh lặng sẽ dẫn lối.",reflection:["Bạn có đang lắng nghe chính mình?"]},
+{name:"Wheel of Fortune",img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg",past:"Mọi thứ đã từng thay đổi.",present:"Bạn đang trong một chu kỳ.",future:"Mọi thứ sẽ tiếp tục xoay chuyển.",reflection:["Bạn có chấp nhận sự thay đổi?"]},
+{name:"Justice",img:"https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg",past:"Bạn đã từng đối diện sự thật.",present:"Bạn cần nhìn rõ.",future:"Mọi thứ sẽ cân bằng.",reflection:["Bạn có đang công bằng với mình không?"]},
+{name:"The Hanged Man",img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg",past:"Bạn đã từng phải dừng lại.",present:"Bạn cần nhìn khác đi.",future:"Buông bỏ sẽ giúp bạn.",reflection:["Bạn có đang cố chấp không?"]},
+{name:"Death",img:"https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg",past:"Một điều đã kết thúc.",present:"Bạn đang chuyển mình.",future:"Khởi đầu mới đang tới.",reflection:["Bạn có đang níu giữ quá khứ?"]},
+{name:"Temperance",img:"https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg",past:"Bạn đã từng cố cân bằng.",present:"Bạn cần chậm lại.",future:"Sự hài hòa sẽ đến.",reflection:["Bạn có đang quá vội vàng?"]},
+{name:"The Devil",img:"https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg",past:"Bạn đã từng bị ràng buộc.",present:"Bạn đang mắc kẹt.",future:"Bạn có thể thoát ra.",reflection:["Điều gì đang giữ bạn lại?"]},
+{name:"The Tower",img:"https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",past:"Một điều đã sụp đổ.",present:"Bạn đang đối diện sự thật.",future:"Sự thật sẽ giải phóng bạn.",reflection:["Bạn có đang trốn tránh?"]},
+{name:"The Star",img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg",past:"Bạn đã từng có niềm tin đẹp.",present:"Bạn đang chữa lành.",future:"Hy vọng sẽ quay lại.",reflection:["Bạn có tin mình sẽ ổn không?"]},
+{name:"The Moon",img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg",past:"Bạn đã từng mơ hồ.",present:"Bạn đang không rõ ràng.",future:"Hãy tin trực giác.",reflection:["Bạn có đang né tránh?"]},
+{name:"The Sun",img:"https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg",past:"Bạn đã từng rất rực rỡ.",present:"Bạn có cơ hội hạnh phúc.",future:"Ánh sáng sẽ trở lại.",reflection:["Bạn có cho phép mình được vui không?"]},
+{name:"Judgement",img:"https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg",past:"Bạn đã từng thức tỉnh.",present:"Bạn đang nhìn lại bản thân.",future:"Cơ hội mới mở ra.",reflection:["Bạn đã sẵn sàng để thay đổi chưa?"]},
+{name:"The World",img:"https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",past:"Bạn đã hoàn thành một chặng.",present:"Bạn đang chuyển giao.",future:"Một vòng mới bắt đầu.",reflection:["Bạn đã sẵn sàng bước tiếp chưa?, cố lên!"]}
 ];
 
-let selected = [];
-let flipped = 0;
+/* LOGIC */
+let selected=[];
+let flipped=0;
 
 function next(n){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("scene"+n).classList.add("active");
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById('scene'+n).classList.add('active');
 }
 
 function startDraw(){
-  selected = [];
-  flipped = 0;
-
-  while(selected.length < 3){
-    let c = tarot[Math.floor(Math.random()*tarot.length)];
-    if(!selected.includes(c)) selected.push(c);
-  }
-
-  next(3);
+selected=[]; flipped=0;
+while(selected.length<3){
+let c=tarot[Math.floor(Math.random()*tarot.length)];
+if(!selected.includes(c)) selected.push(c);
+}
+document.querySelectorAll('.card').forEach(c=>c.style.background="#222");
+next(3);
 }
 
 function flipCard(i){
-  if(i !== flipped) return;
-  const cards = document.querySelectorAll(".card");
-  cards[i].innerText = selected[i].name;
-  flipped++;
-
-  if(flipped === 3){
-    setTimeout(showResult,800);
-  }
+if(i!==flipped) return;
+const cards=document.querySelectorAll('.card');
+cards[i].style.backgroundImage=`url(${selected[i].img})`;
+flipped++;
+if(flipped===3){setTimeout(showResult,1200);}
 }
 
 function generateReading(){
-  const intro = "Có lẽ bạn đã mang theo một điều gì đó rất lâu.";
+return `
+Có thể bạn đã mang theo câu hỏi này trong lòng một khoảng thời gian khá lâu.
 
-  const past = selected[0].past;
-  const present = selected[1].present;
-  const future = selected[2].future;
+${selected[0].past}
 
-  const refArr = selected[2].reflection;
-  const reflection = refArr[Math.floor(Math.random()*refArr.length)];
+Có những điều từ quá khứ vẫn âm thầm ảnh hưởng đến hiện tại của bạn.
 
-  return `
-${intro}
+${selected[1].present}
 
-${past}
+Hiện tại có thể chưa rõ ràng, nhưng đó là lúc bạn bắt đầu cảm nhận thay vì cố hiểu.
 
-${present}
+${selected[2].future}
 
-${future}
+Có lẽ bạn đang ở một giai đoạn chuyển tiếp, nơi mọi thứ chưa hoàn toàn rõ ràng, nhưng cũng không còn như trước nữa.
 
-${reflection}
+${selected[2].reflection[0]}
 `;
 }
 
 function showResult(){
-  next(4);
-  document.getElementById("cardNames").innerText =
-    selected.map(c=>c.name).join(" • ");
-
-  document.getElementById("reading").innerText = generateReading();
+next(4);
+document.getElementById('cardNames').innerText=selected.map(c=>c.name).join(" • ");
+document.getElementById('reading').innerText=generateReading();
 }
 
-function restart(){
-  location.reload();
-}
+function restart(){location.reload();}
 
 </script>
 
