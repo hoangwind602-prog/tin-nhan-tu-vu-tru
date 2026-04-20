@@ -224,47 +224,51 @@ present:"Nếu bạn cảm thấy mình đang tiến tới một cột mốc qua
 future:"Bạn sẽ đạt được sự hài hòa giữa đam mê, sự nghiệp và tâm hồn. Bạn sẽ thấy mình không chỉ đạt được mục tiêu cá nhân mà còn cảm thấy mình thuộc về một điều gì đó lớn lao hơn."}
 ];
 
-let pick=[]; let step=0;
+let pick=[]; 
+let step=0;
 
+/* chuyển scene */
 function go(n){
-  console.log("GO TO:", n); // để debug
-
-  document.querySelectorAll(".screen").forEach(s=>{
-    s.classList.remove("active");
-  });
-
-  const target = document.getElementById("s"+n);
-
-  if(target){
-    target.classList.add("active");
-  }else{
-    console.error("Không tìm thấy scene:", n);
-  }
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("s"+n).classList.add("active");
 }
 
+/* rút bài */
 function draw(){
-pick=[]; step=0;
+pick=[];
+step=0;
+
 while(pick.length<3){
 let c=tarot[Math.floor(Math.random()*tarot.length)];
 if(!pick.includes(c)) pick.push(c);
 }
+
 document.querySelectorAll(".card").forEach(c=>c.classList.remove("flipped"));
+
 go(3);
 }
 
-function flip(i){
-if(i!==step) return;
+/* lật bài */
+function flipCard(index){
+if(index!==step) return;
+
 const cards=document.querySelectorAll(".card");
-cards[i].classList.add("flipped");
-cards[i].querySelector(".back").style.backgroundImage=`url('${pick[i].img}')`;
+cards[index].classList.add("flipped");
+
+cards[index].querySelector(".back").style.backgroundImage=`url('${pick[index].img}')`;
+
 step++;
-if(step===3){setTimeout(show,1200);}
+
+if(step===3){
+setTimeout(showResult,1200);
+}
 }
 
-function show(){
+/* hiển thị */
+function showResult(){
 go(4);
 
-document.getElementById("reading").innerHTML = `
+document.getElementById("reading").innerHTML=`
 <b>${pick[0].name} – Quá khứ</b><br>${pick[0].past}<br><br>
 <b>${pick[1].name} – Hiện tại</b><br>${pick[1].present}<br><br>
 <b>${pick[2].name} – Hướng đi</b><br>${pick[2].future}<br><br>
@@ -274,9 +278,16 @@ Có thể bạn đang ở một khoảng giữa — nơi mà những điều cũ
 Bạn không cần phải vội hiểu hết mọi thứ ngay lúc này.
 
 Chỉ cần bạn vẫn ở đây… và vẫn lắng nghe chính mình, vậy là đủ rồi.
-`;
-}
+document.addEventListener("DOMContentLoaded",()=>{
 
+document.getElementById("btn1").addEventListener("click",()=>go(2));
+document.getElementById("btn2").addEventListener("click",draw);
+
+document.querySelectorAll(".card").forEach((card,i)=>{
+card.addEventListener("click",()=>flipCard(i));
+});
+
+});
 </script>
 
 </body>
