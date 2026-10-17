@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK4 Flashcards - Bếp nhỏ của Seri</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f7f4ee;
+    color: #514a43;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 25px;
+    color: #72866b;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #999084;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.progress {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 6px;
+    background: #e6e0d6;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: #9eaf8c;
+    transition: width 0.3s;
+}
+
+.card {
+    min-height: 300px;
+    background: #fffdf9;
+    border: 1px solid #eee6da;
+    border-radius: 24px;
+    box-shadow: 0 8px 25px #514a4310;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:active {
+    transform: scale(0.98);
+}
+
+.label {
+    color: #b4a99a;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.hanzi {
+    font-size: 65px;
+    color: #72866b;
+    font-weight: bold;
+}
+
+.pinyin {
+    font-size: 25px;
+    color: #b18a69;
+    margin: 12px 0;
+}
+
+.meaning {
+    font-size: 21px;
+    line-height: 1.6;
+}
+
+.hint {
+    font-size: 13px;
+    color: #b4a99a;
+    margin-top: 25px;
+}
+
+button {
+    border: none;
+    border-radius: 13px;
+    padding: 13px 17px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.primary {
+    background: #849879;
+    color: white;
+}
+
+.secondary {
+    background: #e9e4da;
+    color: #625b51;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.mastery {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.mastery button {
+    flex: 1;
+}
+
+.known {
+    background: #dce9d4;
+    color: #4d7046;
+}
+
+.unknown {
+    background: #f3dfd7;
+    color: #a15f4c;
+}
+
+.stats {
+    margin-top: 22px;
+    color: #999084;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>🌿 HSK4 · Góc học tiếng Trung</h1>
+    <div class="subtitle">Mỗi ngày một chút, tiến bộ từng ngày.</div>
+
+    <div class="progress">
+        <span id="counter">Từ 1 / 11</span>
+        <span id="percentage">0% đã nhớ</span>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="bar"></div>
+    </div>
+
+    <div class="card" onclick="flipCard()">
+        <div class="label" id="label">CHỮ HÁN</div>
+        <div class="hanzi" id="hanzi"></div>
+        <div class="pinyin" id="pinyin" hidden></div>
+        <div class="meaning" id="meaning" hidden></div>
+        <div class="hint" id="hint">Chạm vào thẻ để xem đáp án</div>
+    </div>
+
+    <div class="buttons">
+        <button class="secondary" onclick="previousCard()">← Từ trước</button>
+        <button class="primary" onclick="nextCard()">Từ tiếp theo →</button>
+        <button class="secondary" onclick="shuffleCards()">🔀 Ngẫu nhiên</button>
+    </div>
+
+    <div class="mastery">
+        <button class="known" onclick="markWord(true)">✓ Đã nhớ</button>
+        <button class="unknown" onclick="markWord(false)">✗ Chưa nhớ</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+</div>
+
+<script>
+const originalCards = [
+    {hanzi: "吵", pinyin: "chǎo", meaning: "Ồn ào, ầm ĩ"},
+    {hanzi: "成功", pinyin: "chénggōng", meaning: "Thành công"},
+    {hanzi: "成熟", pinyin: "chéngshú", meaning: "Trưởng thành; chín chắn; thuần thục"},
+    {hanzi: "成为", pinyin: "chéngwéi", meaning: "Trở thành"},
+    {hanzi: "诚实", pinyin: "chéngshí", meaning: "Thành thật, trung thực"},
+    {hanzi: "吃惊", pinyin: "chījīng", meaning: "Giật mình, kinh ngạc"},
+    {hanzi: "重新", pinyin: "chóngxīn", meaning: "Làm lại từ đầu, lại lần nữa"},
+    {hanzi: "抽烟", pinyin: "chōuyān", meaning: "Hút thuốc"},
+    {hanzi: "出发", pinyin: "chūfā", meaning: "Xuất phát"},
+    {hanzi: "出生", pinyin: "chūshēng", meaning: "Sinh ra, ra đời"},
+    {hanzi: "出现", pinyin: "chūxiàn", meaning: "Xuất hiện, nảy sinh"}
+];
+
+let cards = [...originalCards];
+let index = 0;
+let showingAnswer = false;
+
+// Lưu tiến độ học trên thiết bị
+let knownWords = JSON.parse(
+    localStorage.getItem("seri_hsk4_known") || "[]"
+);
+
+let unknownWords = JSON.parse(
+    localStorage.getItem("seri_hsk4_unknown") || "[]"
+);
+
+function displayCard() {
+    const card = cards[index];
+
+    document.getElementById("hanzi").textContent = card.hanzi;
+    document.getElementById("pinyin").textContent = card.pinyin;
+    document.getElementById("meaning").textContent = card.meaning;
+
+    document.getElementById("counter").textContent =
+        `Từ ${index + 1} / ${cards.length}`;
+
+    document.getElementById("label").textContent = "CHỮ HÁN";
+
+    showingAnswer = false;
+    updateCardView();
+    updateStats();
+}
+
+function updateCardView() {
+    document.getElementById("pinyin").hidden = !showingAnswer;
+    document.getElementById("meaning").hidden = !showingAnswer;
+
+    document.getElementById("label").textContent =
+        showingAnswer ? "ĐÁP ÁN" : "CHỮ HÁN";
+
+    document.getElementById("hint").textContent =
+        showingAnswer
+        ? "Hãy đọc lại từ và nghĩa tiếng Việt"
+        : "Chạm vào thẻ để xem đáp án";
+}
+
+function flipCard() {
+    showingAnswer = !showingAnswer;
+    updateCardView();
+}
+
+function nextCard() {
+    index = (index + 1) % cards.length;
+    displayCard();
+}
+
+function previousCard() {
+    index = (index - 1 + cards.length) % cards.length;
+    displayCard();
+}
+
+function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+
+    index = 0;
+    displayCard();
+}
+
+function markWord(remembered) {
+    const word = cards[index].hanzi;
+
+    knownWords = knownWords.filter(w => w !== word);
+    unknownWords = unknownWords.filter(w => w !== word);
+
+    if (remembered) {
+        knownWords.push(word);
+    } else {
+        unknownWords.push(word);
+    }
+
+    localStorage.setItem(
+        "seri_hsk4_known",
+        JSON.stringify(knownWords)
+    );
+
+    localStorage.setItem(
+        "seri_hsk4_unknown",
+        JSON.stringify(unknownWords)
+    );
+
+    updateStats();
+    nextCard();
+}
+
+function updateStats() {
+    const total = originalCards.length;
+    const knownCount = originalCards.filter(
+        c => knownWords.includes(c.hanzi)
+    ).length;
+
+    const unknownCount = originalCards.filter(
+        c => unknownWords.includes(c.hanzi)
+    ).length;
+
+    document.getElementById("percentage").textContent =
+        Math.round(knownCount / total * 100) + "% đã nhớ";
+
+    document.getElementById("bar").style.width =
+        (knownCount / total * 100) + "%";
+
+    document.getElementById("stats").innerHTML =
+        `🌱 Đã nhớ: ${knownCount}/${total}<br>` +
+        `📖 Cần ôn lại: ${unknownCount} từ`;
+}
+
+displayCard();
+</script>
+
+</body>
+</html>
