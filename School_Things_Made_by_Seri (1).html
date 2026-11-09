@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8e8e8">
+<title>School Things | Made by Seri</title>
+<style>
+:root{
+  --pink:#f4caca;--pink2:#fff0ef;--brown:#70463e;--cream:#fffaf4;
+  --ink:#382b2a;--mint:#dcefe6;--yellow:#ffe7a8;--line:#efd9d2;
+  --shadow:0 12px 30px rgba(112,70,62,.12)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink);
+ background:linear-gradient(135deg,#fff7f0,#f9e5e5 55%,#eaf3ec);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0}
+.app{max-width:1050px;margin:auto;padding:22px 18px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:58px;height:58px;border-radius:20px;background:var(--brown);display:grid;place-items:center;font-size:30px;box-shadow:var(--shadow)}
+h1{font-size:clamp(25px,5vw,38px);margin:0;color:var(--brown);letter-spacing:.5px}
+.subtitle{margin:5px 0 0;color:#8c6a63;font-size:14px}
+.made{background:#fff8;border:1px solid var(--line);padding:9px 14px;border-radius:999px;color:var(--brown);font-weight:800;font-size:13px;white-space:nowrap}
+.hero{background:#fffaf0;border:2px solid white;border-radius:28px;padding:23px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:var(--shadow);overflow:hidden}
+.hero h2{margin:0 0 7px;font-size:clamp(21px,4vw,29px);color:var(--brown)}
+.hero p{margin:0;color:#86665f;line-height:1.5}
+.dog{font-size:75px;filter:drop-shadow(0 5px 2px #d6b2a0);flex-shrink:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.stat{background:#ffffffc9;border:1px solid white;border-radius:18px;padding:13px;text-align:center}
+.stat b{display:block;font-size:23px;color:var(--brown)}.stat span{font-size:12px;color:#98766f}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 14px}
+.tab{padding:11px 17px;border-radius:14px;background:#fff8;color:var(--brown);font-weight:800;border:1px solid var(--line)}
+.tab.active{background:var(--brown);color:white}
+.panel{background:#fffdf9;border:2px solid white;border-radius:25px;padding:clamp(17px,4vw,28px);box-shadow:var(--shadow);min-height:350px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.panel h3{margin:0;color:var(--brown);font-size:22px}
+.small{color:#98766f;font-size:13px}
+.primary,.secondary,.choice{border-radius:14px;padding:12px 17px;font-weight:800;transition:.15s}
+.primary{background:var(--brown);color:white}.primary:hover{background:#56342f;transform:translateY(-1px)}
+.secondary{background:var(--pink2);color:var(--brown);border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.word-card{background:#fff5f2;border:1px solid var(--line);border-radius:18px;padding:16px 10px;text-align:center;min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.word-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.word-icon{font-size:42px}.word-en{font-weight:900;color:var(--brown)}.word-vi{font-size:13px;color:#8c6a63}
+.listen{font-size:12px;color:#a06d63;background:white;border:1px solid var(--line);border-radius:20px;padding:5px 10px}
+.quizbox{max-width:650px;margin:auto;text-align:center}
+.progress{height:9px;background:#f5e5df;border-radius:20px;overflow:hidden;margin:14px 0 22px}
+.progress>div{height:100%;background:#b47c70;width:0;transition:.3s}
+.question-icon{font-size:72px;margin:8px}
+.question{font-size:clamp(22px,4vw,29px);font-weight:900;color:var(--brown);margin:7px 0}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:22px}
+.choice{background:#fff4f0;border:2px solid var(--line);color:var(--ink);min-height:58px}
+.choice:hover{border-color:#b47c70}.choice.correct{background:#e0f2e6;border-color:#75ae86}.choice.wrong{background:#ffe4e1;border-color:#dc8980}
+.feedback{min-height:30px;margin:14px 0;font-weight:800}
+.match-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.match-card{min-height:92px;border-radius:16px;background:#fff2ee;border:2px solid var(--line);font-weight:800;color:var(--brown);padding:10px}
+.match-card .emoji{font-size:29px;display:block;margin-bottom:4px}
+.match-card.selected{background:#ffe7a8;border-color:#d7ad51}.match-card.matched{background:#e0f2e6;border-color:#75ae86;opacity:.7}
+.type-wrap{max-width:570px;margin:auto;text-align:center}
+.type-input{width:100%;padding:15px;border:2px solid var(--line);border-radius:14px;font-size:18px;text-align:center;margin:15px 0;outline:none}
+.type-input:focus{border-color:#b47c70}
+.result{text-align:center;padding:24px}
+.result .big{font-size:64px}
+footer{text-align:center;color:#98766f;font-size:13px;padding:25px 0 0}
+.hidden{display:none!important}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.match-grid{grid-template-columns:repeat(2,1fr)}.hero{padding:18px}.dog{font-size:55px}.stats{gap:7px}.stat{padding:10px 5px}}
+@media(max-width:390px){.answers{grid-template-columns:1fr}.made{font-size:11px;padding:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><div class="logo">🎒</div><div><h1>School Things</h1><p class="subtitle">Learn • Play • Remember</p></div></div>
+ <div class="made">✦ Made by Seri ✦</div>
+</header>
+<section class="hero">
+ <div><h2>Ready to play and learn? 🐾</h2><p>Cùng chú cún nhỏ khám phá đồ dùng học tập.<br>Chơi mỗi ngày một chút, nhớ từ vựng thật lâu!</p></div>
+ <div class="dog">🐶</div>
+</section>
+<div class="stats">
+ <div class="stat"><b id="score">0</b><span>⭐ Điểm số</span></div>
+ <div class="stat"><b id="learned">0/8</b><span>📚 Từ đã học</span></div>
+ <div class="stat"><b id="streak">0</b><span>🔥 Câu đúng liên tiếp</span></div>
+</div>
+<nav class="tabs">
+ <button class="tab active" data-mode="learn">📖 Học từ</button>
+ <button class="tab" data-mode="quiz">🎯 Trắc nghiệm</button>
+ <button class="tab" data-mode="match">🧩 Ghép đôi</button>
+ <button class="tab" data-mode="spell">✍️ Viết từ</button>
+</nav>
+<main class="panel">
+ <section id="learn">
+  <div class="panel-head"><div><h3>📖 Vocabulary Garden</h3><div class="small">Nhấn vào loa để nghe cách phát âm.</div></div><span class="small">8 từ vựng</span></div>
+  <div class="grid" id="wordGrid"></div>
+ </section>
+ <section id="quiz" class="hidden">
+  <div class="panel-head"><div><h3>🎯 Choose the correct answer</h3><div class="small">Chọn nghĩa tiếng Việt đúng với từ tiếng Anh.</div></div><button class="secondary" onclick="startQuiz()">↻ Chơi lại</button></div>
+  <div class="quizbox" id="quizArea"></div>
+ </section>
+ <section id="match" class="hidden">
+  <div class="panel-head"><div><h3>🧩 Matching Challenge</h3><div class="small">Ghép hình ảnh với từ tiếng Anh tương ứng.</div></div><button class="secondary" onclick="startMatch()">↻ Chơi lại</button></div>
+  <div class="match-grid" id="matchGrid"></div><p class="feedback" id="matchFeedback" style="text-align:center"></p>
+ </section>
+ <section id="spell" class="hidden">
+  <div class="panel-head"><div><h3>✍️ Spell it right!</h3><div class="small">Nhìn hình và viết từ tiếng Anh.</div></div><button class="secondary" onclick="startSpell()">↻ Chơi lại</button></div>
+  <div class="type-wrap" id="spellArea"></div>
+ </section>
+</main>
+<footer>🐾 School Things — A little game, a lot of learning!<br><b>Made with love by Seri ♡</b></footer>
+</div>
+<script>
+const words=[
+ {en:"Eraser",vi:"Cục tẩy / Gôm",icon:"🧽",say:"eraser"},
+ {en:"Notebook",vi:"Quyển vở",icon:"📓",say:"notebook"},
+ {en:"Textbook",vi:"Sách giáo khoa",icon:"📘",say:"textbook"},
+ {en:"School bag",vi:"Cặp sách / Ba lô",icon:"🎒",say:"school bag"},
+ {en:"Pencil case",vi:"Hộp đựng bút",icon:"🖍️",say:"pencil case"},
+ {en:"Blackboard",vi:"Bảng đen",icon:"🟩",say:"blackboard"},
+ {en:"Whiteboard",vi:"Bảng trắng",icon:"⬜",say:"whiteboard"},
+ {en:"Raise hand",vi:"Giơ tay",icon:"🙋",say:"raise hand"},
+ {en:"Take a test",vi:"Làm bài kiểm tra",icon:"📝",say:"take a test"}
+];
+let score=0,streak=0,learned=new Set(),quizOrder=[],qi=0,matchFirst=null,matchCount=0,spellOrder=[],si=0;
+const $=id=>document.getElementById(id);
+function updateStats(){ $("score").textContent=score;$("learned").textContent=learned.size+"/"+words.length;$("streak").textContent=streak;}
+function speak(text){if(!('speechSynthesis'in window)){alert("Trình duyệt chưa hỗ trợ phát âm.");return;}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.85;speechSynthesis.speak(u);}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function renderWords(){
+ $("wordGrid").innerHTML=words.map((w,i)=>`<article class="word-card" onclick="learned.add(${i});updateStats()"><div class="word-icon">${w.icon}</div><div class="word-en">${w.en}</div><div class="word-vi">${w.vi}</div><button class="listen" onclick="event.stopPropagation();speak('${w.say}')">🔊 Listen</button></article>`).join("");
+}
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));
+ ["learn","quiz","match","spell"].forEach(id=>$(id).classList.toggle("hidden",id!==btn.dataset.mode));
+ if(btn.dataset.mode==="quiz"&&!quizOrder.length)startQuiz();
+ if(btn.dataset.mode==="match"&&!matchCount)startMatch();
+ if(btn.dataset.mode==="spell"&&!spellOrder.length)startSpell();
+}));
+function startQuiz(){quizOrder=shuffle(words);qi=0;renderQuiz();}
+function renderQuiz(){
+ if(qi>=quizOrder.length){$("quizArea").innerHTML=`<div class="result"><div class="big">🏆</div><h3>Hoàn thành xuất sắc!</h3><p>Bạn đã hoàn thành ${words.length} câu hỏi.</p><button class="primary" onclick="startQuiz()">Chơi lại</button></div>`;return;}
+ let w=quizOrder[qi],opts=shuffle([w,...shuffle(words.filter(x=>x!==w)).slice(0,3)]);
+ $("quizArea").innerHTML=`<div class="small">Câu ${qi+1}/${quizOrder.length}</div><div class="progress"><div style="width:${qi/quizOrder.length*100}%"></div></div><div class="question-icon">${w.icon}</div><div class="question">${w.en}</div><div class="small">Từ này có nghĩa là gì?</div><div class="answers">${opts.map(o=>`<button class="choice" onclick="answerQuiz(this,${words.indexOf(o)},${words.indexOf(w)})">${o.vi}</button>`).join("")}</div><div class="feedback" id="quizFeedback"></div>`;
+}
+function answerQuiz(btn,chosen,correct){
+ document.querySelectorAll("#quizArea .choice").forEach(b=>b.disabled=true);
+ if(chosen===correct){btn.classList.add("correct");$("quizFeedback").textContent="Chính xác! +10 điểm 🌟";score+=10;streak++;learned.add(correct);}
+ else{btn.classList.add("wrong");document.querySelectorAll("#quizArea .choice").forEach(b=>{if(b.textContent===words[correct].vi)b.classList.add("correct")});$("quizFeedback").textContent="Chưa đúng rồi! Đáp án: "+words[correct].vi+" 💛";streak=0;}
+ updateStats();qi++;setTimeout(renderQuiz,1150);
+}
+function startMatch(){
+ matchFirst=null;matchCount=0;$("matchFeedback").textContent="";
+ let cards=shuffle([...words.slice(0,8).flatMap((w,i)=>[{key:i,type:"image",label:w.icon},{key:i,type:"word",label:w.en}])]);
+ $("matchGrid").innerHTML=cards.map((c,i)=>`<button class="match-card" data-key="${c.key}" data-index="${i}" onclick="pickMatch(this)">${c.type==="image"?`<span class="emoji">${c.label}</span>`:c.label}</button>`).join("");
+}
+function pickMatch(btn){
+ if(btn.classList.contains("matched")||btn===matchFirst)return;
+ btn.classList.add("selected");
+ if(!matchFirst){matchFirst=btn;return;}
+ if(matchFirst.dataset.key===btn.dataset.key){
+  [matchFirst,btn].forEach(x=>{x.classList.remove("selected");x.classList.add("matched");x.disabled=true});
+  score+=10;streak++;matchCount++;learned.add(Number(btn.dataset.key));$("matchFeedback").textContent="Ghép đúng rồi! 🎉";updateStats();
+  if(matchCount===8)$("matchFeedback").textContent="Bạn đã ghép đúng tất cả! Tuyệt vời! 🏆";
+  matchFirst=null;
+ }else{
+  streak=0;updateStats();let first=matchFirst;setTimeout(()=>{first.classList.remove("selected");btn.classList.remove("selected")},550);matchFirst=null;$("matchFeedback").textContent="Chưa khớp, thử lại nhé!";
+ }
+}
+function startSpell(){spellOrder=shuffle(words);si=0;renderSpell();}
+function renderSpell(){
+ if(si>=spellOrder.length){$("spellArea").innerHTML=`<div class="result"><div class="big">✏️</div><h3>Well done!</h3><p>Bạn đã luyện viết xong ${words.length} từ.</p><button class="primary" onclick="startSpell()">Chơi lại</button></div>`;return;}
+ let w=spellOrder[si];
+ $("spellArea").innerHTML=`<div class="small">Từ ${si+1}/${spellOrder.length}</div><div class="progress"><div style="width:${si/spellOrder.length*100}%"></div></div><div class="question-icon">${w.icon}</div><div class="question">${w.vi}</div><p class="small">Hãy viết từ tiếng Anh tương ứng.</p><input class="type-input" id="spellInput" placeholder="Type your answer..." autocomplete="off"><div><button class="primary" onclick="checkSpell()">Kiểm tra ✓</button> <button class="secondary" onclick="speak(w.say)">🔊 Nghe</button></div><div class="feedback" id="spellFeedback"></div>`;
+ $("spellInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkSpell()});
+}
+function checkSpell(){
+ let input=$("spellInput"),w=spellOrder[si],answer=input.value.trim().toLowerCase();
+ if(!answer){$("spellFeedback").textContent="Bạn hãy nhập câu trả lời nhé!";return;}
+ if(answer===w.en.toLowerCase()){
+  $("spellFeedback").textContent="Chính xác! +10 điểm 🌟";input.style.borderColor="#75ae86";score+=10;streak++;learned.add(words.indexOf(w));updateStats();si++;setTimeout(renderSpell,900);
+ }else{$("spellFeedback").textContent="Chưa chính xác. Hãy thử lại nhé! 💪";input.style.borderColor="#dc8980";streak=0;updateStats();}
+}
+renderWords();updateStats();
+</script>
+</body>
+</html>
