@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK4 Vocabulary - Made by Seri</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(145deg, #fdf4f0, #f1f4ed, #f6f0fa);
+    color: #555;
+    display: flex;
+    justify-content: center;
+    padding: 25px 16px;
+}
+
+.app {
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.header {
+    margin: 15px 0 25px;
+}
+
+.header h1 {
+    font-size: 25px;
+    color: #71866c;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #a69a91;
+    font-size: 13px;
+}
+
+.badge {
+    display: inline-block;
+    background: #e5eddf;
+    color: #72876d;
+    padding: 7px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #92887f;
+    margin-bottom: 9px;
+}
+
+.progress {
+    width: 100%;
+    height: 7px;
+    background: #e8e3dc;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #94aa87;
+    transition: .3s;
+}
+
+.card {
+    background: rgba(255,255,255,.9);
+    border-radius: 28px;
+    min-height: 320px;
+    padding: 30px 20px;
+    box-shadow: 0 12px 35px rgba(100,90,70,.09);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+.card:active {
+    transform: scale(.98);
+}
+
+.card-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #b4a89c;
+    margin-bottom: 24px;
+}
+
+.hanzi {
+    font-size: 72px;
+    color: #73896d;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.pinyin {
+    font-size: 27px;
+    color: #c18c72;
+    margin-bottom: 14px;
+}
+
+.meaning {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #666;
+}
+
+.type {
+    font-size: 13px;
+    color: #9a9d8c;
+    margin-top: 15px;
+}
+
+.hint {
+    font-size: 12px;
+    color: #c2b8ac;
+    margin-top: 25px;
+}
+
+.sound {
+    background: #f4eee7;
+    color: #a47c66;
+    border: none;
+    border-radius: 50%;
+    width: 43px;
+    height: 43px;
+    font-size: 20px;
+    margin-top: 17px;
+    cursor: pointer;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 13px 17px;
+    border-radius: 14px;
+    transition: .2s;
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.primary {
+    background: #849a79;
+    color: white;
+}
+
+.secondary {
+    background: #eae6df;
+    color: #746b61;
+}
+
+.navigation button {
+    flex: 1;
+}
+
+.mastery {
+    display: flex;
+    gap: 12px;
+    margin-top: 13px;
+}
+
+.mastery button {
+    flex: 1;
+}
+
+.known {
+    background: #e1ecda;
+    color: #62815a;
+}
+
+.unknown {
+    background: #f6e3dc;
+    color: #b47765;
+}
+
+.tools {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 22px;
+}
+
+.tools button {
+    background: white;
+    color: #82786e;
+    border: 1px solid #eee8df;
+    font-size: 12px;
+}
+
+.statistics {
+    margin-top: 23px;
+    padding: 17px;
+    background: rgba(255,255,255,.65);
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 2;
+    color: #92887f;
+}
+
+.footer {
+    margin-top: 23px;
+    font-size: 12px;
+    color: #b5aaa0;
+    letter-spacing: 1px;
+}
+
+@media(max-width: 380px) {
+    .hanzi {
+        font-size: 60px;
+    }
+
+    .card {
+        min-height: 290px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="badge">🌷 HSK4 VOCABULARY</div>
+        <h1>Little Chinese Garden</h1>
+        <p>Học một chút mỗi ngày, giỏi hơn mỗi ngày.</p>
+    </div>
+
+    <div class="progress-info">
+        <span id="counter">1 / 15</span>
+        <span id="percent">0% đã nhớ</span>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="card" onclick="flipCard()">
+
+        <div class="card-label" id="label">CHỮ HÁN</div>
+
+        <div class="hanzi" id="hanzi"></div>
+
+        <div class="pinyin" id="pinyin" hidden></div>
+
+        <div class="meaning" id="meaning" hidden></div>
+
+        <div class="type" id="type" hidden></div>
+
+        <div class="hint" id="hint">
+            ✨ Chạm vào thẻ để khám phá
+        </div>
+
+    </div>
+
+    <button class="sound" onclick="event.stopPropagation(); speak();">
+        🔊
+    </button>
+
+    <div class="navigation">
+        <button class="secondary" onclick="previous()">← Trước</button>
+        <button class="primary" onclick="next()">Tiếp theo →</button>
+    </div>
+
+    <div class="mastery">
+        <button class="known" onclick="mark(true)">
+            ✓ Đã nhớ
+        </button>
+
+        <button class="unknown" onclick="mark(false)">
+            ✗ Chưa nhớ
+        </button>
+    </div>
+
+    <div class="tools">
+        <button onclick="shuffleCards()">🔀 Ngẫu nhiên</button>
+        <button onclick="showAll()">📚 Tất cả từ</button>
+        <button onclick="reviewUnknown()">🔁 Ôn từ chưa nhớ</button>
+        <button onclick="resetCards()">↻ Học lại</button>
+    </div>
+
+    <div class="statistics" id="statistics"></div>
+
+    <div class="footer">
+        MADE WITH ♡ BY SERI
+    </div>
+
+</div>
+
+<script>
+
+// DANH SÁCH TỪ VỰNG HSK4
+
+const originalCards = [
+
+    {
+        hanzi: "传真",
+        pinyin: "chuánzhēn",
+        meaning: "Máy fax",
+        type: "Danh từ"
+    },
+
+    {
+        hanzi: "窗户",
+        pinyin: "chuānghu",
+        meaning: "Cửa sổ",
+        type: "Danh từ"
+    },
+
+    {
+        hanzi: "词典",
+        pinyin: "cídiǎn",
+        meaning: "Từ điển",
+        type: "Danh từ"
+    },
+
+    {
+        hanzi: "从来",
+        pinyin: "cónglái",
+        meaning: "Từ trước đến nay",
+        type: "Phó từ"
+    },
+
+    {
+        hanzi: "粗心",
+        pinyin: "cūxīn",
+        meaning: "Sơ ý, không cẩn thận",
+        type: "Hình dung từ"
+    },
+
+    {
+        hanzi: "答案",
+        pinyin: "dá'àn",
+        meaning: "Đáp án",
+        type: "Danh từ"
+    },
+
+    {
+        hanzi: "打扮",
+        pinyin: "dǎban",
+        meaning: "Trang điểm, ăn diện",
+        type: "Động từ"
+    },
+
+    {
+        hanzi: "打扰",
+        pinyin: "dǎrǎo",
+        meaning: "Làm phiền, quấy rầy",
+        type: "Động từ"
+    },
+
+    {
+        hanzi: "打印",
+        pinyin: "dǎyìn",
+        meaning: "In",
+        type: "Động từ"
+    },
+
+    {
+        hanzi: "打折",
+        pinyin: "dǎzhé",
+        meaning: "Giảm giá",
+        type: "Động từ"
+    },
+
+    {
+        hanzi: "打针",
+        pinyin: "dǎzhēn",
+        meaning: "Chích, tiêm",
+        type: "Động từ"
+    },
+
+    {
+        hanzi: "大概",
+        pinyin: "dàgài",
+        meaning: "Đại khái, sơ lược; khoảng chừng",
+        type: "Danh từ / Phó từ"
+    },
+
+    {
+        hanzi: "大使馆",
+        pinyin: "dàshǐguǎn",
+        meaning: "Đại sứ quán",
+        type: "Danh từ"
+    },
+
+    {
+        hanzi: "大约",
+        pinyin: "dàyuē",
+        meaning: "Khoảng chừng, khoảng",
+        type: "Phó từ"
+    },
+
+    {
+        hanzi: "戴",
+        pinyin: "dài",
+        meaning: "Đội, đeo",
+        type: "Động từ"
+    }
+
+];
+
+// KHỞI TẠO DỮ LIỆU
+
+let cards = [...originalCards];
+
+let index = 0;
+
+let flipped = false;
+
+let known = JSON.parse(
+    localStorage.getItem("seri_known") || "[]"
+);
+
+let unknown = JSON.parse(
+    localStorage.getItem("seri_unknown") || "[]"
+);
+
+
+// HIỂN THỊ THẺ
+
+function display() {
+
+    const word = cards[index];
+
+    document.getElementById("hanzi").textContent =
+        word.hanzi;
+
+    document.getElementById("pinyin").textContent =
+        word.pinyin;
+
+    document.getElementById("meaning").textContent =
+        word.meaning;
+
+    document.getElementById("type").textContent =
+        word.type;
+
+    document.getElementById("counter").textContent =
+        `${index + 1} / ${cards.length}`;
+
+    flipped = false;
+
+    updateCard();
+
+    updateStats();
+
+}
+
+
+// LẬT THẺ
+
+function flipCard() {
+
+    flipped = !flipped;
+
+    updateCard();
+
+}
+
+function updateCard() {
+
+    document.getElementById("pinyin").hidden =
+        !flipped;
+
+    document.getElementById("meaning").hidden =
+        !flipped;
+
+    document.getElementById("type").hidden =
+        !flipped;
+
+    document.getElementById("label").textContent =
+        flipped ? "ĐÁP ÁN" : "CHỮ HÁN";
+
+    document.getElementById("hint").textContent =
+        flipped
+        ? "Hãy đọc lại và ghi nhớ nhé ♡"
+        : "✨ Chạm vào thẻ để khám phá";
+
+}
+
+
+// CHUYỂN TỪ
+
+function next() {
+
+    index = (index + 1) % cards.length;
+
+    display();
+
+}
+
+function previous() {
+
+    index = (index - 1 + cards.length) % cards.length;
+
+    display();
+
+}
+
+
+// PHÁT ÂM TIẾNG TRUNG
+
+function speak() {
+
+    const word = cards[index].hanzi;
+
+    if (!window.speechSynthesis) {
+        alert("Trình duyệt không hỗ trợ phát âm.");
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(word);
+
+    utterance.lang = "zh-CN";
+
+    utterance.rate = 0.8;
+
+    speechSynthesis.speak(utterance);
+
+}
+
+
+// ĐÁNH DẤU TỪ VỰNG
+
+function mark(isKnown) {
+
+    const word = cards[index].hanzi;
+
+    known = known.filter(w => w !== word);
+
+    unknown = unknown.filter(w => w !== word);
+
+    if (isKnown) {
+        known.push(word);
+    } else {
+        unknown.push(word);
+    }
+
+    save();
+
+    next();
+
+}
+
+
+// LƯU TIẾN ĐỘ
+
+function save() {
+
+    localStorage.setItem(
+        "seri_known",
+        JSON.stringify(known)
+    );
+
+    localStorage.setItem(
+        "seri_unknown",
+        JSON.stringify(unknown)
+    );
+
+    updateStats();
+
+}
+
+
+// THỐNG KÊ
+
+function updateStats() {
+
+    const total = originalCards.length;
+
+    const knownCount = originalCards.filter(
+        w => known.includes(w.hanzi)
+    ).length;
+
+    const unknownCount = originalCards.filter(
+        w => unknown.includes(w.hanzi)
+    ).length;
+
+    const percent = Math.round(
+        knownCount / total * 100
+    );
+
+    document.getElementById("percent").textContent =
+        percent + "% đã nhớ";
+
+    document.getElementById("progressBar").style.width =
+        percent + "%";
+
+    document.getElementById("statistics").innerHTML = `
+        🌱 Đã nhớ: <b>${knownCount}</b> / ${total}<br>
+        📖 Chưa nhớ: <b>${unknownCount}</b> từ<br>
+        ✨ Tiến độ học tập: <b>${percent}%</b>
+    `;
+
+}
+
+
+// XÁO TRỘN
+
+function shuffleCards() {
+
+    cards = [...originalCards];
+
+    for (let i = cards.length - 1; i > 0; i--) {
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+
+    }
+
+    index = 0;
+
+    display();
+
+}
+
+
+// HIỂN THỊ TẤT CẢ
+
+function showAll() {
+
+    cards = [...originalCards];
+
+    index = 0;
+
+    display();
+
+}
+
+
+// ÔN TỪ CHƯA NHỚ
+
+function reviewUnknown() {
+
+    cards = originalCards.filter(
+        w => unknown.includes(w.hanzi)
+    );
+
+    if (cards.length === 0) {
+
+        alert("Tuyệt vời! Em chưa có từ nào được đánh dấu là chưa nhớ.");
+
+        cards = [...originalCards];
+
+        index = 0;
+
+        display();
+
+        return;
+
+    }
+
+    index = 0;
+
+    display();
+
+}
+
+
+// HỌC LẠI
+
+function resetCards() {
+
+    if (confirm("Em muốn xóa tiến độ học và bắt đầu lại?")) {
+
+        known = [];
+
+        unknown = [];
+
+        save();
+
+        cards = [...originalCards];
+
+        index = 0;
+
+        display();
+
+    }
+
+}
+
+
+// BẮT ĐẦU
+
+display();
+
+</script>
+
+</body>
+</html>
