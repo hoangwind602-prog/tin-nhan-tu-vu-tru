@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your House - Made by Seri</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:"Trebuchet MS",Arial,sans-serif;
+  background:linear-gradient(135deg,#dff5ee,#e8f0ff);
+  color:#29445a;text-align:center;
+}
+header{padding:25px 15px 15px}
+h1{font-size:42px;margin:5px;color:#287b75;letter-spacing:2px}
+.subtitle{color:#66828d;font-size:16px}
+.brand{font-size:13px;color:#7d9b9c;margin-top:8px}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;padding:10px}
+button{
+  border:0;border-radius:14px;padding:12px 18px;
+  background:#fff;color:#347b78;font-weight:bold;
+  cursor:pointer;box-shadow:0 3px 8px #b6d2d0;
+  transition:.2s;font-size:15px;
+}
+button:hover{transform:translateY(-2px);background:#e5fff5}
+button.active{background:#398f83;color:white}
+main{max-width:900px;margin:15px auto;padding:15px}
+.panel{
+  background:#ffffffd9;border-radius:24px;padding:25px;
+  box-shadow:0 8px 25px #a9c8c4;margin-bottom:20px;
+}
+.hidden{display:none!important}
+h2{color:#39877d}
+.big-emoji{font-size:85px;margin:15px}
+.word{font-size:30px;font-weight:bold;color:#287b75}
+.meaning{font-size:20px;margin:12px}
+.small{color:#78929a;font-size:14px}
+.action{background:#398f83;color:white;margin:8px}
+.options{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:12px;margin-top:20px
+}
+.options button{padding:17px;font-size:17px}
+.feedback{font-size:19px;font-weight:bold;min-height:30px;margin:15px}
+.progress{height:12px;background:#e3eeee;border-radius:20px;overflow:hidden;margin:15px}
+.progress div{height:100%;background:#54b99c;width:0;transition:.3s}
+.cards{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-top:20px
+}
+.memory-card{
+  min-height:105px;background:#dff5ee;border:2px solid #a7d9cc;
+  border-radius:16px;display:flex;align-items:center;
+  justify-content:center;padding:10px;font-weight:bold;
+  font-size:17px;cursor:pointer;word-break:break-word;
+  box-shadow:0 3px 6px #c5d9d6;
+}
+.memory-card.open{background:#fff1ce;border-color:#e7c879}
+.memory-card.matched{background:#c8f1d8;border-color:#80c99d;cursor:default}
+.score{font-size:18px;color:#39877d;font-weight:bold}
+footer{padding:20px;color:#829b9d;font-size:13px}
+@media(max-width:600px){
+ h1{font-size:34px}
+ main{padding:10px}
+ .panel{padding:18px 12px}
+ .cards{grid-template-columns:repeat(3,1fr);gap:8px}
+ .memory-card{min-height:95px;font-size:14px;padding:6px}
+ .options{grid-template-columns:1fr}
+ button{padding:11px 13px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="big-emoji" style="font-size:55px">🏡</div>
+  <h1>YOUR HOUSE</h1>
+  <div class="subtitle">Let's learn about houses and rooms!</div>
+  <div class="brand">✦ MADE BY SERI ✦</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showMode('learn',this)">📖 Learn</button>
+  <button onclick="showMode('quiz',this)">🎯 Quiz</button>
+  <button onclick="showMode('memory',this)">🧠 Memory Match</button>
+  <button onclick="showMode('challenge',this)">⭐ Challenge</button>
+</nav>
+
+<main>
+
+<section id="learn" class="panel">
+  <h2>📖 Let's learn new words!</h2>
+  <p class="small">Click the arrows to discover vocabulary.</p>
+  <div class="big-emoji" id="learnEmoji">🏢</div>
+  <div class="word" id="learnWord">Flat / Apartment</div>
+  <div class="meaning" id="learnMeaning">Căn hộ</div>
+  <button class="action" onclick="speak(currentWord)">🔊 Listen</button>
+  <div style="margin-top:20px">
+    <button onclick="previousWord()">⬅ Previous</button>
+    <button onclick="nextWord()">Next ➡</button>
+  </div>
+  <p class="small" id="learnCount">1 / 8</p>
+</section>
+
+<section id="quiz" class="panel hidden">
+  <h2>🎯 Choose the correct meaning!</h2>
+  <div class="progress"><div id="quizProgress"></div></div>
+  <p class="small" id="quizNumber">Question 1 / 8</p>
+  <div class="big-emoji" id="quizEmoji">🏢</div>
+  <div class="word" id="quizWord">Flat / Apartment</div>
+  <div class="options" id="quizOptions"></div>
+  <div class="feedback" id="quizFeedback"></div>
+  <button class="action" onclick="nextQuiz()">Next question ➜</button>
+  <p class="score" id="quizScore">Score: 0</p>
+</section>
+
+<section id="memory" class="panel hidden">
+  <h2>🧠 Memory Match</h2>
+  <p>Find the matching English words and Vietnamese meanings!</p>
+  <p class="score" id="memoryScore">Pairs: 0 / 8</p>
+  <p class="small" id="memoryMoves">Moves: 0</p>
+  <div class="cards" id="memoryCards"></div>
+  <div class="feedback" id="memoryFeedback"></div>
+  <button class="action" onclick="startMemory()">🔄 Play again</button>
+</section>
+
+<section id="challenge" class="panel hidden">
+  <h2>⭐ Vocabulary Challenge</h2>
+  <p>How many questions can you answer correctly?</p>
+  <div class="big-emoji" id="challengeEmoji">🛋️</div>
+  <div class="word" id="challengeQuestion"></div>
+  <div class="options" id="challengeOptions"></div>
+  <div class="feedback" id="challengeFeedback"></div>
+  <p class="score" id="challengeScore">⭐ Score: 0</p>
+  <button class="action" onclick="newChallenge()">Next ➜</button>
+</section>
+
+</main>
+
+<footer>Made with ♡ by Seri | Your House Vocabulary Game</footer>
+
+<script>
+const words=[
+ {en:"Flat / Apartment",vi:"Căn hộ",emoji:"🏢"},
+ {en:"Villa",vi:"Biệt thự",emoji:"🏡"},
+ {en:"Stilt house",vi:"Nhà sàn",emoji:"🛖"},
+ {en:"Bungalow",vi:"Nhà một tầng",emoji:"🏠"},
+ {en:"Living room",vi:"Phòng khách",emoji:"🛋️"},
+ {en:"Bedroom",vi:"Phòng ngủ",emoji:"🛏️"},
+ {en:"Kitchen",vi:"Nhà bếp",emoji:"🍳"},
+ {en:"Bathroom",vi:"Phòng tắm",emoji:"🛁"}
+];
+
+let current=0;
+let currentWord="";
+let quizIndex=0,quizScore=0,quizOrder=[];
+let challengeScore=0;
+let firstCard=null,lockBoard=false,matches=0,moves=0;
+
+function speak(word){
+ if(!('speechSynthesis' in window)){alert("Your browser does not support pronunciation.");return}
+ speechSynthesis.cancel();
+ let utterance=new SpeechSynthesisUtterance(word);
+ utterance.lang="en-US";
+ utterance.rate=0.85;
+ speechSynthesis.speak(utterance);
+}
+
+function showMode(id,btn){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ if(id==="quiz")startQuiz();
+ if(id==="memory")startMemory();
+ if(id==="challenge")newChallenge();
+}
+
+function renderLearn(){
+ let w=words[current];
+ currentWord=w.en;
+ document.getElementById("learnEmoji").textContent=w.emoji;
+ document.getElementById("learnWord").textContent=w.en;
+ document.getElementById("learnMeaning").textContent=w.vi;
+ document.getElementById("learnCount").textContent=(current+1)+" / 8";
+}
+function nextWord(){current=(current+1)%words.length;renderLearn()}
+function previousWord(){current=(current+7)%words.length;renderLearn()}
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+
+function startQuiz(){
+ quizOrder=shuffle(words);
+ quizIndex=0;quizScore=0;
+ document.getElementById("quizScore").textContent="Score: 0";
+ renderQuiz();
+}
+function renderQuiz(){
+ if(quizIndex>=quizOrder.length){
+  document.getElementById("quizWord").textContent="🎉 Quiz completed!";
+  document.getElementById("quizEmoji").textContent="🏆";
+  document.getElementById("quizOptions").innerHTML="";
+  document.getElementById("quizFeedback").textContent="Your score: "+quizScore+" / 8";
+  document.getElementById("quizProgress").style.width="100%";
+  return;
+ }
+ let w=quizOrder[quizIndex];
+ document.getElementById("quizNumber").textContent="Question "+(quizIndex+1)+" / 8";
+ document.getElementById("quizEmoji").textContent=w.emoji;
+ document.getElementById("quizWord").textContent=w.en;
+ document.getElementById("quizFeedback").textContent="";
+ document.getElementById("quizProgress").style.width=(quizIndex/8*100)+"%";
+ let choices=shuffle([w.vi,...shuffle(words.filter(x=>x!==w)).slice(0,3).map(x=>x.vi)]);
+ document.getElementById("quizOptions").innerHTML="";
+ choices.forEach(choice=>{
+  let b=document.createElement("button");
+  b.textContent=choice;
+  b.onclick=()=>{
+   if(b.dataset.done)return;
+   document.querySelectorAll("#quizOptions button").forEach(x=>x.disabled=true);
+   if(choice===w.vi){
+    quizScore++;document.getElementById("quizFeedback").textContent="✅ Excellent! Correct!";
+   }else{
+    document.getElementById("quizFeedback").textContent="❌ Not quite! Answer: "+w.vi;
+   }
+   document.getElementById("quizScore").textContent="Score: "+quizScore;
+  };
+  document.getElementById("quizOptions").appendChild(b);
+ });
+}
+function nextQuiz(){if(quizIndex<quizOrder.length){quizIndex++;renderQuiz()}else startQuiz()}
+
+function startMemory(){
+ let deck=[];
+ words.forEach((w,i)=>{
+  deck.push({id:i,text:w.en});
+  deck.push({id:i,text:w.vi});
+ });
+ deck=shuffle(deck);
+ firstCard=null;lockBoard=false;matches=0;moves=0;
+ document.getElementById("memoryScore").textContent="Pairs: 0 / 8";
+ document.getElementById("memoryMoves").textContent="Moves: 0";
+ document.getElementById("memoryFeedback").textContent="";
+ const board=document.getElementById("memoryCards");
+ board.innerHTML="";
+ deck.forEach(item=>{
+  let card=document.createElement("div");
+  card.className="memory-card";
+  card.textContent="❔";
+  card.dataset.id=item.id;
+  card.dataset.text=item.text;
+  card.onclick=()=>flipCard(card);
+  board.appendChild(card);
+ });
+}
+function flipCard(card){
+ if(lockBoard||card.classList.contains("open")||card.classList.contains("matched"))return;
+ card.classList.add("open");
+ card.textContent=card.dataset.text;
+ if(!firstCard){firstCard=card;return}
+ moves++;
+ document.getElementById("memoryMoves").textContent="Moves: "+moves;
+ if(firstCard.dataset.id===card.dataset.id){
+  firstCard.classList.add("matched");
+  card.classList.add("matched");
+  firstCard=null;matches++;
+  document.getElementById("memoryScore").textContent="Pairs: "+matches+" / 8";
+  if(matches===8)document.getElementById("memoryFeedback").textContent="🎉 Amazing! You found all pairs!";
+ }else{
+  lockBoard=true;
+  let previous=firstCard;
+  firstCard=null;
+  setTimeout(()=>{
+   previous.classList.remove("open");previous.textContent="❔";
+   card.classList.remove("open");card.textContent="❔";
+   lockBoard=false;
+  },900);
+ }
+}
+
+function newChallenge(){
+ let w=words[Math.floor(Math.random()*words.length)];
+ document.getElementById("challengeEmoji").textContent=w.emoji;
+ document.getElementById("challengeQuestion").textContent="What does "+w.en+" mean?";
+ document.getElementById("challengeFeedback").textContent="";
+ let choices=shuffle([w.vi,...shuffle(words.filter(x=>x!==w)).slice(0,3).map(x=>x.vi)]);
+ let box=document.getElementById("challengeOptions");
+ box.innerHTML="";
+ choices.forEach(choice=>{
+  let b=document.createElement("button");
+  b.textContent=choice;
+  b.onclick=()=>{
+   box.querySelectorAll("button").forEach(x=>x.disabled=true);
+   if(choice===w.vi){
+    challengeScore++;
+    document.getElementById("challengeFeedback").textContent="🌟 Correct! Well done!";
+   }else{
+    document.getElementById("challengeFeedback").textContent="❌ Correct answer: "+w.vi;
+   }
+   document.getElementById("challengeScore").textContent="⭐ Score: "+challengeScore;
+  };
+  box.appendChild(b);
+ });
+}
+
+renderLearn();
+</script>
+</body>
+</html>
