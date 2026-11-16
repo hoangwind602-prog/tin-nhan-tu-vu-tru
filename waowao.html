@@ -1,0 +1,777 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemistry Magic - Made by Seri</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#10182c;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+header{
+    text-align:center;
+    padding:22px 10px;
+    background:linear-gradient(135deg,#392c70,#176a91);
+}
+
+header h1{margin:0;font-size:27px}
+header p{color:#c8e9ff;font-size:13px}
+
+.score{
+    display:inline-block;
+    background:#ffffff20;
+    padding:10px 20px;
+    border-radius:20px;
+    margin-top:10px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:15px;
+}
+
+.panel{
+    background:#1b2942;
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:17px;
+    border:1px solid #344563;
+}
+
+h2{
+    color:#80e5ff;
+    font-size:19px;
+}
+
+.lab{
+    height:300px;
+    border-radius:16px;
+    background:radial-gradient(circle,#334d70,#17233c);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+}
+
+.lab.shaking{
+    animation:shake .3s infinite;
+}
+
+@keyframes shake{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-3px)}
+    75%{transform:translateX(3px)}
+}
+
+/* Ống nghiệm */
+
+.testtube{
+    position:relative;
+    width:100px;
+    height:175px;
+    border:5px solid #c5e7ff;
+    border-top:0;
+    border-radius:0 0 42px 42px;
+    overflow:hidden;
+    background:#ffffff12;
+    box-shadow:0 0 15px #8ddcff55;
+    z-index:2;
+}
+
+.testtube:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-7px;
+    width:110px;
+    height:7px;
+    background:#d9f5ff;
+    border-radius:10px;
+}
+
+.liquid{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:38%;
+    background:#48b9e9;
+    transition:background 2s,height 1s;
+    opacity:.85;
+    border-radius:0 0 35px 35px;
+}
+
+.liquid.red{background:#ff4d87}
+.liquid.purple{background:#a66bff}
+.liquid.green{background:#63e9a5}
+.liquid.blue{background:#398aff}
+.liquid.yellow{background:#ffe36d}
+
+.tube-label{
+    margin-top:15px;
+    z-index:3;
+    color:#c7eaff;
+}
+
+/* Bong bóng */
+
+.bubble{
+    position:absolute;
+    bottom:5px;
+    width:10px;
+    height:10px;
+    border:2px solid #ffffffb0;
+    border-radius:50%;
+    background:#ffffff35;
+    animation:rise 2s linear forwards;
+    pointer-events:none;
+}
+
+@keyframes rise{
+    0%{transform:translateY(0) scale(.5);opacity:0}
+    20%{opacity:1}
+    100%{transform:translateY(-150px) scale(1.3);opacity:0}
+}
+
+/* Khói / khí */
+
+.smoke{
+    position:absolute;
+    bottom:130px;
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:#dcecff80;
+    filter:blur(8px);
+    animation:smoke 2.5s ease-out forwards;
+    pointer-events:none;
+}
+
+@keyframes smoke{
+    0%{transform:translateY(0) scale(.5);opacity:0}
+    20%{opacity:.7}
+    100%{transform:translateY(-145px) scale(4);opacity:0}
+}
+
+/* Ánh sáng */
+
+.glow{
+    animation:glow 1.2s infinite alternate;
+}
+
+@keyframes glow{
+    from{box-shadow:0 0 15px #ffffff,0 0 30px #46cfff}
+    to{box-shadow:0 0 35px #ffffff,0 0 75px #46cfff}
+}
+
+/* Kết tủa */
+
+.particle{
+    position:absolute;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:#fff3a0;
+    animation:fall 3s linear forwards;
+    pointer-events:none;
+}
+
+@keyframes fall{
+    0%{transform:translateY(-40px);opacity:0}
+    20%{opacity:1}
+    100%{transform:translateY(130px);opacity:1}
+}
+
+/* Hiệu ứng nhiệt */
+
+.heat{
+    position:absolute;
+    bottom:170px;
+    width:4px;
+    height:25px;
+    background:#ffb35c80;
+    border-radius:50%;
+    filter:blur(4px);
+    animation:heat 1.5s infinite ease-in-out;
+}
+
+@keyframes heat{
+    0%{transform:translateY(0) scaleY(1);opacity:.2}
+    100%{transform:translateY(-80px) scaleY(2);opacity:0}
+}
+
+/* Chớp sáng */
+
+.flash{
+    position:absolute;
+    inset:0;
+    background:white;
+    z-index:10;
+    pointer-events:none;
+    animation:flash .5s forwards;
+}
+
+@keyframes flash{
+    0%{opacity:0}
+    30%{opacity:.65}
+    100%{opacity:0}
+}
+
+/* Kho hóa chất */
+
+.chemicals{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.chemical{
+    background:#293b59;
+    border:2px solid transparent;
+    border-radius:14px;
+    padding:13px 5px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.chemical.selected{
+    border-color:#6fffd0;
+    background:#245c61;
+    transform:scale(1.04);
+}
+
+.chemical span{font-size:29px}
+.chemical p{font-size:12px;margin:7px 0 0}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.mix{
+    background:linear-gradient(90deg,#00c9a7,#00a5d9);
+    color:white;
+    width:100%;
+    margin-top:15px;
+    font-size:16px;
+}
+
+.reset{
+    background:#394b67;
+    color:white;
+    margin-top:10px;
+}
+
+.result{
+    display:none;
+    margin-top:15px;
+    background:#233c50;
+    border-radius:14px;
+    padding:16px;
+    line-height:1.6;
+}
+
+.result h3{color:#70ffd2}
+
+.equation{
+    padding:12px;
+    background:#101e35;
+    border-radius:10px;
+    text-align:center;
+    color:#ffe28a;
+    overflow-wrap:anywhere;
+}
+
+.experiment{
+    background:#293b59;
+    padding:12px;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+footer{
+    text-align:center;
+    color:#91a9c6;
+    padding:25px;
+    font-size:12px;
+}
+
+@media(max-width:450px){
+    .chemicals{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🧪 CHEMISTRY MAGIC</h1>
+    <p>Discover the magic of chemistry!</p>
+    <div class="score">
+        ⭐ Điểm khám phá: <b id="score">0</b>
+    </div>
+</header>
+
+<div class="container">
+
+<section class="panel">
+    <h2>🔬 PHÒNG THÍ NGHIỆM</h2>
+    <p>Hãy chọn hóa chất và quan sát điều kỳ diệu!</p>
+
+    <div class="lab" id="lab">
+        <div class="testtube">
+            <div class="liquid" id="liquid"></div>
+        </div>
+        <div class="tube-label" id="status">
+            Đang chờ thí nghiệm...
+        </div>
+    </div>
+
+    <div class="result" id="result"></div>
+</section>
+
+<section class="panel">
+    <h2>⚗️ KHO HÓA CHẤT</h2>
+    <p>Chọn 2 chất để kết hợp.</p>
+
+    <div class="chemicals" id="chemicals"></div>
+
+    <button class="mix" onclick="mixChemicals()">
+        ✨ TIẾN HÀNH PHẢN ỨNG
+    </button>
+
+    <button class="reset" onclick="resetLab()">
+        ↻ Làm lại
+    </button>
+</section>
+
+<section class="panel">
+    <h2>📖 SỔ TAY NHÀ HÓA HỌC</h2>
+    <div id="collection">Chưa có thí nghiệm nào.</div>
+</section>
+
+</div>
+
+<footer>
+    CHEMISTRY MAGIC <br>
+    Made with ❤️ by Seri
+</footer>
+
+<script>
+
+const chemicals=[
+{id:"vinegar",name:"Giấm ăn",formula:"CH₃COOH",icon:"🍶"},
+{id:"baking",name:"Baking soda",formula:"NaHCO₃",icon:"🧂"},
+{id:"cabbage",name:"Bắp cải tím",formula:"Chỉ thị pH",icon:"🥬"},
+{id:"lemon",name:"Nước chanh",formula:"Axit citric",icon:"🍋"},
+{id:"soap",name:"Dung dịch xà phòng",formula:"Dung dịch tẩy rửa",icon:"🫧"},
+{id:"iron",name:"Sắt",formula:"Fe",icon:"🔩"}
+];
+
+const reactions={
+
+"baking+vinegar":{
+name:"Cơn bão bong bóng",
+color:"blue",
+effects:["bubbles","smoke"],
+description:"Baking soda phản ứng với axit axetic trong giấm, giải phóng khí carbon dioxide. Bạn có thể quan sát rất nhiều bong bóng xuất hiện!",
+equation:"CH₃COOH + NaHCO₃ → CH₃COONa + H₂O + CO₂",
+fact:"Khí CO₂ cũng được sử dụng để tạo gas trong nhiều loại đồ uống."
+},
+
+"baking+lemon":{
+name:"Suối bọt chanh",
+color:"yellow",
+effects:["bubbles","smoke"],
+description:"Axit citric trong chanh phản ứng với baking soda, tạo ra khí CO₂ và nước.",
+equation:"3NaHCO₃ + C₆H₈O₇ → Na₃C₆H₅O₇ + 3CO₂ + 3H₂O",
+fact:"Đây là một ví dụ về phản ứng giữa axit và muối bicarbonate."
+},
+
+"cabbage+vinegar":{
+name:"Phép thuật đổi màu đỏ",
+color:"red",
+effects:["glow","color"],
+description:"Anthocyanin trong nước bắp cải tím thay đổi màu sắc khi gặp môi trường axit.",
+equation:"Anthocyanin + môi trường axit ⇌ dạng màu đỏ/hồng",
+fact:"Bắp cải tím là một chất chỉ thị pH tự nhiên."
+},
+
+"baking+cabbage":{
+name:"Phép thuật màu xanh",
+color:"blue",
+effects:["glow","color"],
+description:"Môi trường kiềm làm thay đổi cấu trúc anthocyanin, khiến dung dịch chuyển sang màu xanh.",
+equation:"Anthocyanin + môi trường kiềm ⇌ dạng màu xanh",
+fact:"Có thể dùng màu sắc để nhận biết sự thay đổi độ pH."
+},
+
+"lemon+soap":{
+name:"Cuộc gặp gỡ axit và bazơ",
+color:"green",
+effects:["bubbles","color"],
+description:"Axit citric trong chanh có thể tương tác với các thành phần có tính kiềm trong một số sản phẩm tẩy rửa. Hiệu ứng mô phỏng minh họa sự thay đổi của môi trường dung dịch.",
+equation:"Axit + Bazơ → Muối + Nước",
+fact:"Phản ứng trung hòa có nhiều ứng dụng trong hóa học."
+},
+
+"cabbage+lemon":{
+name:"Sắc tím biến đổi",
+color:"red",
+effects:["color","glow"],
+description:"Axit citric trong chanh làm môi trường trở nên axit, khiến anthocyanin trong bắp cải tím chuyển sang màu đỏ hoặc hồng.",
+equation:"Anthocyanin + môi trường axit ⇌ dạng màu đỏ/hồng",
+fact:"Độ pH ảnh hưởng đến màu sắc của chất chỉ thị."
+}
+
+};
+
+let selected=[];
+let score=0;
+let discovered=[];
+let timers=[];
+
+function renderChemicals(){
+
+const box=document.getElementById("chemicals");
+
+chemicals.forEach(c=>{
+
+const div=document.createElement("div");
+div.className="chemical";
+div.id="chem-"+c.id;
+
+div.innerHTML=`
+<span>${c.icon}</span>
+<p><b>${c.name}</b></p>
+<p>${c.formula}</p>
+`;
+
+div.onclick=()=>selectChemical(c.id);
+
+box.appendChild(div);
+
+});
+
+}
+
+function selectChemical(id){
+
+if(selected.includes(id)){
+selected=selected.filter(x=>x!==id);
+}else{
+
+if(selected.length>=2){
+alert("Bạn chỉ có thể chọn 2 chất!");
+return;
+}
+
+selected.push(id);
+
+}
+
+chemicals.forEach(c=>{
+document.getElementById("chem-"+c.id)
+.classList.toggle("selected",selected.includes(c.id));
+});
+
+}
+
+function clearTimers(){
+timers.forEach(t=>clearTimeout(t));
+timers=[];
+}
+
+function delayed(fn,time){
+timers.push(setTimeout(fn,time));
+}
+
+function bubbles(){
+
+const lab=document.getElementById("lab");
+
+for(let i=0;i<35;i++){
+
+delayed(()=>{
+
+const b=document.createElement("div");
+b.className="bubble";
+b.style.left=(35+Math.random()*30)+"%";
+b.style.animationDuration=(1+Math.random()*1.5)+"s";
+
+lab.appendChild(b);
+
+setTimeout(()=>b.remove(),3000);
+
+},i*100);
+
+}
+
+}
+
+function smoke(){
+
+const lab=document.getElementById("lab");
+
+for(let i=0;i<16;i++){
+
+delayed(()=>{
+
+const s=document.createElement("div");
+s.className="smoke";
+s.style.left=(43+Math.random()*14)+"%";
+
+lab.appendChild(s);
+
+setTimeout(()=>s.remove(),2600);
+
+},i*220);
+
+}
+
+}
+
+function particles(){
+
+const lab=document.getElementById("lab");
+
+for(let i=0;i<45;i++){
+
+delayed(()=>{
+
+const p=document.createElement("div");
+p.className="particle";
+p.style.left=(40+Math.random()*20)+"%";
+p.style.top=(130+Math.random()*35)+"px";
+
+lab.appendChild(p);
+
+setTimeout(()=>p.remove(),3200);
+
+},i*80);
+
+}
+
+}
+
+function heat(){
+
+const lab=document.getElementById("lab");
+
+for(let i=0;i<15;i++){
+
+const h=document.createElement("div");
+h.className="heat";
+h.style.left=(42+Math.random()*16)+"%";
+
+lab.appendChild(h);
+
+}
+
+delayed(()=>{
+lab.querySelectorAll(".heat").forEach(x=>x.remove());
+},5000);
+
+}
+
+function flash(){
+
+const lab=document.getElementById("lab");
+const f=document.createElement("div");
+
+f.className="flash";
+lab.appendChild(f);
+
+setTimeout(()=>f.remove(),600);
+
+}
+
+function runEffects(reaction){
+
+const lab=document.getElementById("lab");
+const liquid=document.getElementById("liquid");
+
+if(reaction.effects.includes("bubbles")){
+bubbles();
+}
+
+if(reaction.effects.includes("smoke")){
+smoke();
+}
+
+if(reaction.effects.includes("glow")){
+liquid.classList.add("glow");
+}
+
+if(reaction.effects.includes("color")){
+liquid.classList.add(reaction.color);
+}
+
+if(reaction.effects.includes("precipitate")){
+particles();
+}
+
+if(reaction.effects.includes("heat")){
+heat();
+}
+
+if(reaction.effects.includes("flash")){
+flash();
+}
+
+}
+
+function mixChemicals(){
+
+if(selected.length!==2){
+alert("Hãy chọn đủ 2 chất nhé!");
+return;
+}
+
+clearTimers();
+
+const key=[...selected].sort().join("+");
+const reaction=reactions[key];
+
+const lab=document.getElementById("lab");
+const liquid=document.getElementById("liquid");
+const result=document.getElementById("result");
+const status=document.getElementById("status");
+
+result.style.display="none";
+
+lab.classList.remove("shaking");
+liquid.className="liquid";
+liquid.style.background="#48b9e9";
+
+if(!reaction){
+
+status.innerText="Đang kiểm tra phản ứng...";
+
+delayed(()=>{
+
+status.innerText="Chưa tìm thấy phản ứng được mô phỏng!";
+
+result.style.display="block";
+result.innerHTML=`
+<h3>🔍 Tiếp tục khám phá!</h3>
+Sự kết hợp này chưa có trong danh mục thí nghiệm.
+Điều đó không có nghĩa hai chất chắc chắn không phản ứng trong mọi điều kiện.
+`;
+
+},1000);
+
+return;
+
+}
+
+status.innerText="Đang chuẩn bị thí nghiệm...";
+
+delayed(()=>{
+
+status.innerText="✨ Phản ứng đang diễn ra!";
+liquid.style.height="65%";
+runEffects(reaction);
+
+},700);
+
+delayed(()=>{
+
+status.innerText="Đang quan sát hiện tượng...";
+
+},2500);
+
+delayed(()=>{
+
+result.style.display="block";
+
+result.innerHTML=`
+<h3>🎉 ${reaction.name}</h3>
+
+<p><b>🔬 Hiện tượng:</b></p>
+<p>${reaction.description}</p>
+
+<p><b>⚗️ Phương trình / mô tả hóa học:</b></p>
+<div class="equation">${reaction.equation}</div>
+
+<p><b>💡 Bạn có biết?</b></p>
+<p>${reaction.fact}</p>
+`;
+
+status.innerText="Thí nghiệm hoàn thành!";
+
+if(!discovered.includes(key)){
+discovered.push(key);
+score+=10;
+document.getElementById("score").innerText=score;
+updateCollection();
+}
+
+},5000);
+
+}
+
+function updateCollection(){
+
+const box=document.getElementById("collection");
+
+box.innerHTML=discovered.map(key=>`
+<div class="experiment">
+🧪 ${reactions[key].name}
+<br>
+<small>Đã khám phá thành công · +10 điểm</small>
+</div>
+`).join("");
+
+}
+
+function resetLab(){
+
+clearTimers();
+
+selected=[];
+
+chemicals.forEach(c=>{
+document.getElementById("chem-"+c.id)
+.classList.remove("selected");
+});
+
+const lab=document.getElementById("lab");
+
+lab.classList.remove("shaking");
+
+lab.querySelectorAll(
+".bubble,.smoke,.particle,.heat,.flash"
+).forEach(x=>x.remove());
+
+document.getElementById("liquid").className="liquid";
+document.getElementById("liquid").style.height="38%";
+document.getElementById("liquid").style.background="#48b9e9";
+
+document.getElementById("status").innerText="Đang chờ thí nghiệm...";
+
+document.getElementById("result").style.display="none";
+
+}
+
+renderChemicals();
+
+</script>
+
+</body>
+</html>
+```
