@@ -1,0 +1,1075 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>PICK A STAR | Made by Seri</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: #080c23;
+    color: white;
+    font-family: Georgia, serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+#universe {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 55%, #29234e 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 10%, #172c59, transparent 50%),
+      linear-gradient(180deg,#070b20,#111532 60%,#090b20);
+}
+
+/* GALAXY */
+
+.galaxy {
+    position: absolute;
+    width: 150%;
+    height: 45%;
+    left: -25%;
+    top: 35%;
+    transform: rotate(-23deg);
+    background: radial-gradient(
+        ellipse,
+        rgba(197,158,255,.27),
+        rgba(108,105,220,.17) 35%,
+        rgba(76,127,210,.08) 55%,
+        transparent 75%
+    );
+    filter: blur(25px);
+    animation: galaxy 15s ease-in-out infinite alternate;
+}
+
+@keyframes galaxy {
+    to { transform: rotate(-17deg) translateX(3%); }
+}
+
+.nebula {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    filter: blur(75px);
+    opacity: .27;
+    animation: float 18s infinite alternate ease-in-out;
+}
+
+.n1 {
+    background: #a16add;
+    top: 10%;
+    left: 0;
+}
+
+.n2 {
+    background: #4868c9;
+    right: 0;
+    bottom: 5%;
+    animation-delay: -5s;
+}
+
+.n3 {
+    background: #d67fba;
+    left: 40%;
+    top: 55%;
+    animation-delay: -9s;
+}
+
+@keyframes float {
+    to { transform: translate(40px,-35px) scale(1.3); }
+}
+
+#starCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* INTRO */
+
+.screen {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+    background: rgba(5,8,27,.3);
+    transition: .8s;
+}
+
+.screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.moon {
+    font-size: 55px;
+    margin-bottom: 18px;
+    color: #fff2c9;
+    filter: drop-shadow(0 0 25px #ffe3a0);
+    animation: moon 3s infinite alternate;
+}
+
+@keyframes moon {
+    to { filter: drop-shadow(0 0 45px #ffe3a0); }
+}
+
+.title {
+    font-size: clamp(35px,8vw,60px);
+    letter-spacing: 6px;
+    color: #fff2df;
+    font-weight: normal;
+    text-shadow: 0 0 25px #bba1ff;
+}
+
+.description {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 2;
+    color: #d9d0f4;
+    letter-spacing: 1px;
+}
+
+.btn {
+    margin-top: 30px;
+    padding: 13px 35px;
+    border: 1px solid #c9b4ff;
+    border-radius: 40px;
+    background: rgba(180,150,255,.15);
+    color: white;
+    letter-spacing: 3px;
+    font-size: 13px;
+    transition: .3s;
+}
+
+.btn:active {
+    transform: scale(.94);
+    background: rgba(180,150,255,.4);
+}
+
+.credit {
+    position: absolute;
+    bottom: 23px;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #aaa5ce;
+}
+
+/* GAME HEADER */
+
+#game {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: 1s;
+}
+
+#game.active {
+    opacity: 1;
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+}
+
+.logo {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #e6d8ff;
+}
+
+.counter {
+    color: #fff0bd;
+    font-size: 15px;
+    text-shadow: 0 0 12px gold;
+}
+
+.instruction {
+    position: absolute;
+    bottom: 112px;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #d5c9ee;
+    letter-spacing: 1px;
+}
+
+.credit-game {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #aaa5ce;
+}
+
+/* INTERACTIVE STARS */
+
+.star {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    animation: twinkle var(--speed) infinite alternate ease-in-out;
+    color: var(--color);
+    filter: drop-shadow(0 0 var(--glow) var(--color));
+}
+
+@keyframes twinkle {
+    from { opacity: .35; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.2); }
+}
+
+.star:active {
+    transform: scale(1.7);
+}
+
+.shooting {
+    position: absolute;
+    z-index: 3;
+    width: 130px;
+    height: 2px;
+    border-radius: 50%;
+    background: linear-gradient(90deg,white,#d8baff,transparent);
+    box-shadow: 0 0 12px white;
+    transform: rotate(-35deg);
+    animation: shoot 1.3s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes shoot {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    100% {
+        opacity: 0;
+        transform: translate(-350px,250px) rotate(-35deg);
+    }
+}
+
+/* BOTTOM MENU */
+
+.menu {
+    position: absolute;
+    bottom: 43px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 17px;
+    pointer-events: auto;
+}
+
+.menu button {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    background: rgba(27,25,66,.7);
+    color: white;
+    font-size: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(180,150,255,.15);
+}
+
+.menu button:active {
+    transform: scale(.9);
+}
+
+/* POPUP */
+
+.popup {
+    position: fixed;
+    z-index: 30;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(4,6,20,.65);
+    backdrop-filter: blur(8px);
+}
+
+.popup.show {
+    display: flex;
+}
+
+.card {
+    width: min(100%,350px);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 27px 23px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 22px;
+    background: linear-gradient(145deg,#282650,#171932);
+    box-shadow: 0 0 45px rgba(180,140,255,.25);
+    text-align: center;
+}
+
+.card h2 {
+    font-size: 21px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    color: #fff0d7;
+    margin-bottom: 18px;
+}
+
+.card p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #e5dafa;
+}
+
+.close {
+    margin-top: 22px;
+    padding: 10px 24px;
+    border: 1px solid #d5bdff;
+    border-radius: 30px;
+    background: transparent;
+    color: white;
+    letter-spacing: 2px;
+}
+
+textarea {
+    width: 100%;
+    height: 110px;
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #8275ac;
+    background: rgba(255,255,255,.07);
+    color: white;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    font-family: Georgia,serif;
+}
+
+textarea::placeholder {
+    color: #aaa1c7;
+}
+
+.wish {
+    margin: 12px 0;
+    padding: 13px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.07);
+    color: #f0dffb;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: left;
+    word-break: break-word;
+}
+
+#starCollection {
+    text-align: left;
+}
+
+.empty {
+    color: #bdb1d5;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* EFFECT */
+
+.sparkle {
+    position: fixed;
+    z-index: 15;
+    pointer-events: none;
+    color: #fff3bb;
+    animation: sparkle .8s forwards;
+}
+
+@keyframes sparkle {
+    to {
+        opacity: 0;
+        transform: translate(var(--x),var(--y)) scale(0);
+    }
+}
+
+@media(max-width:400px) {
+    .menu { gap: 12px; }
+    .menu button {
+        width: 43px;
+        height: 43px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="universe">
+    <div class="galaxy"></div>
+    <div class="nebula n1"></div>
+    <div class="nebula n2"></div>
+    <div class="nebula n3"></div>
+    <canvas id="starCanvas"></canvas>
+</div>
+
+<!-- INTRO -->
+
+<div class="screen" id="intro">
+
+    <div class="moon">☾</div>
+
+    <h1 class="title">PICK A STAR</h1>
+
+    <p class="description">
+        Welcome to your little universe ✧<br>
+        Mỗi ngôi sao là một điều kỳ diệu đáng yêu.<br>
+        Hãy hái một vì sao dành riêng cho bạn.
+    </p>
+
+    <button class="btn" onclick="startGame()">
+        ✦ START ✦
+    </button>
+
+    <div class="credit">MADE BY SERI ♡</div>
+
+</div>
+
+<!-- GAME -->
+
+<div id="game">
+
+    <div class="header">
+        <div class="logo">YOUR LITTLE UNIVERSE</div>
+        <div class="counter">⭐ <span id="count">0</span></div>
+    </div>
+
+    <div class="instruction">
+        Chạm vào một ngôi sao để khám phá điều kỳ diệu ✨
+    </div>
+
+    <div class="menu">
+        <button onclick="openCollection()" title="Bộ sưu tập">📖</button>
+        <button onclick="openWish()" title="Hũ điều ước">🫙</button>
+        <button onclick="toggleMusic()" title="Âm thanh">♫</button>
+    </div>
+
+    <div class="credit-game">MADE BY SERI ♡</div>
+
+</div>
+
+<!-- MESSAGE -->
+
+<div class="popup" id="messagePopup">
+    <div class="card">
+        <div style="font-size:35px;margin-bottom:15px">🌟</div>
+        <h2>A LITTLE MIRACLE</h2>
+        <p id="messageText"></p>
+        <button class="close" onclick="closePopup('messagePopup')">
+            THANK YOU ♡
+        </button>
+    </div>
+</div>
+
+<!-- WISH JAR -->
+
+<div class="popup" id="wishPopup">
+    <div class="card">
+        <div style="font-size:35px">🫙</div>
+        <h2>WISH UPON A STAR</h2>
+
+        <p>
+            Hãy viết một điều ước nhỏ<br>
+            và gửi nó vào vũ trụ nhé.
+        </p>
+
+        <textarea id="wishInput"
+        placeholder="Điều ước của mình là..."></textarea>
+
+        <button class="btn" onclick="saveWish()">
+            SEND TO UNIVERSE ✨
+        </button>
+
+        <div id="wishStatus"
+        style="font-size:12px;margin-top:12px;color:#d6c2ff"></div>
+
+        <button class="close" onclick="closePopup('wishPopup')">
+            CLOSE
+        </button>
+    </div>
+</div>
+
+<!-- COLLECTION -->
+
+<div class="popup" id="collectionPopup">
+    <div class="card">
+        <div style="font-size:35px">📖</div>
+        <h2>MY STAR DIARY</h2>
+        <p>Những điều kỳ diệu bạn đã tìm thấy.</p>
+
+        <div id="starCollection"></div>
+
+        <button class="close" onclick="closePopup('collectionPopup')">
+            CLOSE ♡
+        </button>
+    </div>
+</div>
+
+<script>
+
+// ===================================
+// SAVE DATA
+// ===================================
+
+const defaultData = {
+    total: 0,
+    messages: [],
+    wishes: []
+};
+
+let data;
+
+try {
+    data = JSON.parse(localStorage.getItem("seriPickStar")) || defaultData;
+} catch(e) {
+    data = {...defaultData};
+}
+
+data.total = Number(data.total) || 0;
+if (!Array.isArray(data.messages)) data.messages = [];
+if (!Array.isArray(data.wishes)) data.wishes = [];
+
+function saveData() {
+    try {
+        localStorage.setItem("seriPickStar",JSON.stringify(data));
+    } catch(e) {
+        console.warn("Không thể lưu dữ liệu trên thiết bị.");
+    }
+}
+
+document.getElementById("count").textContent = data.total;
+
+// ===================================
+// BACKGROUND STARS
+// ===================================
+
+const canvas = document.getElementById("starCanvas");
+const ctx = canvas.getContext("2d");
+
+let W,H,backgroundStars = [];
+
+function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1,2);
+
+    W = window.innerWidth;
+    H = window.innerHeight;
+
+    canvas.width = W*dpr;
+    canvas.height = H*dpr;
+
+    canvas.style.width = W+"px";
+    canvas.style.height = H+"px";
+
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    backgroundStars = [];
+
+    for(let i=0;i<350;i++) {
+        backgroundStars.push({
+            x:Math.random()*W,
+            y:Math.random()*H,
+            size:Math.random()*1.6+.3,
+            phase:Math.random()*6,
+            speed:Math.random()*.025+.004
+        });
+    }
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+function drawStars() {
+
+    ctx.clearRect(0,0,W,H);
+
+    backgroundStars.forEach(s => {
+
+        s.phase += s.speed;
+
+        const alpha = .25 + (Math.sin(s.phase)+1)*.35;
+
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+
+        ctx.fillStyle = `rgba(255,245,255,${alpha})`;
+        ctx.shadowBlur = 7;
+        ctx.shadowColor = "#d9c5ff";
+        ctx.fill();
+
+    });
+
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(drawStars);
+}
+
+drawStars();
+
+// ===================================
+// INTERACTIVE STARS
+// ===================================
+
+const universe = document.getElementById("universe");
+
+const starColors = [
+    "#fff2c7",
+    "#ffffff",
+    "#e7d5ff",
+    "#ffcce9",
+    "#b9dcff",
+    "#d9b5ff"
+];
+
+const symbols = ["✦","✧","⋆","✩","★","✵","✶"];
+
+const messages = [
+    "Bạn là một điều kỳ diệu mà vũ trụ đã tạo ra. ♡",
+    "Không cần hoàn hảo, bạn vẫn xứng đáng được yêu thương.",
+    "Mong mọi dịu dàng của thế giới sẽ tìm đến bạn.",
+    "Bạn đã cố gắng rất nhiều rồi. Hãy nghỉ ngơi nhé.",
+    "Đừng quên rằng bạn cũng là một vì sao đang tỏa sáng.",
+    "Một ngày bình thường cũng có thể chứa đựng phép màu.",
+    "Hãy cứ là chính mình, vũ trụ không cần một bản sao khác.",
+    "Những điều tốt đẹp đang âm thầm trên đường đến với bạn.",
+    "Hãy tin vào những khởi đầu nhỏ bé.",
+    "Mong những ước mơ của bạn đều có ngày thành hiện thực.",
+    "Bạn không cần chạy thật nhanh. Hãy đi theo nhịp độ của mình.",
+    "Hãy yêu cả những phần chưa hoàn hảo của chính mình.",
+    "Một cái ôm ấm áp đang được gửi đến bạn từ vũ trụ.",
+    "Bạn xứng đáng có một cuộc sống thật hạnh phúc.",
+    "Hãy giữ cho trái tim mình luôn ấm áp.",
+    "Ngày mai sẽ là một bầu trời mới.",
+    "Bạn không cần tỏa sáng mỗi ngày.",
+    "Mong bạn luôn tìm thấy bình yên trong tâm hồn.",
+    "Có những điều đẹp đẽ chỉ đến khi bạn đủ kiên nhẫn.",
+    "Hãy dành cho bản thân một chút dịu dàng hôm nay.",
+    "Vũ trụ rộng lớn và khả năng của bạn cũng vậy.",
+    "Đừng sợ những con đường chưa từng đi qua.",
+    "Bạn đang trưởng thành theo cách rất riêng.",
+    "Mong bạn luôn có dũng khí để theo đuổi điều mình yêu.",
+    "Hạnh phúc đôi khi chỉ là một buổi chiều bình yên.",
+    "Hãy tin rằng những điều nhỏ bé cũng có thể tạo nên hạnh phúc.",
+    "Cảm ơn bạn vì đã không từ bỏ chính mình.",
+    "Một điều ước nhỏ, một niềm tin lớn. ✨",
+    "Hãy để trái tim được nghỉ ngơi dưới bầu trời đầy sao.",
+    "Chúc bạn có một giấc mơ thật đẹp tối nay."
+];
+
+let started = false;
+let stars = [];
+
+function createStar() {
+
+    const star = document.createElement("div");
+
+    star.className = "star";
+
+    const color = starColors[
+        Math.floor(Math.random()*starColors.length)
+    ];
+
+    const size = Math.random()*13+10;
+
+    star.innerHTML = symbols[
+        Math.floor(Math.random()*symbols.length)
+    ];
+
+    star.style.left = Math.random()*95+"%";
+    star.style.top = Math.random()*87+"%";
+    star.style.fontSize = size+"px";
+
+    star.style.setProperty("--color",color);
+    star.style.setProperty("--glow",(Math.random()*12+5)+"px");
+    star.style.setProperty("--speed",(Math.random()*3+1.5)+"s");
+
+    star.addEventListener("pointerdown",function(e) {
+        if(!started) return;
+
+        e.stopPropagation();
+        collectStar(star);
+    });
+
+    universe.appendChild(star);
+    stars.push(star);
+
+}
+
+function createAllStars() {
+
+    for(let i=0;i<320;i++) {
+        createStar();
+    }
+
+}
+
+// ===================================
+// COLLECT STARS
+// ===================================
+
+function collectStar(star) {
+
+    if(star.dataset.collected) return;
+
+    star.dataset.collected = "true";
+
+    data.total++;
+
+    const message = messages[
+        Math.floor(Math.random()*messages.length)
+    ];
+
+    const record = {
+        message: message,
+        date: new Date().toLocaleDateString("vi-VN")
+    };
+
+    data.messages.unshift(record);
+
+    // Giữ tối đa 100 lời nhắn gần nhất
+    data.messages = data.messages.slice(0,100);
+
+    saveData();
+
+    document.getElementById("count").textContent = data.total;
+
+    const rect = star.getBoundingClientRect();
+
+    sparkle(rect.left+rect.width/2,rect.top+rect.height/2);
+
+    star.remove();
+
+    stars = stars.filter(s => s !== star);
+
+    // Tạo sao mới sau khi hái
+    setTimeout(() => {
+        if(started) createStar();
+    },900);
+
+    document.getElementById("messageText").textContent = message;
+
+    document.getElementById("messagePopup").classList.add("show");
+
+}
+
+// ===================================
+// SPARKLES
+// ===================================
+
+function sparkle(x,y) {
+
+    for(let i=0;i<15;i++) {
+
+        const el = document.createElement("div");
+
+        el.className = "sparkle";
+        el.textContent = ["✦","✧","✵","·"][
+            Math.floor(Math.random()*4)
+        ];
+
+        el.style.left=x+"px";
+        el.style.top=y+"px";
+
+        el.style.setProperty("--x",(Math.random()*110-55)+"px");
+        el.style.setProperty("--y",(Math.random()*110-55)+"px");
+
+        document.body.appendChild(el);
+
+        setTimeout(()=>el.remove(),850);
+
+    }
+
+}
+
+// ===================================
+// SHOOTING STARS
+// ===================================
+
+function shootingStar() {
+
+    if(!started) return;
+
+    const s = document.createElement("div");
+
+    s.className="shooting";
+
+    s.style.left=(20+Math.random()*80)+"%";
+    s.style.top=(Math.random()*45)+"%";
+
+    universe.appendChild(s);
+
+    setTimeout(()=>s.remove(),1400);
+
+}
+
+function scheduleShootingStar() {
+
+    const delay = 3000+Math.random()*6000;
+
+    setTimeout(() => {
+        shootingStar();
+        scheduleShootingStar();
+    },delay);
+
+}
+
+scheduleShootingStar();
+
+// ===================================
+// INTRO
+// ===================================
+
+function startGame() {
+
+    started=true;
+
+    document.getElementById("intro").classList.add("hide");
+
+    document.getElementById("game").classList.add("active");
+
+    createAllStars();
+
+}
+
+// ===================================
+// POPUPS
+// ===================================
+
+function closePopup(id) {
+    document.getElementById(id).classList.remove("show");
+}
+
+document.querySelectorAll(".popup").forEach(popup => {
+    popup.addEventListener("click",e => {
+        if(e.target === popup) {
+            popup.classList.remove("show");
+        }
+    });
+});
+
+// ===================================
+// WISH JAR
+// ===================================
+
+function openWish() {
+
+    document.getElementById("wishStatus").textContent="";
+
+    document.getElementById("wishPopup").classList.add("show");
+
+}
+
+function saveWish() {
+
+    const input = document.getElementById("wishInput");
+
+    const wish = input.value.trim();
+
+    if(!wish) {
+        document.getElementById("wishStatus").textContent =
+            "Hãy viết một điều ước trước nhé ♡";
+        return;
+    }
+
+    data.wishes.unshift({
+        text:wish,
+        date:new Date().toLocaleDateString("vi-VN")
+    });
+
+    saveData();
+
+    input.value="";
+
+    document.getElementById("wishStatus").textContent =
+        "Điều ước đã được gửi vào vũ trụ ✨";
+
+}
+
+// ===================================
+// STAR DIARY
+// ===================================
+
+function openCollection() {
+
+    const box=document.getElementById("starCollection");
+
+    box.innerHTML="";
+
+    if(data.messages.length===0) {
+
+        box.innerHTML=`
+        <p class="empty">
+        Bạn chưa hái ngôi sao nào.<br>
+        Hãy bắt đầu hành trình nhé! 🌟
+        </p>`;
+
+    } else {
+
+        data.messages.forEach((item,index)=>{
+
+            const div=document.createElement("div");
+
+            div.className="wish";
+
+            const title=document.createElement("div");
+            title.textContent="⭐ Ngôi sao "+(data.total-index);
+
+            const content=document.createElement("p");
+            content.textContent=item.message;
+
+            const date=document.createElement("small");
+            date.textContent=item.date;
+            date.style.color="#aaa1c7";
+
+            div.append(title,content,date);
+
+            box.appendChild(div);
+
+        });
+
+    }
+
+    // Hũ điều ước
+    const heading=document.createElement("h2");
+    heading.textContent="🫙 MY WISHES";
+    heading.style.marginTop="25px";
+
+    box.appendChild(heading);
+
+    if(data.wishes.length===0) {
+
+        const empty=document.createElement("p");
+        empty.className="empty";
+        empty.textContent="Những điều ước xinh xắn của bạn sẽ ở đây.";
+
+        box.appendChild(empty);
+
+    } else {
+
+        data.wishes.forEach(w=>{
+
+            const div=document.createElement("div");
+            div.className="wish";
+
+            const content=document.createElement("p");
+            content.textContent="💜 "+w.text;
+
+            const date=document.createElement("small");
+            date.textContent=w.date;
+            date.style.color="#aaa1c7";
+
+            div.append(content,date);
+
+            box.appendChild(div);
+
+        });
+
+    }
+
+    document.getElementById("collectionPopup").classList.add("show");
+
+}
+
+// ===================================
+// AMBIENT SOUND
+// ===================================
+
+let audioContext=null;
+let musicOn=false;
+let soundTimer=null;
+
+function toggleMusic() {
+
+    if(!audioContext) {
+        const AudioCtx=window.AudioContext||window.webkitAudioContext;
+
+        if(!AudioCtx) return;
+
+        audioContext=new AudioCtx();
+    }
+
+    if(audioContext.state==="suspended") {
+        audioContext.resume();
+    }
+
+    musicOn=!musicOn;
+
+    if(musicOn) {
+        playChime();
+    } else {
+        clearTimeout(soundTimer);
+    }
+
+}
+
+function playChime() {
+
+    if(!musicOn || !audioContext) return;
+
+    const notes=[523.25,659.25,783.99,659.25,587.33];
+
+    const freq=notes[Math.floor(Math.random()*notes.length)];
+
+    const oscillator=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+
+    oscillator.type="sine";
+    oscillator.frequency.value=freq;
+
+    gain.gain.setValueAtTime(.0001,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.045,audioContext.currentTime+.05);
+    gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+1.5);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime+1.6);
+
+    soundTimer=setTimeout(playChime,1800+Math.random()*1800);
+
+}
+
+</script>
+
+</body>
+</html>
+```
