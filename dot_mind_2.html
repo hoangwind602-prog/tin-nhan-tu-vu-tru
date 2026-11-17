@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#101525">
+<title>DOT MIND — One Stroke Challenge</title>
+<style>
+:root{
+  --bg:#101525;--panel:#1b2540;--panel2:#222f4d;--mint:#72e6c1;
+  --muted:#9aa8c2;--line:#53617e;--gold:#ffd166;--red:#ff7185;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  min-height:100vh;background:radial-gradient(circle at 50% 0%,#1d2b46 0,#101525 52%);
+  color:#f5f7ff;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  display:flex;justify-content:center;touch-action:pan-y;
+}
+.app{width:100%;max-width:520px;padding:22px 18px 28px}
+header{text-align:center;margin:4px 0 22px}
+.logo{font-size:31px;letter-spacing:5px;font-weight:900;color:var(--mint)}
+.tagline{font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:4px}
+.topline{display:flex;gap:10px;align-items:stretch;margin-bottom:12px}
+.stat{flex:1;background:var(--panel);border:1px solid #2c3957;border-radius:14px;padding:10px 13px}
+.stat span{display:block;color:var(--muted);font-size:10px;letter-spacing:1.3px}
+.stat strong{display:block;font-size:19px;margin-top:3px}
+.level-select{width:100%;margin:0 0 13px;padding:11px 12px;border-radius:12px;border:1px solid #354361;background:var(--panel);color:#fff;font-size:14px}
+.progress{height:6px;border-radius:20px;background:#29344e;overflow:hidden;margin-bottom:17px}
+.progress>div{height:100%;width:0;background:var(--mint);transition:width .2s}
+.instruction{text-align:center;color:#c2cbe0;font-size:13px;line-height:1.55;min-height:40px;margin-bottom:12px}
+.board-wrap{position:relative;width:100%;aspect-ratio:1;background:linear-gradient(145deg,#1c2943,#172138);border:1px solid #34415e;border-radius:23px;overflow:hidden;box-shadow:0 16px 45px #0003}
+svg{display:block;width:100%;height:100%;touch-action:none;user-select:none}
+.edge{stroke:var(--line);stroke-width:5.5;stroke-linecap:round;fill:none;opacity:.95}
+.edge.done{stroke:var(--mint);stroke-width:7;filter:drop-shadow(0 0 5px #72e6c188)}
+.edge.preview{stroke:var(--gold);stroke-width:4;stroke-dasharray:7 7}
+.dot{fill:#f7f8ff;stroke:var(--mint);stroke-width:3}
+.dot.visited{fill:var(--mint);stroke:#d9fff3}
+.dot.current{fill:var(--gold);stroke:#fff0c4;filter:drop-shadow(0 0 7px #ffd16699)}
+.controls{display:flex;gap:10px;margin-top:16px}
+button{border:0;border-radius:13px;padding:14px 12px;font-size:13px;font-weight:800;cursor:pointer}
+button:active{transform:scale(.98)}
+.secondary{flex:1;background:var(--panel2);color:#fff;border:1px solid #354361}
+.primary{flex:1;background:var(--mint);color:#102033}
+.primary:disabled{opacity:.35;cursor:not-allowed}
+.message{min-height:54px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5;padding:13px 5px 2px}
+.message.success{color:var(--mint);font-weight:700}
+.message.error{color:var(--red)}
+.levels-title{display:flex;justify-content:space-between;align-items:center;margin:16px 2px 9px;color:#dce3f4;font-size:12px}
+.level-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.level-tile{padding:8px 0;border-radius:8px;background:#202b45;color:#aab6ce;font-size:10px;border:1px solid #34415c}
+.level-tile.active{background:#294a4b;color:var(--mint);border-color:var(--mint)}
+.level-tile.done{background:#263c40;color:#a5f4d9}
+.level-tile:disabled{opacity:.35;cursor:not-allowed}
+.footer{text-align:center;color:#62708c;font-size:10px;letter-spacing:2px;margin-top:22px}
+.overlay{position:fixed;inset:0;background:#080d18cc;display:none;align-items:center;justify-content:center;padding:22px;z-index:5}
+.modal{width:100%;max-width:360px;background:#1c2943;border:1px solid #405070;border-radius:22px;padding:25px;text-align:center;box-shadow:0 20px 70px #0008}
+.modal h2{color:var(--mint);font-size:23px;margin-bottom:8px}
+.modal p{color:#c4cee1;font-size:14px;line-height:1.6;margin-bottom:17px}
+.modal button{width:100%}
+@media(max-width:360px){.app{padding:17px 13px}.logo{font-size:27px}.level-grid{gap:3px}.level-tile{font-size:9px}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="logo">DOT MIND</div>
+    <div class="tagline">ONE STROKE CHALLENGE</div>
+  </header>
+
+  <section class="topline">
+    <div class="stat"><span>LEVEL</span><strong id="levelLabel">01 / 100</strong></div>
+    <div class="stat"><span>ĐÃ MỞ KHÓA</span><strong id="unlockedLabel">01 / 100</strong></div>
+    <div class="stat"><span>ĐƯỜNG NỐI</span><strong id="edgeLabel">0 / 0</strong></div>
+  </section>
+
+  <select id="levelSelect" class="level-select" aria-label="Chọn màn chơi"></select>
+  <div class="progress"><div id="progressBar"></div></div>
+  <p class="instruction" id="instruction">Giữ ngón tay và kéo từ điểm này sang điểm kế tiếp. Không nhấc tay, không đi lại đường cũ.</p>
+
+  <div class="board-wrap">
+    <svg id="board" viewBox="0 0 400 400" aria-label="Bảng nối điểm"></svg>
+  </div>
+
+  <div class="controls">
+    <button class="secondary" id="resetBtn">↻ CHƠI LẠI</button>
+    <button class="primary" id="nextBtn" disabled>TIẾP THEO →</button>
+  </div>
+  <div class="message" id="message">Bắt đầu tại một đầu mút của hình.</div>
+
+  <div class="levels-title"><span>CHỌN CẤP ĐỘ</span><span id="progressText">0% hoàn thành</span></div>
+  <div class="level-grid" id="levelGrid"></div>
+  <div class="footer">MADE BY SERI</div>
+</main>
+
+<div class="overlay" id="winOverlay">
+  <div class="modal">
+    <h2>✨ XUẤT SẮC!</h2>
+    <p id="winText">Bạn đã hoàn thành thử thách.</p>
+    <button class="primary" id="modalNext">MÀN TIẾP THEO →</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// 100 màn được tạo từ các đường đi Euler hợp lệ.
+// Mỗi màn có một lời giải chắc chắn; người chơi phải đi qua mỗi cạnh đúng một lần.
+const TOTAL_LEVELS = 100;
+const GRID = 6;
+const STORAGE_KEY = "dotMindV2Unlocked";
+
+function mulberry32(a){
+  return function(){
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function shuffle(arr, rand){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(rand()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function neighbors(id){
+  const x=id%GRID, y=Math.floor(id/GRID), out=[];
+  if(x>0) out.push(id-1);
+  if(x<GRID-1) out.push(id+1);
+  if(y>0) out.push(id-GRID);
+  if(y<GRID-1) out.push(id+GRID);
+  return out;
+}
+
+// Tạo một đường đi không lặp cạnh. Đồ thị sinh ra luôn liên thông và có đường Euler.
+function makeTrail(target, seed){
+  const rand=mulberry32(seed);
+  let best=null;
+  for(let attempt=0;attempt<450;attempt++){
+    const start=Math.floor(rand()*GRID*GRID);
+    const trail=[start], used=new Set();
+    let current=start;
+    while(used.size<target){
+      const choices=shuffle(neighbors(current),rand)
+        .filter(n=>!used.has(edgeKey(current,n)));
+      if(!choices.length) break;
+      const next=choices[0];
+      used.add(edgeKey(current,next));
+      trail.push(next);
+      current=next;
+    }
+    if(used.size===target) return trail;
+    if(!best || used.size>best.edges) best={trail,edges:used.size};
+  }
+  // Fallback chắc chắn: đường zíc-zắc qua lưới, cắt lấy số cạnh cần thiết.
+  const snake=[];
+  for(let y=0;y<GRID;y++){
+    const row=Array.from({length:GRID},(_,x)=>y*GRID+x);
+    if(y%2) row.reverse();
+    snake.push(...row);
+  }
+  return snake.slice(0,target+1);
+}
+function edgeKey(a,b){return a<b ? a+"-"+b : b+"-"+a;}
+
+function buildLevels(){
+  const levels=[];
+  for(let i=0;i<TOTAL_LEVELS;i++){
+    // Tăng độ dài từ từ: màn đầu 3 cạnh, màn cuối tối đa khoảng 24 cạnh.
+    const target=Math.min(24,3+Math.floor(i*0.22));
+    const trail=makeTrail(target, 90210+i*7919);
+    const edges=[];
+    for(let j=0;j<trail.length-1;j++){
+      edges.push({a:trail[j],b:trail[j+1],key:edgeKey(trail[j],trail[j+1])});
+    }
+    levels.push({trail,edges,rank:i<15?"DỄ":i<40?"TRUNG BÌNH":i<70?"KHÓ":"BẬC THẦY"});
+  }
+  return levels;
+}
+const levels=buildLevels();
+
+const board=document.getElementById("board");
+const levelLabel=document.getElementById("levelLabel");
+const unlockedLabel=document.getElementById("unlockedLabel");
+const edgeLabel=document.getElementById("edgeLabel");
+const progressBar=document.getElementById("progressBar");
+const progressText=document.getElementById("progressText");
+const message=document.getElementById("message");
+const levelSelect=document.getElementById("levelSelect");
+const levelGrid=document.getElementById("levelGrid");
+const nextBtn=document.getElementById("nextBtn");
+const overlay=document.getElementById("winOverlay");
+
+let levelIndex=0;
+let unlocked=Math.max(1,Math.min(TOTAL_LEVELS,Number(localStorage.getItem(STORAGE_KEY)||1)));
+let used=new Set();
+let visited=new Set();
+let currentNode=null;
+let drawing=false;
+let completed=false;
+let pointerId=null;
+let mistakes=0;
+let startedAt=0;
+
+function pointXY(id){
+  const margin=62, span=276;
+  const x=id%GRID, y=Math.floor(id/GRID);
+  return [margin+x*span/(GRID-1),margin+y*span/(GRID-1)];
+}
+function setMessage(text,type=""){
+  message.className="message"+(type?" "+type:"");
+  message.textContent=text;
+}
+function renderBoard(){
+  const level=levels[levelIndex];
+  let markup="";
+  level.edges.forEach(e=>{
+    const [x1,y1]=pointXY(e.a),[x2,y2]=pointXY(e.b);
+    markup+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="edge ${used.has(e.key)?"done":""}"/>`;
+  });
+  const nodes=new Set(level.trail);
+  nodes.forEach(id=>{
+    const [x,y]=pointXY(id);
+    const cls=(id===currentNode?"current ": "")+(visited.has(id)?"visited":"");
+    markup+=`<circle cx="${x}" cy="${y}" r="10.5" class="dot ${cls}" />`;
+  });
+  board.innerHTML=markup;
+}
+function updateStats(){
+  const level=levels[levelIndex];
+  levelLabel.textContent=String(levelIndex+1).padStart(2,"0")+" / 100";
+  unlockedLabel.textContent=String(unlocked).padStart(2,"0")+" / 100";
+  edgeLabel.textContent=used.size+" / "+level.edges.length;
+  progressBar.style.width=(used.size/level.edges.length*100)+"%";
+  progressText.textContent=Math.round((unlocked-1)/TOTAL_LEVELS*100)+"% hoàn thành";
+  nextBtn.disabled=!completed;
+}
+function renderLevelPicker(){
+  levelSelect.innerHTML="";
+  levelGrid.innerHTML="";
+  for(let i=0;i<TOTAL_LEVELS;i++){
+    const option=document.createElement("option");
+    option.value=i;
+    option.textContent=`Màn ${String(i+1).padStart(2,"0")} — ${levels[i].rank}${i<unlocked?"":" (đã khóa)"}`;
+    option.disabled=i>=unlocked;
+    levelSelect.appendChild(option);
+
+    const btn=document.createElement("button");
+    btn.className="level-tile"+(i===levelIndex?" active":"")+(i<unlocked-1?" done":"");
+    btn.textContent=i<unlocked-1?"✓":i+1;
+    btn.disabled=i>=unlocked;
+    btn.title=i<unlocked?`Màn ${i+1}`:"Màn đang khóa";
+    btn.addEventListener("click",()=>loadLevel(i));
+    levelGrid.appendChild(btn);
+  }
+  levelSelect.value=String(levelIndex);
+}
+function loadLevel(index){
+  if(index<0||index>=unlocked)return;
+  levelIndex=index;
+  used=new Set();visited=new Set();currentNode=null;
+  drawing=false;completed=false;pointerId=null;mistakes=0;startedAt=0;
+  overlay.style.display="none";
+  setMessage("Bắt đầu tại một điểm ở đầu mút. Giữ và kéo liên tục đến điểm kế tiếp.");
+  document.getElementById("instruction").textContent=
+    `${levels[index].rank} • Nối ${levels[index].edges.length} đoạn thẳng bằng một nét duy nhất. Không nhấc tay, không đi lại đường cũ.`;
+  renderBoard();updateStats();renderLevelPicker();
+}
+function nearestNode(event){
+  const rect=board.getBoundingClientRect();
+  const x=(event.clientX-rect.left)*400/rect.width;
+  const y=(event.clientY-rect.top)*400/rect.height;
+  let found=null,best=27;
+  const ids=new Set(levels[levelIndex].trail);
+  ids.forEach(id=>{
+    const [px,py]=pointXY(id);
+    const d=Math.hypot(x-px,y-py);
+    if(d<best){best=d;found=id;}
+  });
+  return found;
+}
+function startDrawing(e){
+  if(completed||drawing)return;
+  const node=nearestNode(e);
+  if(node===null)return;
+  drawing=true;pointerId=e.pointerId;currentNode=node;visited.add(node);startedAt=Date.now();
+  board.setPointerCapture(e.pointerId);
+  renderBoard();setMessage("Đang nối… hãy kéo đến một điểm có đường nối.");
+}
+function moveDrawing(e){
+  if(!drawing||completed||e.pointerId!==pointerId)return;
+  const node=nearestNode(e);
+  if(node===null||node===currentNode)return;
+  const key=edgeKey(currentNode,node);
+  const edge=levels[levelIndex].edges.find(item=>item.key===key);
+  if(!edge){return;}
+  if(used.has(key)){
+    mistakes++;
+    setMessage("Đường này đã được sử dụng. Hãy chọn một đường khác.","error");
+    return;
+  }
+  used.add(key);currentNode=node;visited.add(node);
+  renderBoard();updateStats();
+  if(used.size===levels[levelIndex].edges.length)win();
+}
+function stopDrawing(e){
+  if(!drawing||e.pointerId!==pointerId)return;
+  drawing=false;pointerId=null;
+  if(!completed){
+    setMessage("Bạn đã nhấc tay. Màn chơi được đặt lại — hãy thử lại bằng một nét liên tục.","error");
+    window.setTimeout(()=>{if(!completed&&!drawing)resetLevel(false);},650);
+  }
+}
+function win(){
+  completed=true;drawing=false;
+  const elapsed=Math.max(1,Math.round((Date.now()-startedAt)/1000));
+  const stars=mistakes===0?3:mistakes<3?2:1;
+  if(levelIndex+2>unlocked){
+    unlocked=Math.min(TOTAL_LEVELS,levelIndex+2);
+    localStorage.setItem(STORAGE_KEY,String(unlocked));
+  }
+  updateStats();renderLevelPicker();
+  setMessage(`Hoàn thành trong ${elapsed} giây • ${"★".repeat(stars)}${"☆".repeat(3-stars)}`,"success");
+  document.getElementById("winText").textContent=
+    `Bạn đã nối đủ ${levels[levelIndex].edges.length} đoạn thẳng trong ${elapsed} giây. ${stars} sao!`;
+  document.getElementById("modalNext").textContent=
+    levelIndex===TOTAL_LEVELS-1?"CHƠI LẠI TỪ ĐẦU":"MÀN TIẾP THEO →";
+  overlay.style.display="flex";
+}
+function resetLevel(showText=true){
+  used.clear();visited.clear();currentNode=null;drawing=false;completed=false;pointerId=null;mistakes=0;startedAt=0;
+  renderBoard();updateStats();
+  if(showText)setMessage("Đã đặt lại màn chơi. Hãy thử một lộ trình khác.");
+}
+function goNext(){
+  overlay.style.display="none";
+  if(levelIndex<TOTAL_LEVELS-1)loadLevel(levelIndex+1);
+  else loadLevel(0);
+}
+
+board.addEventListener("pointerdown",startDrawing);
+board.addEventListener("pointermove",moveDrawing);
+board.addEventListener("pointerup",stopDrawing);
+board.addEventListener("pointercancel",stopDrawing);
+document.getElementById("resetBtn").addEventListener("click",()=>resetLevel());
+nextBtn.addEventListener("click",goNext);
+document.getElementById("modalNext").addEventListener("click",goNext);
+levelSelect.addEventListener("change",e=>loadLevel(Number(e.target.value)));
+
+loadLevel(Math.min(unlocked-1,TOTAL_LEVELS-1));
+</script>
+</body>
+</html>
