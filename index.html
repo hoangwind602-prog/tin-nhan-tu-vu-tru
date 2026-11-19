@@ -1,77 +1,156 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#fff5e9">
-  <title>Little Cloud Daycare – Nhà trẻ Mây Nhỏ</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS Dreamland · 6.5–7.0 trong 4 tháng</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#f7a8cf;--lav:#8f8be8;--ink:#464679;--win:#ebe8f2}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Quicksand',system-ui,sans-serif;color:var(--ink);min-height:100vh;background:linear-gradient(#7fb0f2,#bcd0fa 40%,#f2dcf3 75%,#fde8d2) fixed;overflow-x:hidden}
+.cloud{position:fixed;border-radius:50%;background:#fff;filter:blur(28px);opacity:.75;animation:drift 28s ease-in-out infinite alternate;z-index:0;pointer-events:none}
+@keyframes drift{to{transform:translateX(70px)}}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.hills{position:fixed;left:0;right:0;bottom:0;height:110px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 40% 100% at 15% 100%,#8fc46a 98%,transparent),radial-gradient(ellipse 45% 90% at 60% 100%,#a6d37e 98%,transparent),radial-gradient(ellipse 35% 100% at 100% 100%,#7fb95e 98%,transparent)}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:22px 14px 150px}
+.tiny{font-size:12px;letter-spacing:.12em;color:#fff;line-height:1.5;text-transform:uppercase}
+h1{margin:6px 0 4px;color:#fff;font-size:clamp(30px,6vw,52px);text-shadow:0 2px 18px #7b7be888;line-height:1.05}
+.sub{color:#fff;margin:0 0 18px;font-weight:600}
+.win{background:var(--win);border:2px solid #fff;box-shadow:3px 3px 0 #a09dbf,0 12px 30px #6a6bb83d;border-radius:3px;margin-bottom:16px}
+.tb{background:linear-gradient(90deg,#4f58d6,#a99cf0);color:#fff;padding:5px 10px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.tb i{font-style:normal;background:var(--win);color:#555;width:18px;height:18px;line-height:16px;text-align:center;border:1px solid #fff;box-shadow:1px 1px 0 #888;font-size:12px}
+.bd{padding:14px}
+.btn{font:inherit;font-weight:700;color:var(--ink);background:var(--win);border:2px solid #fff;box-shadow:2px 2px 0 #8d8aae;padding:5px 16px;cursor:pointer}
+.btn:active{box-shadow:none;transform:translate(2px,2px)}
+nav{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 20px}
+.sign{font:inherit;font-weight:700;border:0;cursor:pointer;color:#fff;background:var(--pink);padding:10px 34px 10px 18px;clip-path:polygon(0 0,91% 0,100% 50%,91% 100%,0 100%);text-transform:uppercase;letter-spacing:.06em;filter:drop-shadow(0 3px 0 #0002)}
+.sign.on{background:var(--lav)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.hero{display:grid;gap:14px;grid-template-columns:1.4fr 1fr}
+@media(max-width:700px){.hero{grid-template-columns:1fr}}
+.mon{background:#fdf9ff;border:6px solid #e5e1ee;border-radius:10px 10px 4px 4px;padding:14px;text-align:center}
+.screen{background:linear-gradient(#5b55d9,#7b6df0);color:#fff;border-radius:4px;padding:16px 10px}
+.bar{height:14px;border:2px solid #fff;margin-top:8px;background:#3c37a8;padding:1px}
+.bar b{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,#b7b2ff 0 8px,#7a72f0 8px 10px);transition:width .6s}
+.week{border-top:1px dashed #b9b5d6;padding:8px 0}
+.week summary{cursor:pointer;font-weight:700;list-style:none}
+.week.now summary::after{content:" ← đang ở đây";color:#e0559c}
+label.t{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:14px;cursor:pointer}
+label.t input{accent-color:#7a72f0;margin-top:3px}
+label.t.d span{opacity:.5;text-decoration:line-through}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:9px;padding:0 7px;margin-right:4px}
+.L{background:#5aa8f0}.R{background:#7fc46a}.W{background:#f08ab5}.S{background:#a58af0}
+ul{margin:6px 0;padding-left:18px;font-size:14px}li{margin:3px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:5px;text-align:center}
+input[type=number],input[type=date]{font:inherit;width:70px;padding:4px;border:2px inset #fff;background:#fff;color:var(--ink)}
+input[type=date]{width:auto}
+.bubble{position:fixed;right:4%;top:150px;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff9,#bfe0ff55);border:2px solid #fff9;display:grid;place-items:center;font-size:28px;animation:bob 5s ease-in-out infinite;z-index:1}
+#dlg{position:fixed;inset:0;background:#4a4a7855;display:none;place-items:center;z-index:9}
+#dlg.on{display:grid}
+</style>
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">☁️</div>
-        <div><p class="eyebrow">A LITTLE PLACE FULL OF LOVE</p><h1>Nhà trẻ Mây Nhỏ</h1></div>
-      </div>
-      <div class="weather"><span>☀️</span><div><strong>Một ngày dịu dàng</strong><small>Thứ Hai · 9:30 sáng</small></div></div>
-    </header>
+<div class="cloud" style="width:300px;height:120px;left:-60px;top:60px"></div>
+<div class="cloud" style="width:380px;height:140px;right:-80px;top:240px;animation-delay:-9s"></div>
+<div class="cloud" style="width:260px;height:100px;left:30%;top:420px;animation-delay:-15s"></div>
+<div class="bubble">🐠</div>
+<div class="hills"></div>
 
-    <section class="welcome">
-      <div><p class="eyebrow">CHÀO BUỔI SÁNG!</p><h2>Hôm nay mình chăm bé nhé <span>♡</span></h2>
-      <p>Mọi thứ cứ từ từ thôi. Bé đang rất vui vì có bạn ở đây.</p></div>
-      <div class="sun-doodle">🌼</div>
-    </section>
+<div class="wrap">
+  <div class="tiny">Was it real?<br>— Or just a dream? &gt;</div>
+  <h1>IELTS Dreamland</h1>
+  <p class="sub">Lộ trình 16 tuần · 4 kỹ năng · từ 5.5–6.0 lên 6.5–7.0 ✦</p>
+  <nav id="nav"></nav>
+  <main id="view"></main>
+</div>
 
-    <section class="game-layout">
-      <div class="nursery">
-        <div class="room-heading"><div><span class="room-icon">🧸</span><div><h3>Phòng em bé</h3><small>Một góc nhỏ thật ấm áp</small></div></div><span class="pill">Phòng 01</span></div>
-        <div class="room-scene" id="roomScene">
-          <div class="window"><div class="window-sun">☀️</div><div class="cloud cloud-one">☁️</div><div class="cloud cloud-two">☁️</div></div>
-          <div class="shelf"><span>📚</span><span>🪴</span><span>🧸</span></div>
-          <div class="wall-star star-one">✦</div><div class="wall-star star-two">✧</div>
-          <div class="crib">
-            <div class="crib-mobile">🌙　⭐　☁️</div>
-            <div class="baby" id="baby" aria-label="Bé Mimi">
-              <div class="baby-hair"></div><div class="baby-face"><span class="eye left"></span><span class="eye right"></span><span class="cheek left"></span><span class="cheek right"></span><span class="mouth" id="babyMouth"></span></div>
-              <div class="baby-body"><span class="bib">♡</span></div>
-              <div class="baby-arm arm-left"></div><div class="baby-arm arm-right"></div>
-            </div>
-            <div class="crib-rail"></div>
-            <div class="blanket" id="blanket"></div>
-          </div>
-          <div class="plush">🧸</div><div class="plant">🪴</div>
-          <div class="rug"></div>
-          <div class="scene-caption" id="sceneCaption">Mimi đang chờ một cái ôm ♡</div>
-        </div>
-        <div class="baby-card">
-          <div class="avatar">👶🏻</div><div class="baby-info"><strong>Mimi <span>♡</span></strong><small>Bé thích gấu bông và những bài hát ru</small></div>
-          <div class="mood"><span id="moodIcon">😊</span><small id="moodText">Vui vẻ</small></div>
-        </div>
-      </div>
+<div id="dlg"><div class="win" style="width:min(340px,90vw)">
+  <div class="tb">Dreamland <i onclick="dlg(0)">×</i></div>
+  <div class="bd"><p>💜 Are you sure you want to wake up?<br><small>(Xoá toàn bộ tiến độ đã lưu)</small></p>
+  <div style="display:flex;gap:10px;justify-content:center">
+    <button class="btn" onclick="try{localStorage.clear()}catch(e){}location.reload()">Yes</button>
+    <button class="btn" onclick="dlg(0)">No</button>
+    <button class="btn" onclick="dlg(0);alert('Ngủ thêm chút rồi học tiếp nhé 😴')">Maybe</button>
+  </div></div>
+</div></div>
 
-      <aside class="care-panel">
-        <div class="panel-title"><div><span class="panel-icon">💗</span><div><h3>Chăm sóc Mimi</h3><small>Chọn một hoạt động nhé</small></div></div></div>
-        <div class="needs">
-          <div class="need-row"><span>🍓</span><div class="need-copy"><strong>Bụng no</strong><div class="meter"><i id="foodMeter" style="width:58%"></i></div></div><small id="foodValue">58%</small></div>
-          <div class="need-row"><span>💤</span><div class="need-copy"><strong>Năng lượng</strong><div class="meter sleep-meter"><i id="sleepMeter" style="width:72%"></i></div></div><small id="sleepValue">72%</small></div>
-        </div>
-        <div class="activity-list">
-          <button class="activity active" data-action="feed"><span class="activity-emoji">🍼</span><span><strong>Giờ uống sữa</strong><small>Cho Mimi uống một bình sữa ấm</small></span><b>›</b></button>
-          <button class="activity" data-action="nap"><span class="activity-emoji">🌙</span><span><strong>Giờ ngủ trưa</strong><small>Đắp chăn và ru bé ngủ</small></span><b>›</b></button>
-          <button class="activity" data-action="play"><span class="activity-emoji">🧸</span><span><strong>Chơi cùng bé</strong><small>Lắc xúc xắc để Mimi vui hơn</small></span><b>›</b></button>
-        </div>
-        <div class="action-box" id="actionBox">
-          <div class="action-art" id="actionArt">🍼</div>
-          <div class="action-text"><strong id="actionTitle">Một bình sữa ấm nhé?</strong><p id="actionDescription">Chạm vào nút bên dưới để Mimi uống sữa.</p></div>
-          <button class="primary-btn" id="doAction">Cho bé uống sữa <span>♡</span></button>
-        </div>
-        <p class="gentle-note">☁️ Không cần vội vàng. Chăm sóc bằng sự dịu dàng là đủ.</p>
-      </aside>
-    </section>
-    <footer><span>☁️ Little Cloud Daycare</span><span>made with love · made by Seri</span></footer>
-  </main>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js"></script>
+<script>
+const SK={L:'Listening',R:'Reading',W:'Writing',S:'Speaking'};
+// [chủ đề, L, R, W, S]
+const WK=[
+["Chẩn đoán trình độ","1 test Listening Cambridge, chấm & ghi lại loại câu sai","1 test Reading 60', phân loại dạng bài hay sai","Viết 1 Task 2 (40'), đối chiếu band descriptor","Ghi âm Part 1-2-3, nghe lại tìm lỗi phát âm/ngữ pháp"],
+["Nền tảng từ vựng & ngữ pháp","Dictation 15'/ngày Section 1-2","True/False/Not Given + Matching Headings","Cấu trúc Task 2 (mở–thân–kết), lập 2 dàn ý","Part 1: 10 chủ đề quen thuộc, trả lời 2-3 câu mở rộng"],
+["Làm quen dạng bài","Section 3 + Multiple Choice, học paraphrase","Summary Completion & kỹ năng scanning","Task 1 (line/bar): viết overview + so sánh","Part 2: note 1 phút, nói 1.5–2 phút"],
+["Mini test tháng 1","Test Section 1–4 trọn vẹn","2 passages trong 40'","1 Task 1 + 1 Task 2, tự sửa bài","Part 1–3 đầy đủ, so với tuần 1"],
+["Đào sâu dạng bài","Map/Plan labelling","Matching Information + Sentence Completion","Task 2: Opinion & Discussion","Part 3: kỹ thuật PREP, mở rộng ý"],
+["Độ khó tăng dần","Section 4 độc thoại, ghi chú nhanh","Y/N/NG + passage 3 khó","Task 1: table & pie chart","Part 2: 5 chủ đề People/Place/Object/Event"],
+["Từ vựng band 7","Bẫy distractor & đổi đáp án","Skimming 3'/passage, bắt từ khoá","Task 2: Problem–Solution, Advantages–Disadvantages","Idioms & collocations tự nhiên (không lạm dụng)"],
+["Mini test tháng 2","Full test + phân tích lỗi","Full test 60'","Task 1 + Task 2 có thời gian","Mock Speaking với bạn/thầy, ghi âm"],
+["Tăng tốc","Full test 30' + 10' chép đáp án","Mỗi passage 20'","Task 2 trong 40', ghép ý nhanh","Fluency: nói liền mạch 2' không dừng"],
+["Chính xác & chi tiết","Lỗi chính tả, số ít/số nhiều","Matching Headings nâng cao","Task 1: process & map","Phát âm: trọng âm, ngữ điệu, shadowing"],
+["Hướng tới band 7","Test + phân tích 100% câu sai","Test 60' đúng giờ","Task 2: ví dụ cụ thể, cohesion, 250+ từ","Part 3 trừu tượng: so sánh, giả định"],
+["Mini test tháng 3","Full test","Full test","2 bài viết + sửa theo tiêu chí","Mock Speaking đủ 3 phần"],
+["Mock test #1","1 bộ Cambridge đầy đủ","1 bộ Cambridge đầy đủ","Task 1 + 2 đúng giờ (60')","Mock Speaking 11–14'"],
+["Vá điểm yếu","Luyện dạng sai nhiều nhất","Luyện dạng sai nhiều nhất","Viết lại bài cũ theo feedback","Ghi âm lại câu hỏi yếu"],
+["Mock test #2","1 bộ Cambridge mới","1 bộ Cambridge mới","Task 1 + 2 đúng giờ, tự chấm","Mock Speaking + feedback"],
+["Về đích","Ôn lỗi thường gặp, nghe nhẹ hằng ngày","Ôn chiến thuật, đọc nhẹ","1 bài viết, rà lỗi ngữ pháp","Luyện nói thư giãn, ngủ đủ"]
+];
+const MONTHS=["Tháng 1 · Nền tảng","Tháng 2 · Xây kỹ năng","Tháng 3 · Chiến thuật & tốc độ","Tháng 4 · Luyện đề & về đích"];
+const ROUTINE=[["Thứ 2","Listening (45') + 10 từ vựng"],["Thứ 3","Reading (60') + ôn từ"],["Thứ 4","Writing (60') + sửa bài"],["Thứ 5","Speaking (30') + shadowing 20'"],["Thứ 6","Kỹ năng yếu nhất + ngữ pháp"],["Thứ 7","Test/mini test có thời gian"],["Chủ nhật","Nghỉ nhẹ: nghe podcast, xem lại lỗi"]];
+const GUIDE={
+L:{from:"Mất điểm vì bẫy paraphrase & mất tập trung giữa bài.",tips:["Đọc trước câu hỏi, gạch từ khoá, dự đoán loại từ cần điền.","Dictation + shadowing 15'/ngày để quen tốc độ & âm nối.","Nghe xong chép đáp án cẩn thận: chính tả, s/es, số nhiều."],res:"Cambridge IELTS 14–19, BBC 6 Minute English, TED, Elllo"},
+R:{from:"Hết giờ ở passage 3, nhầm T/F/NG.",tips:["Passage 1: 15', passage 2: 20', passage 3: 25'.","NG nghĩa là không có thông tin; False là trái ngược rõ ràng.","Học từ vựng học thuật theo chủ đề và cụm đồng nghĩa."],res:"Cambridge IELTS, IELTS Liz, The Guardian, Scientific American"},
+W:{from:"Task 2 thiếu phát triển ý, ngữ pháp đơn giản, Task 1 thiếu overview.",tips:["Task 2 chiếm 2/3 điểm: viết 40' với dàn ý 5' trước.","Mỗi đoạn thân bài: ý chính → giải thích → ví dụ.","Dùng 2–3 câu phức/đoạn, kiểm tra mạo từ & thì."],res:"Simon IELTS, IELTS Liz, Cambridge Model Answers, Grammarly"},
+S:{from:"Nói chưa mạch lạc, từ vựng lặp lại, phát âm thiếu ngữ điệu.",tips:["Ghi âm mỗi tuần để tự chấm 4 tiêu chí (Fluency, Lexis, Grammar, Pronunciation).","Part 2: mở–thân–kết với 1 câu chuyện thật.","Part 3: Answer → Reason → Example → Contrast."],res:"IELTS Speaking Cue Cards, YouTube shadowing, ELSA Speak, bạn học"}};
+const CP=["Tuần 1","Tuần 4","Tuần 8","Tuần 12","Tuần 16"];
+
+let S={};try{S=JSON.parse(localStorage.getItem('dream')||'{}')||{}}catch(e){S={}}S.done=S.done||{};S.sc=S.sc||{};
+const save=()=>{try{localStorage.setItem('dream',JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const dlg=o=>$('#dlg').classList.toggle('on',!!o);
+let tab='road';
+const TABS=[['road','Lộ trình'],['skill','Kỹ năng'],['prog','Tiến độ']];
+$('#nav').innerHTML=TABS.map(t=>`<button class="sign" data-t="${t[0]}">${t[1]}</button>`).join('');
+$('#nav').onclick=e=>{if(e.target.dataset.t){tab=e.target.dataset.t;render()}};
+
+const total=WK.length*4;
+const doneN=()=>Object.values(S.done).filter(Boolean).length;
+const curWeek=()=>{if(!S.start)return -1;const d=Math.floor((Date.now()-new Date(S.start))/6048e5);return d<0?-1:Math.min(d,15)};
+const win=(t,b)=>`<div class="win"><div class="tb">${t}<i>×</i></div><div class="bd">${b}</div></div>`;
+
+function road(){
+  const p=Math.round(doneN()/total*100),cw=curWeek();
+  let h=`<div class="hero">${win('goal.exe',`<b>Mục tiêu:</b> Overall 6.5–7.0 sau 16 tuần.<br><br>
+   📅 Ngày bắt đầu: <input type="date" id="st" value="${S.start||''}"><br><small>${cw>=0?'Bạn đang ở tuần '+(cw+1)+'/16':'Chọn ngày để đánh dấu tuần hiện tại'}</small>
+   <ul>${ROUTINE.map(r=>`<li><b>${r[0]}:</b> ${r[1]}</li>`).join('')}</ul><small>≈ 2–2.5 giờ/ngày, 6 ngày/tuần.</small>`)}
+   <div class="mon"><div class="screen"><b>DREAMING</b><div class="bar"><b style="width:${p}%"></b></div><div style="margin-top:6px">${p}% · ${doneN()}/${total} nhiệm vụ</div></div></div></div>`;
+  MONTHS.forEach((m,mi)=>{
+    h+=win(m,WK.slice(mi*4,mi*4+4).map((w,k)=>{const i=mi*4+k;
+      return `<details class="week${i===cw?' now':''}" ${i===cw||(cw<0&&i===0)?'open':''}><summary>Tuần ${i+1} — ${w[0]}</summary>${
+      Object.keys(SK).map((s,j)=>{const id=i+s,d=S.done[id];return `<label class="t${d?' d':''}"><input type="checkbox" data-id="${id}" ${d?'checked':''}><span><b class="tag ${s}">${SK[s]}</b>${w[j+1]}</span></label>`}).join('')}</details>`}).join(''));
+  });
+  return h;
+}
+function skill(){
+  return `<div class="grid">${Object.keys(SK).map(s=>{const g=GUIDE[s];return win(SK[s]+'.txt',`<span class="tag ${s}">5.5–6.0 → 7.0</span><p><b>Vấn đề hay gặp:</b> ${g.from}</p><ul>${g.tips.map(t=>`<li>${t}</li>`).join('')}</ul><p><small>📚 ${g.res}</small></p>`)}).join('')}</div>`;
+}
+function prog(){
+  const rows=CP.map((c,i)=>{const v=Object.keys(SK).map(s=>S.sc[i+s]??'');const nums=v.filter(x=>x!=='').map(Number);const ov=nums.length==4?(Math.round(nums.reduce((a,b)=>a+b)/4*2)/2).toFixed(1):'–';
+    return `<tr><td><b>${c}</b></td>${Object.keys(SK).map((s,j)=>`<td><input type="number" min="0" max="9" step="0.5" data-sc="${i}${s}" value="${v[j]}"></td>`).join('')}<td><b>${ov}</b></td></tr>`}).join('');
+  return win('scores.xls',`<p>Ghi điểm các bài test để theo dõi tiến bộ (Overall tự tính, làm tròn 0.5).</p><div style="overflow-x:auto"><table><tr><th>Mốc</th><th>L</th><th>R</th><th>W</th><th>S</th><th>Overall</th></tr>${rows}</table></div>`)
+   +win('settings',`<button class="btn" onclick="dlg(1)">Reset tiến độ…</button>`);
+}
+function render(){
+  document.querySelectorAll('.sign').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  $('#view').innerHTML={road,skill,prog}[tab]();
+  const st=$('#st');if(st)st.onchange=e=>{S.start=e.target.value;save();render()};
+}
+$('#view').addEventListener('change',e=>{
+  if(e.target.dataset.id){S.done[e.target.dataset.id]=e.target.checked;save();render()}
+  if(e.target.dataset.sc){S.sc[e.target.dataset.sc]=e.target.value;save();render()}
+});
+render();
+</script>
 </body>
 </html>
