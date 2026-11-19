@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The HSK Van · HSK4 满分 + HSKK 中级</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Noto+Sans+SC:wght@400;700&family=Pinyon+Script&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#e8588f;--pink2:#f7a8c8;--mint:#e3f3da;--mint2:#a9d9a0;--cream:#fbf1c0;--ink:#5a2f45}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Quicksand','Noto Sans SC',system-ui,sans-serif;color:var(--ink);min-height:100vh;background:linear-gradient(#9fd0ee,#d3ebf6 55%,#cfe9b0) fixed;overflow-x:hidden}
+.tree{position:fixed;top:-30px;width:340px;height:320px;z-index:0;pointer-events:none;filter:blur(1.5px);opacity:.95;background:
+radial-gradient(circle at 30% 30%,#f7b6d0 0 22%,transparent 23%),radial-gradient(circle at 65% 25%,#f4a0c2 0 20%,transparent 21%),radial-gradient(circle at 45% 60%,#fbc6dc 0 24%,transparent 25%),radial-gradient(circle at 78% 58%,#f7b6d0 0 18%,transparent 19%),radial-gradient(circle at 20% 70%,#f4a0c2 0 16%,transparent 17%)}
+.tl{left:-110px}.tr{right:-110px;transform:scaleX(-1)}
+.cloud{position:fixed;top:90px;left:38%;width:260px;height:90px;border-radius:50%;background:#fff;filter:blur(22px);opacity:.85;animation:dr 26s ease-in-out infinite alternate;z-index:0}
+@keyframes dr{to{transform:translateX(90px)}}
+.petal{position:fixed;top:-30px;z-index:1;font-size:16px;pointer-events:none;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(70px,110vh) rotate(360deg)}}
+.ground{position:fixed;left:0;right:0;bottom:0;height:90px;z-index:0;pointer-events:none;background:linear-gradient(transparent,#8fc66a 45%,#7bb85a)}
+.flowers{position:fixed;left:0;right:0;bottom:6px;z-index:0;white-space:nowrap;overflow:hidden;font-size:26px;pointer-events:none;letter-spacing:4px}
+.wrap{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:18px 14px 130px}
+.lights{height:34px;position:relative;background:radial-gradient(circle at 50% 70%,#fff3a0 0 4px,#ffd86b 5px 6px,transparent 9px) 0 0/38px 100% repeat-x;animation:tw 2.5s ease-in-out infinite alternate}
+.lights::before{content:"";position:absolute;left:0;right:0;top:22px;height:2px;background:#b9a86a88}
+@keyframes tw{from{opacity:.65}to{opacity:1}}
+h1{margin:4px 0 0;text-align:center;font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(44px,9vw,76px);color:var(--pink);text-shadow:0 2px 0 #fff,0 0 20px #fff9;line-height:1}
+.zh{text-align:center;font-family:'Ma Shan Zheng',serif;font-size:clamp(22px,5vw,32px);color:#3f8a55;margin:2px 0 14px;text-shadow:0 1px 0 #fff}
+nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:18px}
+.shelf{font:inherit;font-weight:700;cursor:pointer;border:3px solid var(--pink);background:var(--cream);color:var(--pink);padding:8px 22px;border-radius:999px;box-shadow:0 4px 0 #c9406f}
+.shelf.on{background:var(--pink);color:var(--cream)}
+.shelf:active{transform:translateY(3px);box-shadow:0 1px 0 #c9406f}
+.card{background:var(--mint);border:3px solid var(--pink);border-radius:18px;margin-bottom:16px;overflow:hidden;box-shadow:0 8px 20px #7a3a5a2a}
+.tb{background:var(--cream);color:#c2306b;font-weight:700;padding:8px 14px;border-bottom:3px solid var(--pink);letter-spacing:.04em}
+.tb::before,.tb::after{content:" ✿ ";color:#e9a73a}
+.bd{padding:14px}
+.hero{display:grid;gap:14px;grid-template-columns:1.2fr 1fr}
+@media(max-width:700px){.hero{grid-template-columns:1fr}}
+.road{position:relative;height:74px;margin-top:8px;border-bottom:6px solid #b98f5a;background:linear-gradient(transparent 62%,#8fc66a 62%);border-radius:8px}
+.van{position:absolute;bottom:2px;font-size:40px;transition:left .7s;transform:scaleX(-1)}
+.fin{position:absolute;right:6px;bottom:6px;font-size:26px}
+.pct{font-size:34px;font-weight:700;color:var(--pink);line-height:1}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.week{border-top:2px dotted #e8588f88;padding:8px 0}
+.week summary{cursor:pointer;font-weight:700;list-style:none}
+.week.now summary::after{content:" 🚐 đang ở đây";color:var(--pink)}
+label.t{display:flex;gap:8px;align-items:flex-start;margin:7px 0;font-size:14px;cursor:pointer}
+label.t input{accent-color:var(--pink);margin-top:3px}
+label.t.d span{opacity:.5;text-decoration:line-through}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:9px;padding:1px 8px;margin-right:5px}
+.L{background:#e8588f}.R{background:#58a868}.W{background:#e39a2c}.S{background:#5aa4d6}.N{background:#9b6fd6}
+ul{margin:6px 0;padding-left:18px;font-size:14px}li{margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:5px;text-align:center}
+input[type=number],input[type=date]{font:inherit;width:72px;padding:5px;border:2px solid var(--pink2);border-radius:8px;background:#fff;color:var(--ink)}
+input[type=date]{width:auto}
+.btn{font:inherit;font-weight:700;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:7px 18px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="tree tl"></div><div class="tree tr"></div><div class="cloud"></div>
+<div class="ground"></div><div class="flowers">🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸 🌸 🌼 🌸</div>
+
+<div class="wrap">
+  <div class="lights"></div>
+  <h1>The HSK Van</h1>
+  <div class="zh">HSK4 满分 · 2.0 &amp; 3.0 · 60 天</div>
+  <nav id="nav"></nav>
+  <main id="view"></main>
+</div>
+
+<script>
+const SK={L:"听力 Nghe",R:"阅读 Đọc",W:"书写 Viết",S:"HSKK 口语"};
+// [chủ đề, L, R, W, S]
+const WK=[
+["Chẩn đoán trình độ","Làm 1 đề HSK4 phần Nghe đúng giờ, chấm và ghi loại câu sai","1 đề Đọc 40 phút, đánh dấu phần làm chậm","1 đề Viết 25 phút (sắp xếp từ + viết câu theo tranh)","Làm thử 1 đề HSKK trung cấp, ghi âm lại"],
+["Từ vựng & ngữ pháp trọng điểm 1","Phần 1 (đúng/sai): chép chính tả 15 phút/ngày","Phần 1 điền câu: 虽然…但是 / 如果…就 / 不但…而且","Cấu trúc 把 / 被 / 比: sắp xếp 20 câu","HSKK phần 1: nghe nhắc lại 10 câu/ngày, bắt thanh điệu"],
+["Từ vựng & ngữ pháp trọng điểm 2","Phần 2 hội thoại ngắn: bắt hàm ý, phủ định kép","Phần 2 sắp xếp câu: tìm câu mở đầu, đại từ nối 它/这/那","是…的, 连…都, 一边…一边: viết 15 câu","HSKK phần 2 nói theo tranh: mẫu 4 câu (ai, ở đâu, làm gì, cảm nhận)"],
+["Mini test 1","Đề nghe đầy đủ 45 câu","Đề đọc đầy đủ 40 câu","Đề viết đủ 15 câu, tự sửa lỗi","HSKK đủ 14 câu, tự chấm theo thanh điệu và độ trôi chảy"],
+["Tốc độ & độ chính xác","Phần 3 hội thoại dài: ghi chú từ khoá khi nghe","Phần 3 đọc đoạn: 1 phút/câu, đọc câu hỏi trước","Viết câu theo tranh: 10 tranh/ngày, câu đơn giản nhưng đúng","HSKK phần 3: quan điểm, lý do, ví dụ trong 30–40 giây"],
+["Soi lỗi để đạt điểm tuyệt đối","Làm lại toàn bộ câu sai, nghe lại bẫy gây nhiễu","Từ đồng nghĩa và bẫy lựa chọn gây nhiễu","Ôn 200 chữ Hán hay sai, viết tay 15 phút/ngày","Ghi âm 20 câu hỏi, sửa thanh điệu 3 và 4"],
+["Mock test #1","Full đề HSK4 đúng giờ (105 phút), nghe–đọc–viết liền mạch","Phân tích từng câu sai, ghi sổ lỗi","Chép lại câu viết sai 3 lần","Mock HSKK đúng giờ, có người nghe và nhận xét"],
+["Về đích","Mock #2 đầu tuần, sau đó chỉ ôn sổ lỗi","Đọc nhẹ mỗi ngày, giữ cảm giác","Rà lỗi chữ Hán và ngữ pháp hay sai","Nói thư giãn, ngủ đủ, chuẩn bị ngày thi"]
+];
+const MONTHS=["Tháng 1 · Củng cố nền tảng","Tháng 2 · Luyện đề & điểm tuyệt đối"];
+const ROUTINE=[["Thứ 2","Nghe 45 phút + 20 từ vựng"],["Thứ 3","Đọc 40 phút + ngữ pháp"],["Thứ 4","Viết 40 phút + chữ Hán"],["Thứ 5","HSKK 30 phút + ghi âm"],["Thứ 6","Kỹ năng yếu nhất + ôn từ"],["Thứ 7","Mini test / mock test"],["Chủ nhật","Nghỉ nhẹ: nghe podcast, xem phim"]];
+const GUIDE={
+L:{info:"45 câu · 30 phút · 100 điểm",tips:["Phần 1 (10 câu): đọc trước câu nhận định, chú ý số, thời gian, phủ định.","Phần 2 (15 câu): câu cuối của người nói hay chứa đáp án và hàm ý (比如 反问 không phải… sao?).","Phần 3 (20 câu): ghi từ khoá, đáp án thường xuất hiện theo thứ tự.","Chép chính tả câu sai để nhớ bẫy."]},
+R:{info:"40 câu · 40 phút · 100 điểm",tips:["Phần 1 điền câu: xét từ loại và cặp liên từ trước.","Phần 2 sắp xếp: tìm câu mở đầu (có chủ đề), dựa vào đại từ và liên từ.","Phần 3 đọc đoạn: đọc câu hỏi trước, khoanh vùng đáp án.","Mục tiêu 1 phút/câu để còn thời gian rà lại."]},
+W:{info:"15 câu · 25 phút · 100 điểm",tips:["Phần 1 sắp xếp từ: tìm vị ngữ, rồi chủ ngữ, rồi trạng ngữ/định ngữ.","Chú ý 把, 被, 比, 连…都, 是…的.","Phần 2 viết câu theo tranh và từ gợi ý: câu đơn giản, đúng ngữ pháp, chữ Hán chắc chắn.","Viết tay chữ Hán 15 phút/ngày, chữ sai chính tả mất điểm."]},
+S:{info:"14 câu · khoảng 23 phút · mục tiêu 90+/100",tips:["Phần 1 nghe nhắc lại: nhắc ngay, giữ đúng thanh điệu và độ dài câu.","Phần 2 nói theo tranh: ai, ở đâu, làm gì, cảm nhận, có liên từ.","Phần 3 trả lời: quan điểm, lý do, ví dụ trong 30–40 giây.","Ghi âm rồi nghe lại, tập trung thanh 3 và thanh 4."]}};
+const RES="📚 Giáo trình chuẩn HSK 4, đề thi thật (真题) HSK4 và HSKK, Pleco, Anki/Quizlet, Chinese Grammar Wiki, Du Chinese";
+const CP=["Tuần 1","Tuần 4","Tuần 7","Tuần 8"];
+const EXTRA=["Tải danh sách từ vựng HSK 4 bản 3.0 (2.000 từ), đánh dấu khoảng 800 từ chưa biết, bắt đầu 15 từ mới/ngày","Khoảng 100 từ mới + gõ pinyin rồi chọn chữ 10 phút/ngày","Khoảng 100 từ mới + viết tay 50 chữ trong danh sách 400 chữ viết","Ôn từ bằng lặp lại ngắt quãng, tự kiểm tra 300 từ ngẫu nhiên","Khoảng 100 từ mới + viết tay thêm 100 chữ (cộng dồn 200)","Khoảng 100 từ mới + làm đề mô phỏng HSK 3.0 trên máy (nếu có) để quen gõ pinyin","Nhóm từ mới cuối + viết tay đủ 400 chữ, ôn chữ sai","Ôn lại 2.000 từ và 400 chữ viết, kiểm tra thiết bị, cách gõ pinyin và lịch thi"];
+const NOTE3="HSK 3.0 (cấp 4): 2.000 từ tích luỹ (1.000 từ mới), nhận mặt 1.096 chữ, viết tay 400 chữ. Buổi thi chính thức đầu tiên dự kiến 13/12/2026, thi giấy hoặc máy (gõ pinyin). Kỹ năng Nói thi cùng bài thi từ cấp 3. Số câu và thang điểm 3.0 chưa thấy công bố chính thức: xem thông báo mới nhất tại chinesetest.cn.";
+const NOTE2="HSK 2.0: phiên thi toàn cầu cuối cùng trong lịch 2026 là 07/11/2026. Sau đó chỉ còn nếu trung tâm thi của em tổ chức riêng, hãy hỏi trung tâm. Từ vựng HSK4 2.0 là 1.200 từ.";
+const IS3="HSK 3.0 khác 2.0: 9 cấp thay vì 6, HSK4 cần 2.000 từ (2.0 chỉ 1.200), phải viết tay 400 chữ, thi máy có gõ pinyin, Nói thi cùng bài thi. Phần tiếng Việt dưới đây về cấu trúc câu hỏi là của HSK 2.0, dùng làm tham khảo kỹ năng.";
+function setMode(m){S.mode=m;save();render()}
+
+let S={};try{S=JSON.parse(localStorage.getItem('hskvan')||'{}')||{}}catch(e){S={}}S.done=S.done||{};S.sc=S.sc||{};S.mode=S.mode||"3";
+const save=()=>{try{localStorage.setItem('hskvan',JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+let tab='road';
+const TABS=[['road','Lộ trình'],['skill','Kỹ năng'],['prog','Tiến độ']];
+$('#nav').innerHTML=TABS.map(t=>`<button class="shelf" data-t="${t[0]}">${t[1]}</button>`).join('');
+$('#nav').onclick=e=>{if(e.target.dataset.t){tab=e.target.dataset.t;render()}};
+const is3=()=>S.mode==="3";
+const keys=()=>is3()?Object.keys(SK).concat("N"):Object.keys(SK);
+const total=()=>WK.length*keys().length;
+const doneN=()=>Object.keys(S.done).filter(id=>S.done[id]&&keys().includes(id.slice(-1))).length;
+const curWeek=()=>{if(!S.start)return -1;const d=Math.floor((Date.now()-new Date(S.start))/6048e5);return d<0?-1:Math.min(d,7)};
+const card=(t,b)=>`<div class="card"><div class="tb">${t}</div><div class="bd">${b}</div></div>`;
+
+function road(){
+  const p=Math.round(doneN()/total()*100),cw=curWeek();
+  let h=card('Chọn phiên bản đề',`<button class="shelf ${is3()?'on':''}" onclick="setMode('3')">HSK 3.0</button> <button class="shelf ${is3()?'':'on'}" onclick="setMode('2')">HSK 2.0</button><p style="font-size:14px">${is3()?NOTE3:NOTE2}</p>`)+`<div class="hero">${card('Hành trình 8 tuần',`<b>Mục tiêu:</b> ${is3()?"HSK 4 (3.0) đúng tối đa ở mọi kỹ năng và phần Nói đạt 90%+.":"HSK4 300/300 và HSKK trung cấp 90+/100."}<br><br>
+   📅 Ngày bắt đầu: <input type="date" id="st" value="${S.start||''}"><br><small>${cw>=0?'Bạn đang ở tuần '+(cw+1)+'/8':'Chọn ngày để đánh dấu tuần hiện tại'}</small>
+   <ul>${ROUTINE.map(r=>`<li><b>${r[0]}:</b> ${r[1]}</li>`).join('')}</ul><small>Khoảng 1.5–2 giờ/ngày, 6 ngày/tuần.</small>`)}
+   ${card('Chuyến xe đến 满分',`<div class="pct">${p}%</div><small>${doneN()}/${total()} nhiệm vụ</small><div class="road"><span class="van" style="left:${p}%;transform:translateX(-${p}%) scaleX(-1)">🚐</span><span class="fin">🌸</span></div>`)}</div>`;
+  MONTHS.forEach((m,mi)=>{
+    h+=card(m,WK.slice(mi*4,mi*4+4).map((w,k)=>{const i=mi*4+k;
+      return `<details class="week${i===cw?' now':''}" ${i===cw||(cw<0&&i===0)?'open':''}><summary>Tuần ${i+1} — ${w[0]}</summary>${
+      keys().map((s,j)=>{const id=i+s,d=S.done[id];return `<label class="t${d?' d':''}"><input type="checkbox" data-id="${id}" ${d?'checked':''}><span><b class="tag ${s}">${s==="N"?"3.0 bổ sung":SK[s]}</b>${s==="N"?EXTRA[i]:w[j+1]}</span></label>`}).join('')}</details>`}).join(''));
+  });
+  return h;
+}
+function skill(){
+  return (is3()?card("HSK 3.0 · điểm cần lưu ý",IS3):"")+`<div class="grid">${Object.keys(SK).map(s=>{const g=GUIDE[s];return card(SK[s],`<span class="tag ${s}">${g.info}</span><ul>${g.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`)}).join('')}</div>`+card('Tài liệu gợi ý',RES);
+}
+function prog(){
+  const rows=CP.map((c,i)=>{const g=s=>S.sc[i+s]??'';const v=['L','R','W'].map(g);const nums=v.filter(x=>x!=='').map(Number);const sm=nums.reduce((a,b)=>a+b,0),tot=nums.length==3?(is3()?Math.round(sm/3):sm):'–';
+    return `<tr><td><b>${c}</b></td>${['L','R','W'].map((s,j)=>`<td><input type="number" min="0" max="100" data-sc="${i}${s}" value="${v[j]}"></td>`).join('')}<td><b>${tot}${tot===(is3()?100:300)?' 🌸':''}</b></td><td><input type="number" min="0" max="100" data-sc="${i}S" value="${g('S')}"></td></tr>`}).join('');
+  return card('Bảng điểm',`<p>Ghi điểm từng bài thi thử. ${is3()?'Với HSK 3.0, ghi % đúng từng đề (thang điểm chính thức chưa được xác nhận).':'Mục tiêu: 300/300 cho HSK4 và 90+/100 cho HSKK.'}</p><div style="overflow-x:auto"><table><tr><th>Mốc</th><th>听力</th><th>阅读</th><th>书写</th><th>${is3()?'TB 3 kỹ năng':'Tổng/300'}</th><th>HSKK</th></tr>${rows}</table></div>`)
+   +card('Cài đặt',`<button class="btn" onclick="if(confirm('Xoá toàn bộ tiến độ?')){try{localStorage.clear()}catch(e){}location.reload()}">Reset tiến độ</button>`);
+}
+function render(){
+  document.querySelectorAll('.shelf').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  $('#view').innerHTML={road,skill,prog}[tab]();
+  const st=$('#st');if(st)st.onchange=e=>{S.start=e.target.value;save();render()};
+}
+$('#view').addEventListener('change',e=>{
+  if(e.target.dataset.id){S.done[e.target.dataset.id]=e.target.checked;save();render()}
+  if(e.target.dataset.sc){S.sc[e.target.dataset.sc]=e.target.value;save();render()}
+});
+for(let i=0;i<10;i++){const p=document.createElement('span');p.className='petal';p.textContent='🌸';p.style.left=Math.random()*100+'vw';p.style.animationDuration=(12+Math.random()*12)+'s';p.style.animationDelay=(-Math.random()*20)+'s';document.body.appendChild(p)}
+render();
+</script>
+</body>
+</html>
